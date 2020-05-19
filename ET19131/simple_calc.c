@@ -57,3 +57,15 @@ void ausgabe( int a, int b, int op, int c){
 
 
 
+
+
+int main(){
+
+    int a = 1;
+    int b = 1;
+
+    int c = 0;
+    c = perform_operation(a, b, PLUS);
+    ausgabe(a, b, PLUS, c);
+
+}
