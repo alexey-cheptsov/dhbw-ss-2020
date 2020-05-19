@@ -1,39 +1,41 @@
-#include <stdio.h>
+//Matrikelnummer:2089623//
+# include <stdio.h>
 
-enum Operations {
-            PLUS  = 0,
-            MINUS = 1,
-            MULT  = 2,
-            DIV   = 3
+
+enum Operations
+{
+	PLUS = 0,
+	MINUS = 1,
+	MULT = 2,
+	DIV = 3
 };
 
-// Performs the given Operation on a and b
-// Returns the result c = a <op> b
-int perform_operation(int a, int b, int op) {
-
-// Kollege 1
-
+int perform_operation(int a, int b, int op)
+{
+	int c = 0;
+	if (op == PLUS)
+	c = a + b;                                   //Berechnung
+	return c;
 }
 
-// Performs the "plus" operation on a and b
-// Returns the result c = a + b
-int perform_sum (int a, int b) {
-
-// Kollege 200
-
+void ausgabe(int a, int b, int op, int c)
+{
+	if (op == PLUS)
+	{
+		printf("Result:");
+		printf("%d ", a);
+		printf("%c", '+');
+		printf(" %d = %d", b, c);
+	}
 }
 
-// Prints results of a <op> b = c
-void ausgabe (int a, int b, int op, int c) {
-
-// Kollegin 3
-
-}
-
-int main() {
-
-    int a = 1;
-    int b = 1;
-
-    // int c = a PLUS b;
+int main()
+{
+	int a = 1;
+	int b = 1;
+	int c = 0;
+	
+	c = perform_operation(a, b, PLUS);
+	
+	ausgabe(a, b, PLUS, c);
 }
