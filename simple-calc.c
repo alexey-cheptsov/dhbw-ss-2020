@@ -19,7 +19,7 @@ int perform_operation(int a, int b, int op) {
 // Returns the result c = a + b
 int perform_sum (int a, int b) {
 
-// Kollege 200
+// Kollege 2
 
 }
 
@@ -27,6 +27,13 @@ int perform_sum (int a, int b) {
 void ausgabe (int a, int b, int op, int c) {
 
 // Kollegin 3
+
+}
+
+// Makes input of a and b
+void eingabe (int* a, int* b) {
+
+// Kollegin 4
 
 }
 
