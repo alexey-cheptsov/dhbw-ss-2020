@@ -19,7 +19,7 @@ int perform_operation(int a, int b, int op) {
 // Returns the result c = a + b
 int perform_sum (int a, int b) {
 
-// Kollege 2
+// Kollege 200
 
 }
 
