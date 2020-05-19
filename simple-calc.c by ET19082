@@ -7,6 +7,14 @@ enum Operations {
             DIV   = 3
 };
 
+// Performs the "plus" operation on a and b
+// Returns the result c = a + b
+int perform_sum (int a, int b) {
+	int c = 0;
+		c = a + b;
+	return c;
+}
+
 // Performs the given Operation on a and b
 // Returns the result c = a <op> b
 int perform_operation(int a, int b, int op) {
@@ -19,13 +27,6 @@ int perform_operation(int a, int b, int op) {
 return c;
 }
 
-// Performs the "plus" operation on a and b
-// Returns the result c = a + b
-int perform_sum (int a, int b) {
-	int c = 0;
-		c = a + b;
-	return c;
-}
 
 // Prints results of a <op> b = c
 void ausgabe (int a, int b, int op, int c) {
