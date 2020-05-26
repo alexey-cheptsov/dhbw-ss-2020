@@ -1,0 +1,6 @@
+Wie viel Grad Celsius hat der absolute Nullpunkt?
+
+- 0
+- -175,45
+- -235,32
++ -273,15
