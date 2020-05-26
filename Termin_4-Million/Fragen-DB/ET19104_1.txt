@@ -1,0 +1,6 @@
+Bei welchen Nachbarländern weicht die Bevölkerungszahl weniger als 400.000 voneinander ab?
+
+- Spanien/Portugal
+- Frankreich/Italien
+- Niederlande/Belgien
++ Österreich/Schweiz

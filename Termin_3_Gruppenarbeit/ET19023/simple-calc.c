@@ -10,37 +10,39 @@ enum Operations {
 // Performs the given Operation on a and b
 // Returns the result c = a <op> b
 int perform_operation(int a, int b, int op) {
-
-// Kollege 1
-
+    int c = 0;
+    if (op == PLUS) {
+        c = perform_sum(a, b);
+    }
+    return c;
 }
 
 // Performs the "plus" operation on a and b
 // Returns the result c = a + b
 int perform_sum (int a, int b) {
 
-// Kollege 2
+    int c = 0;
+    c = a + b;
 
+    return c;
 }
 
 // Prints results of a <op> b = c
 void ausgabe (int a, int b, int op, int c) {
-
-// Kollegin 3
-
-}
-
-// Makes input of a and b
-void eingabe (int* a, int* b) {
-
-// Kollegin 4
-
+    if (op == PLUS) {
+        printf("%d + %d = %d", a, b, c);
+    }
 }
 
 int main() {
 
     int a = 1;
     int b = 1;
+    int c = 0;
+    int op = 0;
+
+    c = perform_operation(a, b, op);
+    ausgabe(a, b, op, c);
 
     // int c = a PLUS b;
 }

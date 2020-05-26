@@ -1,0 +1,6 @@
+Welches Instrument am Auto draf laut gesetzt bis zu 10 % vorgehen, aber nicht nachgehen
+
+-Kilometerzähler
+-Benzinanzeige
++Geschwindigkeitsmesser
+-Außenthermometer
