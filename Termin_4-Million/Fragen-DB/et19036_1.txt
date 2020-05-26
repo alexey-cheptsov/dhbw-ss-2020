@@ -1,6 +1,0 @@
-Norweger und Finnen sind...
-
-- Copydinaeins
-- Druckdinazwei
-- Pastedinadrei
-+ Skandinavier
