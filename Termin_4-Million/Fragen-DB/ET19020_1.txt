@@ -1,6 +1,6 @@
 Zu welchem mythischen König gehört das Schwert Excalibur?
 
--Karl
--Ludwig
--Franz Josef
-+Artus
+- Karl
+- Ludwig
+- Franz Josef
++ Artus
