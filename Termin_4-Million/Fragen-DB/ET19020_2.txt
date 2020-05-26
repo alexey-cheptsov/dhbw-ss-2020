@@ -1,6 +1,6 @@
 wie lange schläft ein koala am Tag?
 
--8-12 Stunden
-+14-20 Stunden
--4-6 Stunden
--3-5 Stunden
+- 8-12 Stunden
++ 14-20 Stunden
+- 4-6 Stunden
+- 3-5 Stunden
