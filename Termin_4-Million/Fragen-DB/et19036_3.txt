@@ -1,6 +1,0 @@
-Wer gründete im 13. Jahrhundert den Franziskanerorden?
-
-- Franz von Assissi
-- Franz von Asisi
-- Franz von Asissi
-+ Franz von Assisi
