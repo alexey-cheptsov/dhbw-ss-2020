@@ -1,0 +1,6 @@
+Was war die höchstgeschwindigkeit einer Lockheed SR-71 "Blackbird"?
+
+- Mach 1,4
++ Mach 3,36
+- Mach 2,3
+- Mach 5.23
