@@ -1,6 +1,6 @@
 Wie weit ist der Mond von der Erde entfernt?
 
-+384 400km
--454 200km
--1 000 000km
--178 000km
++ 384400km
+- 454200km
+- 1000000km
+- 178000km
