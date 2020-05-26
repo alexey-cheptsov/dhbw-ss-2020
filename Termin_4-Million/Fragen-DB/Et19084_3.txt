@@ -3,4 +3,4 @@ Wieviele Zeilen Code stecken ca. hinter Windows XP?
 + 40.000.000
 - 750.000
 - 560.000.000.000
-+ 122.000
+- 122.000
