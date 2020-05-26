@@ -1,0 +1,6 @@
+Weches Element des Periodensystems besitzt die Abkürzung 'Sb'?
+
+- Serbium
+- Sorbium
+- Actinium
++ Antimon
