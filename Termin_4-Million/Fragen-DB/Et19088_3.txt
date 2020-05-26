@@ -1,0 +1,6 @@
+Wie heißt der Knabe, dem Wilhelm Tell den legendären Apfel vom Kopf schießt?
+
+- Fritz
+- Heinrich
++ Walter
+- August
