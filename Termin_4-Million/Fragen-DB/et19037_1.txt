@@ -1,6 +1,0 @@
-Wie heißt die Mutter von Niki Lauda?
-
-- Petra Lauda
-- Machma Lauda
-+ Mama Lauda
-- Mama Lauder
