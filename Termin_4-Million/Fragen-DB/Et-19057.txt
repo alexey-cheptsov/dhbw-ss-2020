@@ -1,6 +1,6 @@
 Wie lang ist die längste Straße der Welt?
 
-+30.000km
--24.654km
--19.876km
--10.000km
++ 30.000km
+- 24.654km
+- 19.876km
+- 10.000km
