@@ -1,6 +1,6 @@
 Wer sagt: 'Ich denke, also bin ich' ?
 
--Sokrates
-+René Descartes
--Immanuel Kant
--J.W. Goethe
+- Sokrates
++ René Descartes
+- Immanuel Kant
+- J.W. Goethe
