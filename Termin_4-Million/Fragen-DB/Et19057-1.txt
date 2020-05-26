@@ -1,0 +1,6 @@
+Wie viel Leisung hat der Sportwagen McLaren F1?
+
+-401kW
+-299kW
++461kW
+-599kW
