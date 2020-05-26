@@ -1,6 +1,0 @@
-Wie viele Liter Bier werden in Deutschland pro Kopf jährlich getrunken?
-
-- 1000 Liter
-- 1 Liter
-+ 100 L
-- 100 mL
