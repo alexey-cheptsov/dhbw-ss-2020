@@ -1,6 +1,6 @@
 In welchem der folgenden Länder gilt kein Linksverkehr
 
--Irland
--Zypern
--Malta
-+Monaco
+- Irland
+- Zypern
+- Malta
++ Monaco
