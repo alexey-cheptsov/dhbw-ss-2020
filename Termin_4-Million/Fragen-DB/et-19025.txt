@@ -1,5 +1,5 @@
-wie alt ist Diego?
-a 10
-b 12
-c 18
-d 19
+Wie alt ist Diego?
+-a 10
+-b 12
+-c 18
++d 19
