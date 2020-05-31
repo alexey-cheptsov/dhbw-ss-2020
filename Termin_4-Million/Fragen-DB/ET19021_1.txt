@@ -1,6 +1,6 @@
 Wie viele anerkannte Staaten gibt es auf der Welt?
 
--130
--190
--195
--203
+- 130
+- 190
++ 195
+- 203

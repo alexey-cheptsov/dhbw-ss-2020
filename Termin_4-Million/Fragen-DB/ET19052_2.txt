@@ -1,6 +1,6 @@
 Wer ist dezeitiger(2020) Bundesminister/in für Arbeit und Soziales ?
 
-+Hubertus Heil
--Andrea Nahles
--Katarina Barley
--Peter Altmaier
++ Hubertus Heil
+- Andrea Nahles
+- Katarina Barley
+- Peter Altmaier
