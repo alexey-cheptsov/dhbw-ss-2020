@@ -1,5 +1,6 @@
 Welches Tier ist bei einer bekannten Distribution das Kennzeichen?
+
 - Kamel
 - Lama
 + Pinguin
-- Schildkörte
+- Schildkröte
