@@ -13,7 +13,7 @@ typedef struct {
 typedef struct {
 	int credits;
 	int level;
-	char joker_available;
+	_Bool joker_available;
 	char* name;
 } Player;
 
