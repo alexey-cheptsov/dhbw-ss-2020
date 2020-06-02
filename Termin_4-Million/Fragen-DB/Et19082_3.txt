@@ -1,6 +1,6 @@
-Wieviele Zeilen Code stecken ca. hinter Windows XP?
+Wie groß ist die Entfernung von der Erde zum Mond?
 
-+ 40.000.000
-- 750.000
-- 560.000.000.000
-+ 122.000
+- 2 km
+- 284.230 km
++ 384.400 km
+- 385.400 km
