@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define FILE_PATH "../Fragen-DB"
+
 typedef struct Player {
 	char* name;
 	int score;
@@ -40,44 +42,61 @@ Player *players;
 Question *questions;
 
 
-void getSettings(char **names, int *count);
+void getSettings(Player *players, int *count);
 
-int printQuestion(int id);
-void getAnswer(char *name, char *answer);
-int checkAnswer(int id, char *answer);
+void readQuestiones(Question *questions, int size);
+void printQuestion(Question question);
+void getAnswer(Player *player, char *answer);
+int checkAnswer(Question question, char *answer);
 
-int printChance(int id, char* name);
-int printScore(char** names, int *scores);
-int saveScore(FILE *file, char** names, int *scores);
+void printChance(Question question, Player player);
+int printScore(FILE *file, Player *players);
 
 int main(int argc, char **argv) {	
 	return 0;
 }
 
-void getSettings(char **names, int *count) {
-	
+void getSettings(Player *players, int *count) {
+	// Abfrage Anzahl der Spieler
+	// Eingabe der Spielernamen
+
+	// Lukas Hauser
 }
 
-int printQuestion(int id) {
-	return 0;
+void readQuestiones(Question *questions, int size) {
+	// Speichern der Fragen
+
+	// Fabian Himmelsbach
 }
 
-void getAnswer(char *name, char *answer) {
-	
+void printQuestion(Question question) {
+	// Ausgabe der Frage (Zufaellige Nummerierung)
+
+	// Fabian Himmelsbach
 }
 
-int checkAnswer(int id, char *answer) {
-	return 0;
+void getAnswer(Player *player, char *answer) {
+	// Eingabe der Antwort des Spielers
+
+	// Deniz Akdeniz
 }
 
-int printChance(int id, char* name) {
-	return 0;
+int checkAnswer(Question question, char *answer) {
+	// Überprüfen der Antwort
+	// Setzen der Punkte
+
+	// Nick Hof
 }
 
-int printScore(char** names, int *scores) {
-	return 0;
+void printChance(Question question, Player player) {
+	// Ausgabe der 50-50 Chance
+
+	// Oliver Gerstl
 }
 
-int saveScore(FILE *file, char** names, int *scores) {
-	return 0;
+int printScore(FILE *file, Player *players) {
+	// Ausgabe des Spielstands / der Ergebnisse
+	// Speichern der Ergebnisse in Datei
+
+	// To be continued...
 }
