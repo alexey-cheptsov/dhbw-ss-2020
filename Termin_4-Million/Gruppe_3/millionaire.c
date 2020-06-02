@@ -1,7 +1,7 @@
 /*
  * millionaire.c
  * 
- * Copyright 2020 et19110 <et19110@lehre.dhbw-stuttgart.de>
+ * Copyright 2020 Gruppe_3
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
