@@ -7,7 +7,7 @@ typedef struct {
 } Question;
 
 void read_filenames(char** filenames);
-int choose_question(Question* question);
+int choose_question(char** filenames);
 void print_question(Question* question);
 void print_question_50_50(Question* question);
 
