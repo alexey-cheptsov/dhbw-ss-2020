@@ -7,7 +7,7 @@
 
 struct Fragen_Catalogue_Eintrag{
   char* Frage;
-  char* Antwort[4];
+  char* Antworten[4];
   int nr_correct;
 }
 
