@@ -20,7 +20,9 @@
  * 
  * 
  */
-
+#include <string.h> //Fabis Biblios
+#include <dir.h>
+#include <time.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,7 +81,7 @@ void readQuestiones(Question *questions, int size) {
 	int tempnumber;
 	srand(time(NULL));
 	
-	questions =  malloc (size * sizeof(Question));
+	questions = (Question*) malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
 	for (int i = 0; i < size;){

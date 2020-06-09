@@ -43,9 +43,80 @@ void read_filenames(struct dirent* rd) {
 		printf("Öffnen fehlgeschlagen.");
 	}
 =======
+int read_question(FILE* fl, Question* questions){
+	 size_t input_size = 1;
+	///read first line (question)
+	if(getline(&questions->question, &input_size, fl) ==-1){
+		return 0;
+	}  
+    ///empty line:
+    if(getline(&questions->answers[0], &input_size, fl) == -1){
+		return 0;
+	}
+    ///read answers:
+    for(int i = 0; i<4; i++){
+		input_size=1;
+		if(getline(&questions->answers[i], &input_size, fl) == -1){
+			return 0;
+		}
+		///save correct answers
+		if(questions->answers[i][0] == '+'){
+			questions->nr_correct = i;
+		}
+		///remove + / - 
+		for(int c=0; c<input_size; c++){
+			questions->answers[i][c]=questions->answers[i][c+2];
+		}
+	}
+	return 1;
+}
 
+int choose_question(Question* questions, char** filenames, int* max_questions){// Anika
+    srand(time(NULL));
+    int random;
+    FILE* fl;
+    char* path_to_file;
+	
+	path_to_file = (char*)malloc(27*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
+	strcpy(path_to_file, "../Fragen-DB/");
+	
+	///choose rondom question
+    random=rand()% *max_questions;
+	strcat(path_to_file, filenames[random]);
+    fl = fopen(path_to_file, "r");
+	if(fl==NULL){
+		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		filenames[random] = filenames[*max_questions];
+		*max_questions= *max_questions-1;
+		free(path_to_file);
+		if(*max_questions >0){
+			choose_question(questions, filenames, max_questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+	
+	if(read_question(fl, questions)==0){
+		printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		filenames[random] = filenames[*max_questions];
+		*max_questions= *max_questions-1;
+		free(path_to_file);
+		if(*max_questions >0){
+			choose_question(questions, filenames, max_questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+    
+    ///refresh data for next call
+	filenames[random]=filenames[*max_questions];
+	*max_questions= *max_questions-1;
+	free(path_to_file);
+    return 1;
+}
 
-int choose_question(Question* questions); // Anika
 void print_question(const Question question); // Dominik
 
 void print_question_50_50(const Question question)
@@ -81,7 +152,6 @@ bool check_answer(Question question, int answer)
 }
 
 void user_input(int *credits, char *str); // Max
-_Bool check_answer(Question question, int answer);
 
 
 // int main(int argc, char ** argv) {
