@@ -73,7 +73,13 @@ int main()
     
     //3.  Hauptspiel
     
-
+    Frage_fragen();
+    abfrage50_50();
+    Antwort_einlesen();
+    richtig_o_falsch();
+    gewinnberechnen();
+    endscreen();
+    
     
     
 
