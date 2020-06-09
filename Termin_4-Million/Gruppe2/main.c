@@ -152,7 +152,6 @@ bool check_answer(Question question, int answer)
 }
 
 void user_input(int *credits, char *str); // Max
-_Bool check_answer(Question question, int answer);
 
 
 // int main(int argc, char ** argv) {
