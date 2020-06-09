@@ -17,6 +17,9 @@ typedef struct {
 	char* name;
 } Player;
 
+struct State {
+
+
 Player player;
 
 // Writes filenames from directory to array
