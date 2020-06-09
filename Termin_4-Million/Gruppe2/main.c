@@ -20,7 +20,6 @@ typedef struct {
 	char name[MAX_NAME_SIZE];
 } Player;
 
-<<<<<<< HEAD
 typedef struct {
 	void (*handle_input) (void);
 	void (*update) (void);
@@ -29,18 +28,14 @@ typedef struct {
 
 State* currentState;
 =======
-<<<<<<< HEAD
 =======
 struct State {
->>>>>>> d55f023067ca68456950f567592cb9b15f995f76
 
 
 Player player;
->>>>>>> 30715eaeed016b839094904d4aad37f3ff0ea97f
 
 // Writes filenames from directory to array
 // Luis
-<<<<<<< HEAD
 void read_filenames(char** question_1, char** question_2, char** question_3) {
 	DIR* dir;
 	struct dirent* rd;
@@ -58,7 +53,6 @@ void read_filenames() {
 		sprintf(question_1[m], "ET19%s_1.txt", matrikel[m]);
 		sprintf(question_2[m], "ET19%s_2.txt", matrikel[m]);
 		sprintf(question_3[m], "ET19%s_2.txt", matrikel[m]);
->>>>>>> d55f023067ca68456950f567592cb9b15f995f76
 	}
 
 	while ((rd = readdir(dir)) != NULL) {
