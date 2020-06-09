@@ -53,6 +53,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
 		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
+		fgets(Catalogue[i]
 		//test
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
