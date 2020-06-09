@@ -55,14 +55,29 @@ void getSettings(Player *players, int *count);
 void readQuestiones(Question *questions, int size);
 void printQuestion(Question question);
 void getAnswer(Player *player, char *answer);
-int checkAnswer(Question question, char *answer);
+int checkAnswer(Question question, Player player, char *answer, int level);
 
 void printChance(Question question, Player player);
 int printScore(FILE *file, Player *players);
 
 int random(int min, int max);
 
-int main(int argc, char **argv) {	
+int main(int argc, char **argv) {
+	printf("Willkommen bei 'Wer Wird Millionaer' !\n" );
+	printf("Die Sendung in der Sie mit Ihrem Wissen Geld verdienen, ");
+	printf("und sogar Millionaer werden koennen!\n\n");
+	printf("Zu den Spielregeln:\n");
+	printf("Regel Nummer eins : Nicht schummeln!\n");
+	printf("Regel Nummer zwei : nur gueltige Zeichen eingeben!\n");
+	printf("Zu den gueltigen Zeichen gehoeren -> A,B,C,D ODER a,b,c,d .\n\n");
+	printf("Sie erhalten auch EINEN Joker, der 50:50 Joker kann nur einmal\n");
+	printf("pro Spiel verwendet werden!\n");
+	printf("Diesen benutzen Sie dann, wenn Ihnen die Frage ");
+	printf("vorgelesen wurde.\n");
+	printf("Sie koennen auch mit Ihren Freunden gegeneinander spielen.\n");
+	printf("Sie muessen lediglich die Anzahl der Spieler eingeben.\n");
+	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
+	printf("Viel ERFOLG! :)");
 	return 0;
 }
 
@@ -131,14 +146,37 @@ void printQuestion(Question question) {
 
 void getAnswer(Player *player, char *answer) {
 	// Eingabe der Antwort des Spielers
-
+	printf("Bitte geben Sie Ihre Antwort ein %s", player->name);
+	scanf("%c", answer);
 	// Deniz Akdeniz
 }
 
-int checkAnswer(Question question, char answer) {
+int checkAnswer(Question question, Player player, char answer, int level) {
 	// Überprüfen der Antwort
-	// Setzen der Punkte
+	int input; //answer als int
+	switch(answer)
+	{
+		case 65: //A
+		case 97: input = 0; break; //a
+		case 66: //B
+		case 98: input = 1; break; //b
+		case 67: //C
+		case 99: input = 2;  break; //c
+		case 68: //D
+		case 100: input = 3; break; //d
+	}
+	if(question.correctAnswer == input)
+	{
+		printf("Antwort %c ist korrekt!\n", answer);
+		player.score = prices[level];	// Setzen der Punkte
+	}
+	else
+	{
+		printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
+		//player.score = 0;
+	}
 
+		//int level erstellen
 	// Nick Hof
 }
 
