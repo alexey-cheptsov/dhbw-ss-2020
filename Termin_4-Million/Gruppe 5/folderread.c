@@ -1,29 +1,111 @@
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include <dirent.h>
+
+#define L 7
+
+void get_filenames(char array[][100]);
+
+void random_questions(char array[][100]);
+void open_files(char array[][100]);
+
+
+struct Fragen_Catalogue_Eintrag{
+	char *Frage;
+	char *Antworten[4];
+	int nr_correct;
+	
+}Catalogue;
+
 
 int main ()
 {
+	char namestr[100][100];
+	
+	get_filenames(namestr);
+	random_questions(namestr);
+	open_files(namestr);
+	
+	return 0;	
+}
+
+//Auslesen der aktuellen Dateinamen aus der Datenbank.
+void get_filenames(char array[][100]){
+	int i=0;
     DIR * Ordner;
     struct dirent * entry;
-    int files = 0;
+  
 
     Ordner = opendir ("Fragen-DB");
     if (Ordner == NULL)
     {
         perror ("Verzeichnis kann nicht gelesen werden");
-        return 1;
+       
     }
 
     while ((entry = readdir (Ordner)))
     {
-        files ++;
-        printf ("Datei% 3d:%s \n",files,entry-> d_name);
+        
+       strcpy(array[i], entry->d_name);
+        i++;
     }
 
     closedir (Ordner);
+}
 
-    return (0);
+
+		
+void random_questions(char array[][100]){
+	char buffer[L][100];
+	int m=0;
+	srand(time(NULL));
+	
+	for(int i=0; i<L;i++){
+		// Zufällig ausgewählte Dateinamen zwischenspeichern
+		strcpy(buffer[i], array[rand()%94]);
+	}
+	
+	//Ursprünglichen Inhalt von Array löschen 
+		while(m<=100){
+		array[m][0] = '\0';
+		m++;
+	}
+	//Array neu beschreiben mit zufällig Ausgew
+	for(int i=0; i<L;i++){
+		strcpy(array[i], buffer[i]);
+		
+	}
+}
+void open_files(char array[][100]){
+	FILE*datei;
+	char buffer[L][100];
+	
+	for(int m=0;m<L;m++){
+		strcpy(buffer[m], "/home/knoppix/Fragen-DB/");
+		strcat(buffer[m], array[m]);
+	}
+		
+/*	for(int i=0; i<L;i++){
+
+		printf("%s\n", buffer[i]);
+	}*/
+	
+	
+	for(int i=0;i<L;i++){
+		datei=fopen(buffer[i],"r");
+		
+		while(!feof(datei)){
+			printf("%c",fgetc(datei));
+			
+		}
+		printf("\n\n\n");
+		fclose(datei);
+	}
+	
+
 }
 
 
