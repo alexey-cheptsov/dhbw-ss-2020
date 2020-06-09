@@ -113,7 +113,7 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 }
 int main()
 {
-    int frageAktuell = 0, antwort = 0, richtigeAntwort = 0;
+    int frageAktuell = 0, antwort = 0, richtigeAntwort = 0, jokerflag = 0;
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
@@ -125,8 +125,17 @@ int main()
         antwort = antwort_eingabe();
         if(antwort == 5)
         {
-            frage_ausgabe_50_50(&Catalogue, frageAktuell);
-            antwort_eingabe();
+            if(jokerflag == 1)
+            {
+                printf("Sie haben leider keinen Joker mehr!\n")
+                antwort = antwort_eingabe();
+            }
+            else
+            {
+                jokerflag = 1;
+                frage_ausgabe_50_50(&Catalogue, frageAktuell);
+                antwort_eingabe();
+            }
         }
         antwort_auswertung(richtigeAntwort, antwort);
     }
