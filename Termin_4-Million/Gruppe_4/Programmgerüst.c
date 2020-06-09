@@ -3,6 +3,7 @@
 #include<string.h> 
 #define MAX 97
 #define PATH "test123"
+#define ZEILENLAENGE 80
 
 struct fragenKatalogEintrag
 {
@@ -36,6 +37,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	DIR *dir;
 	FILE *dateiFrage;
 	struct dirent *dirzeiger;
+	int i = 0;
 	/* öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
@@ -46,6 +48,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcpy(dateipfad, PATH);
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
+		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
 		//test
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
