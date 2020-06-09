@@ -19,7 +19,7 @@ void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tob
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
-int antwort_auswertung(int richtig);
+int antwort_auswertung(int richtig);//Harald
 int spielstand_speichern();
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
