@@ -77,7 +77,8 @@ void printQuestion(Question question) {
 
 void getAnswer(Player *player, char *answer) {
 	// Eingabe der Antwort des Spielers
-
+	printf("Bitte geben Sie Ihre Antwort ein %s", player->name);		// Spieler wird nach Antwort gefragt
+	scanf("%c", answer);							// Antwort wird in "answer" hinterlegt			        
 	// Deniz Akdeniz
 }
 
