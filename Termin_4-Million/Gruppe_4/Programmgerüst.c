@@ -5,7 +5,7 @@
 #include<stdlib.h>
 
 #define MAX 97
-#define PATH "test123"
+#define PATH "test123"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
 #define ZEILENLAENGE 80
 
 struct fragenKatalogEintrag
