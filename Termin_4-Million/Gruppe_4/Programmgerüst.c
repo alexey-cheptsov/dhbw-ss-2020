@@ -62,7 +62,6 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcpy(dateipfad, PATH);
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
-<<<<<<< HEAD
 		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
 		fgets(temp, ZEILENLAENGE, dateiFrage);
 		for (int l = 0; l<=3;l++){
@@ -73,12 +72,8 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 				Catalogue[i].antworten[l] = temp2;
 			}
 		}
+		i++;
 	}
-	
-=======
-		//test
-	}
->>>>>>> c2540ac8017fd92a3c4b72c448eeb1fc33e418b1
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
