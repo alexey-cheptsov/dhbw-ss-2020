@@ -21,8 +21,18 @@ typedef struct {
 } Player;
 
 <<<<<<< HEAD
+typedef struct {
+	void (*handle_input) (void);
+	void (*update) (void);
+	void (*render) (void);
+} State;
+
+State* currentState;
+=======
+<<<<<<< HEAD
 =======
 struct State {
+>>>>>>> d55f023067ca68456950f567592cb9b15f995f76
 
 
 Player player;
