@@ -42,7 +42,7 @@ typedef struct Question {
 	int correctAnswer;
 } Question;
 
-const int prices = {10, 100, 1000, 10000, 100000, 500000, 1000000};
+const int prices[] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
 
 Player *players;
 Question *questions;
