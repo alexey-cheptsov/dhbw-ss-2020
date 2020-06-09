@@ -98,11 +98,11 @@ int main(void) {
 
 print_welcome_message()
 {
-	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONÄR");
+	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
 	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
-	printf("\nFür jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
+	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
 	printf("Sie haben einen 50:50 Joker der mit xxxx eingesetzt werden kann.");
-	printf("\nViel Spass und Viel Erfolg wünscht Ihnen Günther Jauch");
+	printf("\nViel Spass und Viel Erfolg wuenscht Ihnen Guenther Jauch");
 	return 0;
 }
 
