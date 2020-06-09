@@ -16,7 +16,7 @@ struct spieler {
 
 struct fragenKatalogEintrag Catalouge[MAX];
 
-int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
+int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrick
 void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
@@ -28,6 +28,10 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 int nutzerdaten_eingabe(char*vorname,char*nachname)
 {
+    vorname[50];
+	nachname[50];
+	printf("Bitte Vornamen und Nachnamen eingeben:\n");
+	scanf("%s %s",vorname,nachname);
     return 0;
 }
 void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
