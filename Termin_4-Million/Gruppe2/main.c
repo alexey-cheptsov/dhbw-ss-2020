@@ -21,10 +21,7 @@ Player player;
 
 // Writes filenames from directory to array
 // Luis
-void read_filenames() {
-	char question_1[26][14];
-	char question_2[26][14];
-	char question_3[26][14];
+void read_filenames(char** question_1, char** question_2, char** question_3) {
 	char* matrikel[] = { "004", "017", "020", "021", "023", "036", "037", "052", "057", "070", "073", "078", "080", "082", "084", "088", "095", "099", "104", "107", "110", "114", "115", "131", "135", "140" };
 	for (int m = 0; m <= 25; m++) {
 		sprintf(question_1[m], "ET19%s_1.txt", matrikel[m]);
