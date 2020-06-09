@@ -5,35 +5,53 @@
 //50-50 -> Jenny
 //read_fragen -> Stefan
 
-struct Fragen_Catalogue_Eintrag{
-  char* Frage;
-  char* Antworten[4];
-  int nr_correct;
+typedef struct Frage {
+    char* frage;
+    char* antworten[4];
+    int richtigeantwort;
+} Frage;
+Frage *fragen;
+
+
+
+int anmeldung(int a, int b, int op)
+{
+    int c = 0;
+
+    c = a + b;
+
+    return c;
 }
 
-Fragen_Catalogue_Eintrag[] Catalogue;
-
-void read_fragen_db(Fragen_Catalogue_Eintrag*Catalogue, int*nr_entries)
+void guthabensumme(int a)
 {
-  
+
+  int guthaben += a;
 }
 
-int frage_auswählen(Fragen_Catalogue_Eintrag*Catalogue, int*nr_entries)
+int fragenkatalog()
 {
-  
+    Datenbank = fopen( "Fragen-DB", "r");
+
+    /* Der Erfolg oder Misserfolg von fopen() wird geprüft*/
+
+    if(Datenbank == NULL){
+        printf("Fehler beim Öffnen von Fragen-DB");
+        exit(EXIT_FAILURE);
+    }
+    else
+        printf("Fragen-DB erfolgreich geöffnet!");
+
+
+    return 0;
 }
 
-void frage_ausgabe(Fragen_Catalogue_Eintrag*Catalogue, int index)
-{
-  
 }
 
-void frage_ausgabe_50-50(Fragen_Catalogue_Eintrag*Eintrag, int index)
+int main()
 {
- 
-}
 
-void main()
-{
- 
+    char[]Spielername = anmeldung(int nummer);
+    int geld = guthabensumme(int plus)
+
 }
