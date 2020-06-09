@@ -71,7 +71,49 @@ void getSettings(Player *players, int *count) {
 
 void readQuestiones(Question *questions, int size) {
 	// Speichern der Fragen
-
+char filename [] = "ET19xxx_x.txt"; 
+	FILE *path;
+	int filenumber;
+	int tempnumber;
+	srand(time(NULL));
+	
+	questions =  malloc (size * sizeof(Question));
+		
+	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
+	for (int i = 0; i < size;){
+		
+		filenumber = rand() % 141; //die nummern reichen bis 140
+		
+		for (int i = 0; i < 3; i++) { //zufällige Nummer wird in einzelne Ziffern aufgeteilt und in String eingefügt
+			tempnumber = filenumber % 10;
+			filename[6 - i] = '0' + tempnumber;
+			filenumber /= 10;
+		}
+		filename [8] = '0' + (rand() % 4);
+		path = fopen(filename,"r");
+		if (path == NULL) {
+			continue; // wenn Datei nicht existiert/nicht zu öffnen ist wird nächste Nummer versucht
+		}
+		else {
+			
+			i++; //erfolgreiches öffnen der Datei.
+	
+			questions[i].question = (char*) malloc (100 * sizeof(char));
+			fscanf(path,"%[^\n]",questions[i].question);
+			while (fgetc(path)!= '\n'); //Buffer leeren
+			
+				
+			for (int n = 0; n < 4; n++){ 	//n muss noch geshuffelt werden
+				questions[i].answers[n] =(char*) malloc (100*sizeof(char));
+				
+				while (fgetc(path)!= '\n'); //Buffer leeren
+					fscanf(path,"%[^\n]",questions[i].answers[n]);
+					if (questions[i].answers[n][0] == '+'){
+						 questions[i].correctAnswer = n;
+					}		
+			}
+		}
+	}
 	// Fabian Himmelsbach
 }
 

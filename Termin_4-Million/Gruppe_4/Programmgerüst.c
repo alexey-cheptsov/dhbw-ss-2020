@@ -1,5 +1,8 @@
 #include<stdio.h>
+#include<dirent.h>
+#include<string.h> 
 #define MAX 97
+#define PATH "test123"
 
 struct fragenKatalogEintrag
 {
@@ -12,29 +15,38 @@ struct spieler {
 	int gewinn;
 };
 
-struct fragenKatalogEintrag Catalouge[MAX];
+struct fragenKatalogEintrag Catalogue[MAX];
 
-int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrick
-void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
+int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
+int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
-int antwort_auswertung(int richtig);//Harald
+int antwort_auswertung(int richtig);
 int spielstand_speichern();
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 
 int nutzerdaten_eingabe(char*vorname,char*nachname)
 {
-    vorname[50];
-	nachname[50];
-	printf("Bitte Vornamen und Nachnamen eingeben:\n");
-	scanf("%s %s",vorname,nachname);
     return 0;
 }
-void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
-{
-
+int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
+{ 	
+	DIR *dir;
+	FILE *dateiFrage;
+	struct dirent *dirzeiger;
+	/* Ã¶ffne Verzeichnis @ PATH */
+	if((dir=opendir(PATH)) == NULL){
+		printf("\nVerzeichnis konnte nicht gefunden werden\n");
+		return 0;}
+	/* komplettes Verzeichnis Eintrag fÃ¼r Eintrag auslesen */
+	while((dirzeiger=readdir(dir)) != NULL){
+		char* dateipfad;
+		strcpy(dateipfad, PATH);
+		strcat(dateipfad, (*dirzeiger).d_name);
+		dateiFrage = fopen(dateipfad, "r");
+		//test
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
@@ -46,13 +58,7 @@ void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 }
 int antwort_eingabe()
 {
-    char antwort = 0;
-    int antwortNummer = 0;
-    printf("Geben Sie die Nummer der Richtigen Antwort ein!\n"
-           "Wenn Sie den 50/50 Joker wünschen drücken Sie die 5!\n");
-    antwort = getchar();
-    antwortNummer = (int)antwort;
-    return antwort;
+    return 0;
 }
 int antwort_auswertung(int richtig)
 {
