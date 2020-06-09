@@ -53,11 +53,12 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	char* antwortCOld;
 	char* antwortDOld;
 	
-	/* öffne Verzeichnis @ PATH */
+	/*	öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
 		return 0;}
-	/* komplettes Verzeichnis Eintrag für Eintrag auslesen */
+	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen 
+		Jede Fragedatei wird geöffnet*/
 	while((dirzeiger=readdir(dir)) != NULL){
 		char* dateipfad;
 		strcpy(dateipfad, PATH);
@@ -66,12 +67,26 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		if (NULL == dateiFrage){
 			printf("\n Datei konnte nicht geoeffnet werden\n\n\n");
 			return 0;}
+		/*	Aus der ersten Zeile wird die Frage ausgelesen, die zweite wird übersprungen und die folgenden Zeilen
+		werden als Fragen zwischengespeichert. */
 		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
 		fgets(temp, ZEILENLAENGE, dateiFrage);
 		fgets(antwortAOld, ZEILENLAENGE, dateiFrage);
 		fgets(antwortBOld, ZEILENLAENGE, dateiFrage);
 		fgets(antwortCOld, ZEILENLAENGE, dateiFrage);
 		fgets(antwortDOld, ZEILENLAENGE, dateiFrage);
+		/*	Richtige Antwort wird gesucht und die Nummer der Antwort wird gespeichert (a =  1, b = 2, usw)
+		Richtige Antwort ist am ersten Zeichen zu erkennnen */
+		if(antwortAOld[0] == '+'){
+			Catalogue[i].nr_correct = 1;}
+		else if(antwortBOld[0] == '+'){
+			Catalogue[i].nr_correct = 2;}
+		else if(antwortCOld[0] == '+'){
+			Catalogue[i].nr_correct = 3;}
+		else if(antwortDOld[0] == '+'){
+			Catalogue[i].nr_correct = 4;}
+		/*	Die Zwischenspeicher werden in die Structure geschrieben, aber die ersten 2 Zeichen werden uebergangen, da
+			sie nur der Formatierung und ERkennung dienen */
 		for(int j=0; j<=strlen(antwortAOld); j++){
 			Catalogue[i].antworten[0][j] = antwortAOld[k];
 			}
@@ -86,6 +101,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 			}
 		i++;
 	}
+	/*	Directory wird wieder geschlossen */
 	closedir(dir);
 	return 0;
 }
