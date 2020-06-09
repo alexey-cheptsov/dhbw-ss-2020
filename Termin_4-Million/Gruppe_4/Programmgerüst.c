@@ -14,11 +14,11 @@ struct spieler {
 
 struct fragenKatalogEintrag[MAX]Catalogue;
 
-int nutzerdaten_eingabe(char*vorname,char*nachname);
-void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);
-void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);
-int antwort_eingabe();
+int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
+void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
+int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
+void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
+int antwort_eingabe();// Harald
 int antwort_auswertung(int richtig);
 int spielstand_speichern();
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
