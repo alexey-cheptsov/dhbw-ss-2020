@@ -109,7 +109,10 @@ void readQuestiones(Question *questions, int size) {
 				fscanf(path,"%[^\n]",questions[i].answers[n]);
 				if (questions[i].answers[n][0] == '+'){
 					 questions[i].correctAnswer = n;
-				}		
+				}
+				for (int k = 0;questions[i].answers[n][k+1] != '\0'; k++){
+					questions[i].answers[n][k] = questions[i].answers[n][k+2];
+				}
 			}
 		}
 	}
