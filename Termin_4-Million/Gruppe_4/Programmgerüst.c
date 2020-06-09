@@ -1,5 +1,7 @@
 #include<stdio.h>
 #define MAX 97
+#define JOKER 5
+#define FEHLERMELDUNG 6
 
 struct fragenKatalogEintrag
 {
@@ -44,14 +46,33 @@ int antwort_eingabe()
 {
     char antwort = 0;
     int antwortNummer = 0;
-    printf("Geben Sie die Nummer der Richtigen Antwort ein!\n"
-           "Wenn Sie den 50/50 Joker wünschen drücken Sie die 5!\n");
-    antwort = getchar();
-    antwortNummer = (int)antwort;
+    do
+    {
+        printf("Geben Sie die Nummer der Richtigen Antwort ein!\n"
+               "Wenn Sie den 50/50 Joker wünschen drücken Sie die 5!\n"
+               "Bei Eingabe einer Falschen Antwort wird das Programm abgebrochen"
+               "und Ihr aktueller Spielstand gespeichert.");
+        antwort = getchar();
+        antwortNummer = (int)antwort;
+
+    }while(antwortNummer == 0 || antwortNummer >5);
+    printf("Vielen Dank! Ihre Antwort wird ausgewertet!");
     return antwort;
 }
-int antwort_auswertung(int richtig)
+int antwort_auswertung(int richtig, int antwort)
 {
+    if(antwort == JOKER)
+    {
+        return JOKER;
+    }
+    else if(antwort == richtig)
+    {
+
+    }
+    else
+    {
+
+    }
     return 0;
 }
 int spielstand_speichern()
