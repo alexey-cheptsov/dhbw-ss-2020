@@ -41,7 +41,7 @@ void read_filenames() {
 	char filenames[50][11];
 	struct dirent* rd;
 	DIR* dir;
-	dir = opendir("..\Fragen-DB");
+	dir = opendir("../Fragen-DB/");
 	if (dir == NULL) {
 		printf("Oeffnen fehlgeschlagen.");
 	}
@@ -49,7 +49,7 @@ void read_filenames() {
 	while ((rd = readdir(dir)) != NULL) {
 		strcpy(&(filenames[m][0]), rd->d_name);
 		m++;
-		printf("%s", filenames[m]);
+		printf("%s", &filenames[m]);
 	}
 }
 =======
