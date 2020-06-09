@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <_Bool.h>
+#include <stdbool.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
@@ -86,6 +86,15 @@ void print_question_50_50(const Question question)
 	
 	
 } // Sven
+
+bool check_answer(Question question, int answer)
+{
+	if(question.nr_correct == answer)
+	{
+		return true;
+	}
+	else return false;
+}
 
 void user_input(int *credits, char *str); // Max
 _Bool check_answer(Question question, int answer);
