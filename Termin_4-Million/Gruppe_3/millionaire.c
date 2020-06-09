@@ -71,7 +71,7 @@ void getSettings(Player *players, int *count) {
 
 void readQuestiones(Question *questions, int size) {
 	// Speichern der Fragen
-char filename [] = "ET19xxx_x.txt"; 
+	char filename [] = "ET19xxx_x.txt"; 
 	FILE *path;
 	int filenumber;
 	int tempnumber;
@@ -95,7 +95,6 @@ char filename [] = "ET19xxx_x.txt";
 			continue; // wenn Datei nicht existiert/nicht zu öffnen ist wird nächste Nummer versucht
 		}
 		else {
-			
 			i++; //erfolgreiches öffnen der Datei.
 	
 			questions[i].question = (char*) malloc (100 * sizeof(char));
@@ -107,10 +106,13 @@ char filename [] = "ET19xxx_x.txt";
 				questions[i].answers[n] =(char*) malloc (100*sizeof(char));
 				
 				while (fgetc(path)!= '\n'); //Buffer leeren
-					fscanf(path,"%[^\n]",questions[i].answers[n]);
-					if (questions[i].answers[n][0] == '+'){
-						 questions[i].correctAnswer = n;
-					}		
+				fscanf(path,"%[^\n]",questions[i].answers[n]);
+				if (questions[i].answers[n][0] == '+'){
+					 questions[i].correctAnswer = n;
+				}
+				for (int k = 0;questions[i].answers[n][k+1] != '\0'; k++){
+					questions[i].answers[n][k] = questions[i].answers[n][k+2];
+				}
 			}
 		}
 	}
@@ -136,10 +138,22 @@ int checkAnswer(Question question, char answer) {
 	// Nick Hof
 }
 
+// Ausgabe der 50-50 Chance
 void printChance(Question question, Player player) {
-	// Ausgabe der 50-50 Chance
+	if(player.chanceUsed) {
+		printf("\nDu hast dein 50-50 Chance bereits verwendet!\n");
+		return;
+	}
+	int answer = random(0, 4);
 
-	// Oliver Gerstl
+	while(answer == question.correctAnswer) {
+		answer = random(0, 4);
+	}
+	int index1 = min(answer, question.correctAnswer);
+	int index2 = max(answer, question.correctAnswer);
+	
+	printf("\n%s\n\n a) %s\n b) %s\n", question.question, question.answers[index1], question.answers[index2]);
+	player.chanceUsed = 1;
 }
 
 int printScore(FILE *file, Player *players) {
