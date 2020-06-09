@@ -27,14 +27,18 @@
 
 #define FILE_PATH "../Fragen-DB"
 
+#define min(X, Y) ((X < Y) ? (X) : (Y))
+#define max(X, Y) ((X > Y) ? (X) : (Y))
+
 typedef struct Player {
-	char* name;
+	char *name;
 	int score;
+	int chanceUsed;
 } Player;
 
 typedef struct Question {
-	char* question;
-	char* answers[4];
+	char *question;
+	char *answers[4];
 	int correctAnswer;
 } Question;
 
@@ -51,6 +55,8 @@ int checkAnswer(Question question, char *answer);
 
 void printChance(Question question, Player player);
 int printScore(FILE *file, Player *players);
+
+int random(int min, int max);
 
 int main(int argc, char **argv) {	
 	return 0;
@@ -81,7 +87,7 @@ void getAnswer(Player *player, char *answer) {
 	// Deniz Akdeniz
 }
 
-int checkAnswer(Question question, char *answer) {
+int checkAnswer(Question question, char answer) {
 	// Überprüfen der Antwort
 	// Setzen der Punkte
 
@@ -99,4 +105,8 @@ int printScore(FILE *file, Player *players) {
 	// Speichern der Ergebnisse in Datei
 
 	// To be continued...
+}
+
+int random(int min, int max) {
+	return (rand() % (max - min + 1)) + min;
 }
