@@ -17,7 +17,13 @@ typedef struct {
 	char* name;
 } Player;
 
-struct State {
+typedef struct {
+	void (*handle_input) (void);
+	void (*update) (void);
+	void (*render) (void);
+} State;
+
+State* currentState;
 
 
 Player player;
