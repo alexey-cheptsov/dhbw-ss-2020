@@ -13,7 +13,8 @@ struct fragenKatalogEintrag
     int nr_correct;
 };
 struct spieler {
-	char* name;
+	char* vorname;
+	char* nachname;
 	int gewinn;
 };
 
@@ -112,5 +113,8 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 }
 int main()
 {
+    struct spieler neuerSpieler;
+
+    nutzerdaten_eingabe(&neuerSpieler.vorname,&neuerSpieler.nachname);
     return 0;
 }
