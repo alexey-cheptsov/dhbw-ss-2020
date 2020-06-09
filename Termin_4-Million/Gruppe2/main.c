@@ -19,6 +19,13 @@ typedef struct {
 	char name[MAX_NAME_SIZE];
 } Player;
 
+<<<<<<< HEAD
+=======
+struct State {
+
+
+Player player;
+>>>>>>> 30715eaeed016b839094904d4aad37f3ff0ea97f
 
 // Writes filenames from directory to array
 // Luis
