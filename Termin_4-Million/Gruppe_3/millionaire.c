@@ -79,7 +79,7 @@ char filename [] = "ET19xxx_x.txt";
 	
 	questions =  malloc (size * sizeof(Question));
 		
-	printf("%i\n",chdir(FILE_PATH)); // wechselt in das Verzeichnis indem die Fragen sind
+	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
 	for (int i = 0; i < size;){
 		
 		filenumber = rand() % 141; //die nummern reichen bis 140
@@ -95,13 +95,13 @@ char filename [] = "ET19xxx_x.txt";
 			continue; // wenn Datei nicht existiert/nicht zu öffnen ist wird nächste Nummer versucht
 		}
 		else {
-			printf("\nDatei gefunden %s\n",filename); //Debug
+			
 			i++; //erfolgreiches öffnen der Datei.
 	
 			questions[i].question = (char*) malloc (100 * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
 			while (fgetc(path)!= '\n');
-			printf("%s\n",questions[i].question);
+			
 				
 			for (int n = 0; n < 4; n++){ 	//n muss noch geshuffelt werden
 				questions[i].answers[n] =(char*) malloc (100*sizeof(char));
@@ -113,7 +113,7 @@ char filename [] = "ET19xxx_x.txt";
 					}
 				
 				
-				printf("%s\n",questions[i].answers[n]);
+				
 			}
 		}
 	}
