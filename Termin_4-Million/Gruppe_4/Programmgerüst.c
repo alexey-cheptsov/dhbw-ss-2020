@@ -47,10 +47,10 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	int i = 0;
 	int k = 2;
 	char *temp;
-	char *temp2;
-	struct antworten{
-	char *antwortOld[4];};
-	struct antworten old;
+	char* antwortAOld;
+	char* antwortBOld;
+	char* antwortCOld;
+	char* antwortDOld;
 	
 	/* öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
@@ -62,18 +62,31 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcpy(dateipfad, PATH);
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
+		if (NULL == dateiFrage){
+			printf("\n Datei konnte nicht geoeffnet werden\n\n\n");
+			return 0;}
 		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
 		fgets(temp, ZEILENLAENGE, dateiFrage);
-		for (int l = 0; l<=3;l++){
-			fgets(old.antwortOld[l], ZEILENLAENGE, dateiFrage);
-			for(int j=0; j<=strlen(old.antwortOld[l]); j++){
-				char *temp2;
-				temp2[j] = old.antwortOld[j];
-				Catalogue[i].antworten[l] = temp2;
+		fgets(antwortAOld, ZEILENLAENGE, dateiFrage);
+		fgets(antwortBOld, ZEILENLAENGE, dateiFrage);
+		fgets(antwortCOld, ZEILENLAENGE, dateiFrage);
+		fgets(antwortDOld, ZEILENLAENGE, dateiFrage);
+		for(int j=0; j<=strlen(antwortAOld); j++){
+			Catalogue[i].antworten[0][j] = antwortAOld[k];
 			}
-		}
+		for(int j=0; j<=strlen(antwortBOld); j++){
+			Catalogue[i].antworten[1][j] = antwortBOld[k];
+			}
+		for(int j=0; j<=strlen(antwortCOld); j++){
+			Catalogue[i].antworten[2][j] = antwortCOld[k];
+			}
+		for(int j=0; j<=strlen(antwortDOld); j++){
+			Catalogue[i].antworten[3][j] = antwortDOld[k];
+			}
 		i++;
 	}
+	closedir(dir);
+	return 0;
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
@@ -95,7 +108,7 @@ int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 
 	//fragenKatalogEintrag mit neuen zufällig ausgewählten Fragen füllen
 	for(int i=0; i<7;i++){
-		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);
+		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);}
     return 0;
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
