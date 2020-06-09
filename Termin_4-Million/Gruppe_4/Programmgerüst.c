@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<dirent.h>
 #include<string.h>
+#include<time.h>
+#include<stdlib.h>
 #define MAX 97
 #define PATH "test123"
 
@@ -55,6 +57,25 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
+    char Zwischenspeicher[7][100];
+	int j=0;
+	//Zufallszahl mittels Zeitstempel auf Startwert gesetzt
+	srand(time(NULL));
+
+	for(int i=0; i<7;i++){
+		// Zufällig ausgewählte Dateinamen zwischenspeichern
+		strcpy(Zwischenspeicher[i], fragenKatalogEintrag.frage[rand()%nr_entries+1]);
+	}
+
+	//Ursprünglichen Inhalt von dem fragenKatalogEintrag löschen
+		while(j<=100){
+		fragenKatalogEintrag.frage[j][0] = '\0';
+		j++;
+	}
+
+	//fragenKatalogEintrag mit neuen zufällig ausgewählten Fragen füllen
+	for(int i=0; i<7;i++){
+		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);
     return 0;
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
