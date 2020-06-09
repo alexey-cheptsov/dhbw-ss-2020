@@ -100,20 +100,17 @@ char filename [] = "ET19xxx_x.txt";
 	
 			questions[i].question = (char*) malloc (100 * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
-			while (fgetc(path)!= '\n');
+			while (fgetc(path)!= '\n'); //Buffer leeren
 			
 				
 			for (int n = 0; n < 4; n++){ 	//n muss noch geshuffelt werden
 				questions[i].answers[n] =(char*) malloc (100*sizeof(char));
 				
-				while (fgetc(path)!= '\n');
+				while (fgetc(path)!= '\n'); //Buffer leeren
 					fscanf(path,"%[^\n]",questions[i].answers[n]);
 					if (questions[i].answers[n][0] == '+'){
 						 questions[i].correctAnswer = n;
-					}
-				
-				
-				
+					}		
 			}
 		}
 	}
