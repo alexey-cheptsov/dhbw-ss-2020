@@ -11,8 +11,8 @@ State* stateLost;
 State* currentState = stateMenu;
 
 int main(void) {
-	while (1) {
-		currentState->init();
+	currentState->init();
+	while (1) {	
 		currentState->handle_input();
 		currentState->update();
 		currentState->render();
