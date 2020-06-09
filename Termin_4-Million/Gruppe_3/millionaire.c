@@ -20,9 +20,7 @@
  * 
  * 
  */
-#include <string.h> //Fabis Biblios
-#include <dir.h>
-#include <time.h>
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,8 +41,6 @@ typedef struct Question {
 	char *answers[4];
 	int correctAnswer;
 } Question;
-
-const int prices[] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
 
 Player *players;
 Question *questions;
@@ -81,7 +77,7 @@ void readQuestiones(Question *questions, int size) {
 	int tempnumber;
 	srand(time(NULL));
 	
-	questions = (Question*) malloc (size * sizeof(Question));
+	questions =  malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
 	for (int i = 0; i < size;){
