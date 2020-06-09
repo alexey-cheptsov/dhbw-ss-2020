@@ -14,13 +14,10 @@ Frage *fragen;
 
 
 
-int anmeldung(int a, int b, int op)
+int anmeldung(char* Spielername)
 {
-    int c = 0;
-
-    c = a + b;
-
-    return c;
+    printf("Wie ist dein Name...");
+    scanf()
 }
 
 void guthabensumme(int a)
@@ -48,10 +45,36 @@ int fragenkatalog()
 
 }
 
+void fragen_einlesen(Frage* Fragen_Katalog, char* PFAD){
+
+    //fopen(...)
+    //fscanf(...)
+    //Fragen_Katalog[i].Frage = ...
+}
+
 int main()
 {
 
-    char[]Spielername = anmeldung(int nummer);
-    int geld = guthabensumme(int plus)
+  //Eigenschaften
+    char[20] Spielername;
+    
+    int Guthaben = 0;
+    int 50_50_flag = 0;  // 0 - nicht genommen, 1 - genommen
+    
+    Frage *Fragen_Katalog;
+    
+//Programmablauf
+    
+    //1. Eingabe Player-Creds
+    anmeldung(Spielername);
+    
+    //2. Fragen aus der DB laden
+    fragen_einlesen(Fragen_Katalog, char* PFAD);
+    
+    //3.  Hauptspiel
+    
+
+    
+    
 
 }
