@@ -113,8 +113,22 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 }
 int main()
 {
-    struct spieler neuerSpieler;
+    int frageAktuell = 0, antwort = 0, richtigeAntwort = 0;
 
+    struct spieler neuerSpieler;
+    read_frage(&Catalogue);
     nutzerdaten_eingabe(&neuerSpieler.vorname,&neuerSpieler.nachname);
+    while(1)
+    {
+        frageAktuell = frage_auswahl(&Catalogue, MAX);
+        frage_ausgabe(&Catalogue, frageAktuell);
+        antwort = antwort_eingabe();
+        if(antwort == 5)
+        {
+            frage_ausgabe_50_50(&Catalogue, frageAktuell);
+            antwort_eingabe();
+        }
+        antwort_auswertung(richtigeAntwort, antwort);
+    }
     return 0;
 }
