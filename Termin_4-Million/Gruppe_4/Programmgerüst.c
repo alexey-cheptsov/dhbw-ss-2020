@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<dirent.h>
-#include<string.h> 
+#include<string.h>
 #define MAX 97
 #define PATH "test123"
 
@@ -29,10 +29,14 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 int nutzerdaten_eingabe(char*vorname,char*nachname)
 {
+    vorname[50];
+	nachname[50];
+	printf("Bitte Vornamen und Nachnamen eingeben:\n");
+	scanf("%s %s",vorname,nachname);
     return 0;
 }
 int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
-{ 	
+{
 	DIR *dir;
 	FILE *dateiFrage;
 	struct dirent *dirzeiger;
