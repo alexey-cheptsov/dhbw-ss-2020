@@ -36,12 +36,22 @@ Player player;
 
 // Writes filenames from directory to array
 // Luis
-void read_filenames(struct dirent* rd) {
+void read_filenames() {
+	int m = 0;
+	char filenames[50][11];
+	struct dirent* rd;
 	DIR* dir;
-	dir = opendir("../FRAGEN-DB/");
+	dir = opendir("..\Fragen-DB");
 	if (dir == NULL) {
-		printf("Öffnen fehlgeschlagen.");
+		printf("Oeffnen fehlgeschlagen.");
 	}
+
+	while ((rd = readdir(dir)) != NULL) {
+		strcpy(&(filenames[m][0]), rd->d_name);
+		m++;
+		printf("%s", filenames[m]);
+	}
+}
 =======
 int read_question(FILE* fl, Question* questions){
 	 size_t input_size = 1;
