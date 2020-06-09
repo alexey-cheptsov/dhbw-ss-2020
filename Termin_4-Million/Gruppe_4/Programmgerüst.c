@@ -12,7 +12,7 @@ struct spieler {
 	int gewinn;
 };
 
-struct fragenKatalogEintrag[MAX]Catalogue;
+struct fragenKatalogEintrag Catalouge[MAX];
 
 int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
 void read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
@@ -42,7 +42,13 @@ void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 }
 int antwort_eingabe()
 {
-    return 0;
+    char antwort = 0;
+    int antwortNummer = 0;
+    printf("Geben Sie die Nummer der Richtigen Antwort ein!\n"
+           "Wenn Sie den 50/50 Joker wünschen drücken Sie die 5!\n");
+    antwort = getchar();
+    antwortNummer = (int)antwort;
+    return antwort;
 }
 int antwort_auswertung(int richtig)
 {
