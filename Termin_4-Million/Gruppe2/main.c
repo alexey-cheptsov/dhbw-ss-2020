@@ -32,7 +32,13 @@ void read_filenames(char** question_1, char** question_2, char** question_3) {
 }
 
 int choose_question(Question* questions); // Anika
-void print_question(const Question question); // Dominik
+// Dominik
+void print_question(const Question question) {
+	printf("%s\n", question.question);
+	for (int i = 0; i < 4; ++i) {
+		printf("%c) %s\n", 'a' + i, question.answers[i]);
+	}
+}
 void print_question_50_50(const Question question); // Sven
 void user_input(); // Max
 _Bool check_answer(Question question, int answer);
