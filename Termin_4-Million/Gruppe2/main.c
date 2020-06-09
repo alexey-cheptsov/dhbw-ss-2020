@@ -26,7 +26,7 @@ void read_filenames(char** question_1, char** question_2, char** question_3) {
 	for (int m = 0; m <= 25; m++) {
 		sprintf(question_1[m], "ET19%s_1.txt", matrikel[m]);
 		sprintf(question_2[m], "ET19%s_2.txt", matrikel[m]);
-		sprintf(question_3[m], "ET19%s_2.txt", matrikel[m]);
+		sprintf(question_3[m], "ET19%s_3.txt", matrikel[m]);
 	}
 	return 0;
 }
