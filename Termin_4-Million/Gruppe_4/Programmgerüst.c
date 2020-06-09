@@ -22,7 +22,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobi
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
-int antwort_auswertung(int richtig);
+int antwort_auswertung(int richtig, int antwort);// Harald
 int spielstand_speichern();
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
@@ -51,6 +51,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
 		//test
+	}
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
@@ -62,9 +63,21 @@ void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 }
 int antwort_eingabe()
 {
-    return 0;
+    char antwort = 0;
+    int antwortNummer = 0;
+    do
+    {
+        printf("Bitte geben Sie die Nummer der richtigen Antwort ein!"
+               "Wenn Sie einen Joker wuenschen waehlen Sie die 5!"
+               "Bei eingabe der Falschen Antwort wird das Programm abgebrochen"
+               "und Ihr aktueller Highscore gespeichert!\n");
+        antwort = getchar();
+        antwortNummer = (int)antwort;
+    }while(antwortNummer ==0||antwortNummer >5);
+    printf("Ihre antwort wird ausgewertet\n");
+    return antwortNummer;
 }
-int antwort_auswertung(int richtig)
+int antwort_auswertung(int richtig, int antwort)
 {
     return 0;
 }
