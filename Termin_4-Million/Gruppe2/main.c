@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include "dirent.h"
+#include <dirent.h>
 
 #define MAX_NAME_SIZE 20
 
@@ -27,22 +27,71 @@ typedef struct {
 } State;
 
 State* currentState;
-=======
-=======
+
 struct State {
 
-
+}
 Player player;
 
 // Writes filenames from directory to array
 // Luis
+<<<<<<< HEAD
+void read_filenames(int* m, char** filenames) {
+	//int m = 0;
+	//char filenames[100][15];
+	struct dirent* rd;
+	DIR* dir;
+	
+	dir = opendir("../Fragen-DB/");
+=======
 void read_filenames(struct dirent* rd) {
 	DIR* dir;
 	dir = opendir("../FRAGEN-DB/");
+>>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
 	if (dir == NULL) {
 		printf("Öffnen fehlgeschlagen.");
 	}
+<<<<<<< HEAD
+
+	while ((rd = readdir(dir)) != NULL) {
+		if(rd->d_name[0] != '.'){
+			strcpy(&(filenames[*m][0]), rd->d_name);
+			printf("%s", filenames[*m]);
+			*m=*m+1;
+		}
+	}
+}
+
+int read_question(FILE* fl, Question* questions){
+	 size_t input_size = 1;
+	///read first line (question)
+	if(getline(&questions->question, &input_size, fl) ==-1){
+		return 0;
+	}  
+    ///empty line:
+    if(getline(&questions->answers[0], &input_size, fl) == -1){
+		return 0;
+	}
+    ///read answers:
+    for(int i = 0; i<4; i++){
+		input_size=1;
+		if(getline(&questions->answers[i], &input_size, fl) == -1){
+			return 0;
+		}
+		///save correct answers
+		if(questions->answers[i][0] == '+'){
+			questions->nr_correct = i;
+		}
+		///remove + / - 
+		for(int c=0; c<input_size; c++){
+			questions->answers[i][c]=questions->answers[i][c+2];
+		}
+	}
+	return 1;
+}
 =======
+=======
+>>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
 
 
 int choose_question(Question* questions); // Anika
@@ -93,6 +142,11 @@ int main(void) {
 	player.name = userInput(&player.credits, player.name);
 	player.level = 1;
 	player.joker_available = 1;
+	
+	int max =0;
+	char filenames[100][13];
+	read_filenames(&max, filenames);
+	
 	return 0;
 }
 
