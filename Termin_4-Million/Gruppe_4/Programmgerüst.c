@@ -42,6 +42,13 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	FILE *dateiFrage;
 	struct dirent *dirzeiger;
 	int i = 0;
+	int k = 2;
+	char *temp;
+	char *temp2;
+	struct antworten{
+	char *antwortOld[4];};
+	struct antworten old;
+	
 	/* öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
@@ -53,8 +60,17 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
 		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
-		fgets(Catalogue[i]
-		//test
+		fgets(temp, ZEILENLAENGE, dateiFrage);
+		for (int l = 0; l<=3;l++){
+			fgets(old.antwortOld[l], ZEILENLAENGE, dateiFrage);
+			for(int j=0; j<=strlen(old.antwortOld[l]); j++){
+				char *temp2;
+				temp2[j] = old.antwortOld[j];
+				Catalogue[i].antworten[l] = temp2;
+			}
+		}
+	}
+	
 }
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 {
