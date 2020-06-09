@@ -33,7 +33,30 @@ void read_filenames(char** question_1, char** question_2, char** question_3) {
 
 int choose_question(Question* questions); // Anika
 void print_question(const Question question); // Dominik
-void print_question_50_50(const Question question); // Sven
+
+void print_question_50_50(const Question question)
+{
+	srand(time(0));
+	
+	int num1 = (rand() % (4));
+	int num2 = (rand() % (4));
+	
+	while(num1 == question.nr_correct)
+	{
+		num1 = (rand() % (4));
+	}
+	
+	while(num2 == question.nr_correct || num2 == num1)
+	{
+		num2 = (rand() % (4));
+	}
+	
+	printf("%s \n", question.answers[num1]);
+	printf("%s \n", question.answers[num2]);
+	
+	
+} // Sven
+
 void user_input(); // Max
 _Bool check_answer(Question question, int answer);
 
