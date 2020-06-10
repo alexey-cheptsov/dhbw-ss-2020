@@ -1,7 +1,6 @@
-//Tolles c program
-#define pi = 1.5
-//auswahl der Fragen-> Diego/Simmi
-//ausgabe -> Nico
+//Wer wird Millionär
+//Auswahl der Fragen-> Diego/Simmi
+//Ausgabe -> Nico
 //50-50 -> Jenny
 //read_fragen -> Stefan
 
@@ -101,8 +100,8 @@ int zufallszahl(int Zahl[8])
 
 void fragen_einlesen(Frage* Fragen_Katalog, char* PFAD){
 
-int Frage[8];
-zufallszahl(Frage); //7 Zufallszahlen werden in das Array "Frage" geschrieben
+int Zahl[8];
+zufallszahl(Zahl); //7 Zufallszahlen werden in das Array "Frage" geschrieben
     
     //fopen(...)
     //fscanf(...)
