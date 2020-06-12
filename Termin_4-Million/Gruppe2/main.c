@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include <dirent.h>
+#include "dirent.h"
 
 #define MAX_NAME_SIZE 20
 
@@ -35,23 +35,16 @@ Player player;
 
 // Writes filenames from directory to array
 // Luis
-<<<<<<< HEAD
+
 void read_filenames(int* m, char** filenames) {
-	//int m = 0;
-	//char filenames[100][15];
+
 	struct dirent* rd;
 	DIR* dir;
-	
 	dir = opendir("../Fragen-DB/");
-=======
-void read_filenames(struct dirent* rd) {
-	DIR* dir;
-	dir = opendir("../FRAGEN-DB/");
->>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
+
 	if (dir == NULL) {
 		printf("Öffnen fehlgeschlagen.");
 	}
-<<<<<<< HEAD
 
 	while ((rd = readdir(dir)) != NULL) {
 		if(rd->d_name[0] != '.'){
@@ -91,7 +84,7 @@ int read_question(FILE* fl, Question* questions){
 }
 =======
 =======
->>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
+>>>>>>> 
 
 
 int choose_question(Question* questions); // Anika
