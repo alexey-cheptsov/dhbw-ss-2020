@@ -46,7 +46,7 @@ State stateLost = {
 };
 
 State* currentState = NULL;
-Player player = {credits = 0, level = 1, joker_available = true, {}};
+Player player = { credits = 0, level = 1, joker_available = true, name = {}, done = false };
 Question currentQuestion;
 
 
@@ -81,6 +81,7 @@ bool State_CreateUser_handle_input() {
 
 void State_AskQuestion_init() {
 	print_question(currentQuestion);
+	// print_joker_info();
 }
 
 bool State_AskQuestion_handle_input() {
@@ -106,12 +107,12 @@ bool State_Joker_handle_input() {
 
 void State_Won_init() {
 	// print_winning_screen();
-	// show_results();
+	// show_game_results();
 }
 
 bool State_Won_handle_input() {
 	if (getchar() == '\n') {
-		save_to_leaderboard();
+		//save_player_stats();
 		return false; // false means game is done and will close
 	}
 	return true;
@@ -120,12 +121,12 @@ bool State_Won_handle_input() {
 
 void State_Lost_init() {
 	// print_losing_screen();
-	// show_results();
+	// show_game_results();
 }
 
 bool State_Lost_handle_input() {
 	if (getchar() == '\n') {
-		save_to_leaderboard();
+		//save_player_stats();
 		return false; // false means game is done and will close
 	}
 	return true;
