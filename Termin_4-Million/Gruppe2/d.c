@@ -11,14 +11,32 @@ typedef struct {
 	int credits;
 	int level;
 	bool joker_available;
-	char name[MAX_NAME_SIZE];
+	char name[32];
 	bool done;
 } Player;
 
 typedef struct {
 	void (*init) (void);
-	void (*handle_input) (void);
+	bool (*handle_input) (void);
 } State;
+
+void State_Menu_init();
+bool State_Menu_handle_input();
+
+void State_CreateUser_init();
+bool State_CreateUser_handle_input();
+
+void State_AskQuestion_init();
+bool State_AskQuestion_handle_input();
+
+void State_Joker_init();
+bool State_Joker_handle_input();
+
+void State_Won_init();
+bool State_Won_handle_input();
+
+void State_Lost_init();
+bool State_Lost_handle_input();
 
 State stateMenu = {
 	&State_Menu_init,
@@ -46,13 +64,23 @@ State stateLost = {
 };
 
 State* currentState = NULL;
-Player player = { credits = 0, level = 1, joker_available = true, name = {}, done = false };
+Player player = { .credits = 0, .level = 1, .joker_available = true, .name = {}, .done = false };
 Question currentQuestion;
 
+
+int main(void) {
+	currentState = &stateMenu;
+	currentState->init();
+
+	while ( currentState->handle_input() );
+
+	return 0;
+}
 
 
 void State_Menu_init() {
 	// print welcome message
+	printf("Welcome\n");
 }
 
 bool State_Menu_handle_input() {
@@ -68,6 +96,7 @@ void State_CreateUser_init() {
 	// guide user through the creation of a player profile
 	// printf("Name:") ...
 	// fgets ...
+	printf("Enter name ..\n");
 }
 
 bool State_CreateUser_handle_input() {
@@ -80,13 +109,23 @@ bool State_CreateUser_handle_input() {
 
 
 void State_AskQuestion_init() {
-	print_question(currentQuestion);
+	//print_question(currentQuestion);
 	// print_joker_info();
+	printf("Question %d\n", player.level);
 }
 
 bool State_AskQuestion_handle_input() {
 	// get user input and check answer
 	char user_answer = getchar();
+	if (user_answer == '\n') {
+		++player.level;
+		if (player.level == 8) {
+			currentState = &stateWon;
+			currentState->init();
+		} else {
+			currentState->init();
+		}
+	}
 	//if (user_answer == currentQuestion.nr_correct) { increase level, credits, go to next Q };
 	//else if (user_answer == joker) .. joker
 	// else wrong answer: currentState = &stateLost;
@@ -97,6 +136,7 @@ bool State_AskQuestion_handle_input() {
 
 void State_Joker_init() {
 	// print remaining 2 answers
+	printf("Joker\n");
 }
 
 bool State_Joker_handle_input() {
@@ -108,6 +148,7 @@ bool State_Joker_handle_input() {
 void State_Won_init() {
 	// print_winning_screen();
 	// show_game_results();
+	printf("Won!\n");
 }
 
 bool State_Won_handle_input() {
@@ -122,6 +163,7 @@ bool State_Won_handle_input() {
 void State_Lost_init() {
 	// print_losing_screen();
 	// show_game_results();
+	printf("Lost!\n");
 }
 
 bool State_Lost_handle_input() {
@@ -131,16 +173,3 @@ bool State_Lost_handle_input() {
 	}
 	return true;
 }
-
-
-
-int main(void) {
-	currentState = &stateMenu;
-	currentState->init();
-
-	while ( currentState->handle_input() );
-
-	return 0;
-}
-
-
