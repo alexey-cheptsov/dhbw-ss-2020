@@ -30,12 +30,12 @@ State* currentState;
 
 struct State {
 
-}
+};
 Player player;
 
 // Writes filenames from directory to array
 // Luis
-<<<<<<< HEAD
+
 void read_filenames(int* m, char** filenames) {
 	//int m = 0;
 	//char filenames[100][15];
@@ -43,15 +43,9 @@ void read_filenames(int* m, char** filenames) {
 	DIR* dir;
 	
 	dir = opendir("../Fragen-DB/");
-=======
-void read_filenames(struct dirent* rd) {
-	DIR* dir;
-	dir = opendir("../FRAGEN-DB/");
->>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
 	if (dir == NULL) {
 		printf("Öffnen fehlgeschlagen.");
 	}
-<<<<<<< HEAD
 
 	while ((rd = readdir(dir)) != NULL) {
 		if(rd->d_name[0] != '.'){
@@ -89,9 +83,6 @@ int read_question(FILE* fl, Question* questions){
 	}
 	return 1;
 }
-=======
-=======
->>>>>>> ebc68b410f7ea9da192b55d374b669b4a4c9a303
 
 
 int choose_question(Question* questions); // Anika
@@ -131,13 +122,13 @@ bool check_answer(Question question, int answer)
 
 void user_input(int *credits, char *str); // Max
 _Bool check_answer(Question question, int answer);
-
-
+void print_welcome_message();
+char* userInput(int* credits, char* str);
 // int main(int argc, char ** argv) {
 int main(void) {
 	Player player;
 	int credits;
-	char str[NAME_SIZE];
+	char str[NAME_MAX];
 	print_welcome_message();
 	player.name = userInput(&player.credits, player.name);
 	player.level = 1;
@@ -145,12 +136,12 @@ int main(void) {
 	
 	int max =0;
 	char filenames[100][13];
-	read_filenames(&max, filenames);
+	read_filenames(&max, &filenames[0][0]);
 	
 	return 0;
 }
 
-print_welcome_message()
+void print_welcome_message()
 {
 	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
 	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
