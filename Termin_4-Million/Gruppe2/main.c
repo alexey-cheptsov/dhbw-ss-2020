@@ -43,7 +43,7 @@ void read_filenames(int* m, char** filenames) {
 	dir = opendir("../Fragen-DB/");
 
 	if (dir == NULL) {
-		printf("�ffnen fehlgeschlagen.");
+		printf("Öffnen fehlgeschlagen.");
 	}
 
 	while ((rd = readdir(dir)) != NULL) {
@@ -55,7 +55,11 @@ void read_filenames(int* m, char** filenames) {
 	}
 }
 
-int read_question(FILE* fl, Question* questions){
+/* Read the question, the corresponding answers and which one is correct.
+ * This information is written to |question|. 
+ * Return Value: 0 if the data couldn't be read, 1 it worked.
+ */
+int read_question(FILE* fl, Question* questions){//Anika
 	 size_t input_size = 1;
 	///read first line (question)
 	if(getline(&questions->question, &input_size, fl) ==-1){
@@ -68,6 +72,7 @@ int read_question(FILE* fl, Question* questions){
     ///read answers:
     for(int i = 0; i<4; i++){
 		input_size=1;
+	    	///Fragen zufällig anordnen???
 		if(getline(&questions->answers[i], &input_size, fl) == -1){
 			return 0;
 		}
@@ -85,9 +90,57 @@ int read_question(FILE* fl, Question* questions){
 =======
 =======
 >>>>>>> 
+///refresh question data for next call
+void refresh_data(int* m, char** f, int r, char* p){//Anika
+	f[r] = f[*m];	///replace used filename
+	*m = *m -1;	///new number of available questions
+	free(p);	///p is the path to the used file
+}
 
 
-int choose_question(Question* questions); // Anika
+/*choose a random question from |filenames|, open the .txt file 
+ * |max_questions| is used to indicate how many questions aren't used yet / are available
+ * Return value: 1 if everything worked fine, 0 if an error occurred
+ */
+int choose_question(Question* questions){ // Anika
+    srand(time(NULL));
+    int random;
+    FILE* fl;
+    char* path_to_file;
+	
+	path_to_file = (char*)malloc(27*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
+	strcpy(path_to_file, "../Fragen-DB/");
+	
+	///choose rondom question
+    random=rand()% *max_questions;
+	strcat(path_to_file, filenames[random]);
+    fl = fopen(path_to_file, "r");
+	if(fl==NULL){
+		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(max_questions, filenames, random, path_to_file);
+		if(*max_questions >0){
+			choose_question(questions, filenames, max_questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+	
+	if(read_question(fl, questions)==0){
+		printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(max_questions, filenames, random, path_to_file);
+		if(*max_questions >0){
+			choose_question(questions, filenames, max_questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+    
+    
+	refresh_data(max_questions, filenames, random, path_to_file);
+    return 1;
+}
 void print_question(const Question question); // Dominik
 
 void print_question_50_50(const Question question)

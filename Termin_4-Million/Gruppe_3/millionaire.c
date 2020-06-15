@@ -79,7 +79,8 @@ void readQuestiones(Question *questions, int size) {
 	int filenumber;
 	int tempnumber;
 	srand(time(NULL));
-	
+	int numbers [] = {0,1,2,3};
+	int x;
 	questions =  malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
