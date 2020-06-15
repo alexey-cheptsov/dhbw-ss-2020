@@ -1,9 +1,16 @@
-//Tolles c program
-#define pi = 1.5
-//auswahl -> Diego
-//ausgabe -> Nico
+//Wer wird Millionär
+//Auswahl der Fragen-> Diego/Simmi
+//Ausgabe -> Nico
 //50-50 -> Jenny
 //read_fragen -> Stefan
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
 
 typedef struct Frage {
     char* frage;
@@ -45,8 +52,57 @@ int fragenkatalog()
 
 }
 
+
+/*Die Funktion "zufallszahl" berechnet 7 Zufallszahlen und sortiert diese dann in 
+ aufsteigender Reihenfolge. Danach prüft sie, ob aufeinanderfolgende Zahlen gleich sind.
+ Die Schleife läuft solange durch, bis alle Zufallszahlen einen unterschiedlichen Wert haben 
+ und wird dann verlassen. Im Anschluss werden die Zufallszahlen ausgegeben.*/	
+
+int zufallszahl(int Zahl[8])
+{
+	int flag=1;
+	do
+	{
+		srand(time(NULL));
+		
+		for(int i=0;i<7;i++)
+		{
+			Zahl[i]= (rand()%93)+1;		
+		}
+	
+		qsort(Zahl, 7, sizeof(int), cmpfunc);
+
+		for(int i=1;i<=7;i++)
+		{
+			if(Zahl[i]==Zahl[i-1])		
+			{
+				flag=0;	
+				break;
+			}
+			
+			else
+			{
+		   flag=1;
+			}
+		}
+	}while(flag==0);	 
+	 
+		printf("Folgende Fragen wurden ausgewählt: \n");
+		for(int n = 0 ; n < 7; n++ ) 
+		{   
+			printf("%d ", Zahl[n]);
+		}
+	return *Zahl;
+}
+
+
+
+
 void fragen_einlesen(Frage* Fragen_Katalog, char* PFAD){
 
+int Zahl[8];
+zufallszahl(Zahl); //7 Zufallszahlen werden in das Array "Frage" geschrieben
+    
     //fopen(...)
     //fscanf(...)
     //Fragen_Katalog[i].Frage = ...

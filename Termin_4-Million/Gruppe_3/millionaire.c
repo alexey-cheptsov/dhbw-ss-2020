@@ -58,6 +58,9 @@ int printScore(FILE *file, Player *players);
 
 int random(int min, int max);
 
+void shuffle (int*); //Fabian
+void swap_int (int*,int,int);
+
 int main(int argc, char **argv) {	
 	return 0;
 }
@@ -102,22 +105,37 @@ void readQuestiones(Question *questions, int size) {
 			while (fgetc(path)!= '\n'); //Buffer leeren
 			
 				
-			for (int n = 0; n < 4; n++){ 	//n muss noch geshuffelt werden
-				questions[i].answers[n] =(char*) malloc (100*sizeof(char));
-				
-				while (fgetc(path)!= '\n'); //Buffer leeren
-				fscanf(path,"%[^\n]",questions[i].answers[n]);
-				if (questions[i].answers[n][0] == '+'){
-					 questions[i].correctAnswer = n;
+			shuffle(numbers);
+			
+			for (int n = 0; n < 4; n++) {
+				questions[i].answers[n] =(char*) malloc (100*sizeof(char)); //Speicherreservierung für die Antworten 
+			}
+			for (int n = 0; n < 4; n++){ 
+				x = numbers[n];	
+				while (fgetc(path)!= '\n'); // Buffer leeren
+				fscanf(path,"%[^\n]",questions[i].answers[x]);
+				if (questions[i].answers[x][0] == '+'){
+						 questions[i].correctAnswer = x;
 				}
-				for (int k = 0;questions[i].answers[n][k+1] != '\0'; k++){
-					questions[i].answers[n][k] = questions[i].answers[n][k+2];
+				for (int k = 0;questions[i].answers[x][k+1] != '\0'; k++){
+					questions[i].answers[x][k] = questions[i].answers[x][k+2]; //entfernt vorzeichen und erstes Leerzeichen
 				}
 			}
+			
 		}
 	}
-	// Fabian Himmelsbach
+	
 }
+void swap_int (int array[4],int random_number,int index){
+	int temp = array [index];
+	array[index] = array[random_number];
+	array[random_number] = temp;
+} // Fabian Himmelsbach
+void shuffle (int array[4]){
+	for (int i = 3;i > 0; i--){
+		swap_int(array,rand()%i,i);	
+	}
+}// Fabian Himmelsbach
 
 void printQuestion(Question question) {
 	// Ausgabe der Frage (Zufaellige Nummerierung)

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include <dirent.h>
+#include "dirent.h"
 
 #define MAX_NAME_SIZE 20
 
@@ -37,12 +37,14 @@ Player player;
 // Luis
 
 void read_filenames(int* m, char** filenames) {
-	//int m = 0;
-	//char filenames[100][15];
+
 	struct dirent* rd;
 	DIR* dir;
-	
 	dir = opendir("../Fragen-DB/");
+<<<<<<< HEAD
+=======
+
+>>>>>>> be4a755f9582e12de6cc59f3c5961f867e33de3b
 	if (dir == NULL) {
 		printf("Öffnen fehlgeschlagen.");
 	}
@@ -83,6 +85,12 @@ int read_question(FILE* fl, Question* questions){
 	}
 	return 1;
 }
+<<<<<<< HEAD
+=======
+=======
+=======
+>>>>>>> 
+>>>>>>> be4a755f9582e12de6cc59f3c5961f867e33de3b
 
 
 int choose_question(Question* questions); // Anika
@@ -92,23 +100,23 @@ void print_question_50_50(const Question question)
 {
 	srand(time(0));
 	
-	int num1 = (rand() % (4));					// int num = (rand() % (upper - lower + 1)) + lower;
-	int num2 = (rand() % (4));
+	int num = (rand() % (4));
 	
-	while(num1 == question.nr_correct)
+	while(num == question.nr_correct)
 	{
-		num1 = (rand() % (4));
+		num = (rand() % (4));
 	}
 	
-	while(num2 == question.nr_correct || num2 == num1)
+	if(num < question.nr_correct)
 	{
-		num2 = (rand() % (4));
+		printf("%s \n", question.answers[num]);
+		printf("%s \n", question.answers[question.nr_correct]);
 	}
-	
-	printf("%s \n", question.answers[num1]);
-	printf("%s \n", question.answers[num2]);
-	
-	
+	else
+	{
+		printf("%s \n", question.answers[question.nr_correct]);
+		printf("%s \n", question.answers[num]);
+	}	
 } // Sven
 
 bool check_answer(Question question, int answer)
@@ -120,10 +128,14 @@ bool check_answer(Question question, int answer)
 	else return false;
 }
 
+<<<<<<< HEAD
 void user_input(int *credits, char *str); // Max
 _Bool check_answer(Question question, int answer);
 void print_welcome_message();
 char* userInput(int* credits, char* str);
+=======
+
+>>>>>>> be4a755f9582e12de6cc59f3c5961f867e33de3b
 // int main(int argc, char ** argv) {
 int main(void) {
 	Player player;

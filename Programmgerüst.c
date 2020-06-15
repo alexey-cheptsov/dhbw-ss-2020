@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<dirent.h>
-#include<string.h>
-#include<time.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <dirent.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define MAX 97
 #define PATH "test123"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
@@ -60,7 +60,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen 
 		Jede Fragedatei wird geöffnet*/
 	while((dirzeiger=readdir(dir)) != NULL){
-		char* dateipfad;
+		char* dateipfad = NULL;
 		strcpy(dateipfad, PATH);
 		strcat(dateipfad, (*dirzeiger).d_name);
 		dateiFrage = fopen(dateipfad, "r");
@@ -130,7 +130,11 @@ int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
-
+	//Ausgabe der aktuellen Frage
+	printf("Frage: %s \n", Catalogue[index].frage);
+	//Ausgabe der vier Antwortmöglichkeiten
+	for(int n = 0; n <= 3; n++)
+		printf("%d) %s \n", n+1, Catalogue[index].antworten[n]);
 }
 int antwort_eingabe()
 {
@@ -170,13 +174,13 @@ int main()
     while(1)
     {
         frageAktuell = frage_auswahl(&Catalogue, MAX);
-        frage_ausgabe(&Catalogue, frageAktuell);
+        frage_ausgabe(Catalogue, frageAktuell);
         antwort = antwort_eingabe();
         if(antwort == 5)
         {
             if(jokerflag == 1)
             {
-                printf("Sie haben leider keinen Joker mehr!\n")
+                printf("Sie haben leider keinen Joker mehr!\n");
                 antwort = antwort_eingabe();
             }
             else
