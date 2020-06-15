@@ -55,6 +55,10 @@ void read_filenames(int* m, char** filenames) {
 	}
 }
 
+/* Read the question, the corresponding answers and which one is correct.
+ * This information is written to |question|. 
+ * Return Value: 0 if the data couldn't be read, 1 it worked.
+ */
 int read_question(FILE* fl, Question* questions){//Anika
 	 size_t input_size = 1;
 	///read first line (question)
@@ -93,6 +97,11 @@ void refresh_data(int* m, char** f, int r, char* p){//Anika
 	free(p);	///p is the path to the used file
 }
 
+
+/*choose a random question from |filenames|, open the .txt file 
+ * |max_questions| is used to indicate how many questions aren't used yet / are available
+ * Return value: 1 if everything worked fine, 0 if an error occurred
+ */
 int choose_question(Question* questions){ // Anika
     srand(time(NULL));
     int random;
