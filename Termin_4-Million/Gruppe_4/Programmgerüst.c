@@ -32,7 +32,7 @@ int spielstand_speichern();
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 
-int nutzerdaten_eingabe(char*vorname,char*nachname)
+int nutzerdaten_eingabe(char *vorname,char *nachname)
 {
     vorname[50];
 	nachname[50];
@@ -52,12 +52,12 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	char* antwortBOld;
 	char* antwortCOld;
 	char* antwortDOld;
-	
+
 	/*	öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
 		return 0;}
-	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen 
+	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen
 		Jede Fragedatei wird geöffnet*/
 	while((dirzeiger=readdir(dir)) != NULL){
 		char* dateipfad;
@@ -151,7 +151,12 @@ int antwort_eingabe()
 }
 int antwort_auswertung(int richtig, int antwort)
 {
-    return 0;
+    if(richtig == antwort){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 int spielstand_speichern()
 {
@@ -167,7 +172,7 @@ int main()
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
-    nutzerdaten_eingabe(&neuerSpieler.vorname,&neuerSpieler.nachname);
+    nutzerdaten_eingabe(neuerSpieler.vorname, neuerSpieler.nachname);
     while(1)
     {
         frageAktuell = frage_auswahl(&Catalogue, MAX);
@@ -177,7 +182,7 @@ int main()
         {
             if(jokerflag == 1)
             {
-                printf("Sie haben leider keinen Joker mehr!\n")
+                printf("Sie haben leider keinen Joker mehr!\n");
                 antwort = antwort_eingabe();
             }
             else
