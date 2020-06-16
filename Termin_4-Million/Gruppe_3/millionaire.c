@@ -31,7 +31,6 @@
 
 #define min(X, Y) ((X < Y) ? (X) : (Y))
 #define max(X, Y) ((X > Y) ? (X) : (Y))
-const int[] = Price (10,100,1000,10000,100000,500000,1000000);
 
 typedef struct Player {
 	char *name;
@@ -47,6 +46,8 @@ typedef struct Question {
 
 Player *players;
 Question *questions;
+
+const int[] price = {10,100,1000,10000,100000,500000,1000000};
 
 void printTitle();
 void getSettings(Player *players, int *count);
