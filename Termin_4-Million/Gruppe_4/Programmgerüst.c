@@ -190,7 +190,30 @@ int spielstand_speichern(struct spieler *neuerSpieler)
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 {
-
+	void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
+{	
+	int c;
+	/*	Die Frage wird nochmal ausgegeben*/
+	printf("\n%s",Catalogue[index].frage);
+	/*	Es wird eine Zufallszahl zw. 0 und 3 bestimmt, dabei darf die Zahl nicht die richtige Antwort sein*/
+	srand(time(NULL));
+	c = rand() % 4;
+	if (c == Catalogue[index].nr_correct){
+		if (c<3){
+			c++;
+		}
+		else if(c==3){
+			c--;
+		}
+	}
+	/*	Die ausgewählte Antwort und die richtige Antwort werden in originaler Reihenfolge ausgegeben*/
+	if (c>Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c, Catalogue[index].antworten[c]);
+	}
+	if(c<Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", c, Catalogue[index].antworten[c], Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
+	}
+}	
 }
 int main()
 {
