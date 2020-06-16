@@ -14,6 +14,7 @@ void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
 void insert_in_struct(char string[][150], int structdata);
+void Fragenausgabe();
 
 struct Fragen_Catalogue{
 	char Frage[150];
@@ -33,6 +34,7 @@ int main ()
 	random_questions(namestr);
 	add_path(namestr);
 	open_files(namestr);
+	Fragenausgabe(namestr);
 	
 	printf("%s\n",first.Frage);
 	printf("%s\n",first.Antworten[0]);
@@ -47,6 +49,36 @@ int main ()
 	printf("%s\n",seventh.Antworten[3]);
 	
 	return 0;	
+}
+void Fragenausgabe()
+{
+	
+	printf("%s\n",first.Frage);
+	int zahl1;
+	int zahl2;
+	int zahl3;
+	int zahl4;
+	srand(time(NULL));
+	zahl1=rand() % 4;
+	zahl4=zahl3=zahl2=zahl1;
+	while(zahl2==zahl1)
+	{
+		zahl2=rand() % 4;
+	}
+	while(zahl3==zahl1||zahl3==zahl2)
+	{
+		zahl3=rand() % 4;
+	}
+	while(zahl4==zahl1||zahl4==zahl2||zahl4==zahl3)
+	{
+		zahl4=rand() % 4;
+	}
+	
+
+	printf(" a)%10s",first.Antworten[zahl1]);
+	printf(" b)%10s\n",first.Antworten[zahl2]);
+	printf(" c)%10s",first.Antworten[zahl3]);
+	printf(" d)%10s\n",first.Antworten[zahl4]);
 }
 
 //Auslesen der aktuellen Dateinamen aus der Datenbank.

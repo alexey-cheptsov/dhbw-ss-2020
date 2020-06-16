@@ -98,10 +98,11 @@ int zufallszahl(int Zahl[8])
 /* Funktion generiert verkürzte Antwortmöglichkeiten.*/
 int abfrage50_50(Frage *Catalogue, int index)
 {
-	int a = 0, e=3, r2;
+	//int a = 0, e=3;
+	int r2;
 	//static int pruefung = 0;
 	char c, c2;
-   	double r = e - a + 1;
+   	//double r = e - a + 1;
 	/*
 	if(pruefung == 1)
 	{
@@ -115,12 +116,13 @@ int abfrage50_50(Frage *Catalogue, int index)
 	if(joker == 'j')
 	{
 	*/
-		r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
+		//r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
+		r2 = rand()%4;
 
 		Catalogue = Catalogue + index;		//weiter zur Ausgewählten Frage aus dem Katalog durch Pointeraddition
 
 		while(r2 == (Catalogue->nr_correct))
-			r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
+			r2 = rand()%4;
 
 		switch(r2)
 		{
