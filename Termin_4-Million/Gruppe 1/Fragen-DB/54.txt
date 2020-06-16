@@ -1,0 +1,7 @@
+Wie viele Zähne hat ein ausgewachsener Braunbär?
+
+- 36
+- 58
++ 42
+- 54
+
