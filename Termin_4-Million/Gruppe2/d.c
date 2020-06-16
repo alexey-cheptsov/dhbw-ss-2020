@@ -154,7 +154,7 @@ int choose_question(Question* questions){ // Anika
 
 
 int main(void) {
-	srand(time(0));
+	srand(time(NULL));
 
 	currentState = &stateMenu;
 	currentState->init();
@@ -216,8 +216,13 @@ bool State_CreateUser_handle_input() {
 
 
 void State_AskQuestion_init() {
-	///choose rondom question
     choose_question(&currentQuestion);
+	printf("Frage %d\n", player.level);
+	printf("%s\n\n", currentQuestion.question);
+	for (int i = 0; i < 4; ++i) {
+		printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
+	}
+	printf("j) Joker\n");
 }
 
 bool State_AskQuestion_handle_input() {
