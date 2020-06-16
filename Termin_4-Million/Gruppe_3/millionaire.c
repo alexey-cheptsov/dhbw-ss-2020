@@ -47,7 +47,7 @@ typedef struct Question {
 Player *players;
 Question *questions;
 
-
+void printTitle();
 void getSettings(Player *players, int *count);
 
 void readQuestiones(Question *questions, int size);
@@ -63,7 +63,11 @@ int random(int min, int max);
 void shuffle (int*); //Fabian
 void swap_int (int*,int,int);
 
-int main(int argc, char **argv) {	
+int main(int argc, char **argv) {
+	return 0;
+}
+
+void printTitle() {	
 	printf("Willkommen bei 'Wer Wird Million%cr' !\n",132 );
 	printf("Die Sendung in der Sie mit Ihrem Wissen Geld verdienen, ");
 	printf("und sogar Million%cr werden k%cnnen!\n\n",132,148);
@@ -79,7 +83,6 @@ int main(int argc, char **argv) {
 	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n",129);
 	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
 	printf("Viel ERFOLG! :)");
-	return 0;
 }
 
 void getSettings(Player *players, int *count) {
