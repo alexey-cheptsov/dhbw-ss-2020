@@ -172,7 +172,7 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 	c = rand() % 4;
 	if (c == Catalogue[index].nr_correct){
 		if (c<3){
-		c++;
+			c++;
 		}
 		else if(c==3){
 			c--;
