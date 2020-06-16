@@ -190,8 +190,7 @@ int spielstand_speichern(struct spieler *neuerSpieler)
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 {
-	void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
-{	
+	
 	int c;
 	/*	Die Frage wird nochmal ausgegeben*/
 	printf("\n%s",Catalogue[index].frage);
@@ -214,7 +213,7 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 		printf("\n%d: %s\t%d: %s", c, Catalogue[index].antworten[c], Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
 	}
 }	
-}
+
 int main()
 {
     int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
