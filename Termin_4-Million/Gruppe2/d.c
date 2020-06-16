@@ -91,7 +91,7 @@ void refresh_data(int r, char* p){//Anika
 }
 
 int read_question(FILE* fl, Question* questions){//Anika
-	 size_t input_size = 1;
+	size_t input_size = 1;
 	///read first line (question)
 	if(getline(&questions->question, &input_size, fl) ==-1){
 		return 0;
@@ -179,7 +179,7 @@ void State_Menu_init() {
 	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
 	printf("\nSie haben einen 50:50 Joker der mit <j> eingesetzt werden kann.");
 	printf("\nViel Spass und Viel Erfolg wuenscht Ihnen Guenther Jauch\n");
-	printf("Zum Spielbeginn drücken Sie <ENTER>\n")
+	printf("Zum Spielbeginn drücken Sie <ENTER>\n");
 
 	// read filenames
 	struct dirent* rd;
