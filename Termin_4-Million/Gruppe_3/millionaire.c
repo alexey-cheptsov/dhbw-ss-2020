@@ -67,8 +67,28 @@ int main(int argc, char **argv) {
 
 void getSettings(Player *players, int *count) {
 	// Abfrage Anzahl der Spieler
-	// Eingabe der Spielernamen
+	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
+	scanf("%d", *count);
 
+	// Eingabe der Spielernamen
+    printf("Bitte Geben sie Ihren Namen ein: ");
+
+    //Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
+    char *Array_name = malloc(*count*sizeof(*Array_name));
+
+    //Überprüfen ob der Speicherbereich voll ist
+    if(Array_name == NULL)
+        return EXIT_FAILURE;
+
+    //Einlesen des Spielernamens
+    for(int i=0; i<=*count;i++){
+        scanf("%s", Array_name);
+
+        players = Array_name[i];
+
+        //Speicherplatz wieder freigeben für den nächsten Spieler
+        free(Array_name);
+    }
 	// Lukas Hauser
 }
 
