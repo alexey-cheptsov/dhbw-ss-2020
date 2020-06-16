@@ -88,29 +88,31 @@ void printTitle() {
 void getSettings(Player *players, int *count) {
 	// Abfrage Anzahl der Spieler
 	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
-	scanf("%d", *count);
+	scanf("%d", count);
 
 	// Eingabe der Spielernamen
     printf("Bitte Geben sie Ihren Namen ein: ");
 
     //Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
-    char *Array_name = malloc(*count*sizeof(*Array_name));
+    char *Array_name = (char*) malloc(*count*sizeof(*Array_name));
 
     //Überprüfen ob der Speicherbereich voll ist
     if(Array_name == NULL)
-        return EXIT_FAILURE;
+        return;
 
     //Einlesen des Spielernamens
     for(int i=0; i<=*count;i++){
-        scanf("%s", Array_name[i]);
+        scanf("%s", Array_name);
 
-        players = Array_name[i];
-
-        //Speicherplatz wieder freigeben für den nächsten Spieler
-        free(Array_name);
+        Player player = {Array_name, 0, 0};
+        players[i] = player;
     }
+    //Speicherplatz wieder freigeben für den nächsten Spieler
+        free(Array_name);
+
 	// Lukas Hauser
 }
+
 
 void readQuestiones(Question *questions, int size) {
 	// Speichern der Fragen
@@ -121,20 +123,12 @@ void readQuestiones(Question *questions, int size) {
 	srand(time(NULL));
 	int numbers [] = {0,1,2,3};
 	int x;
-	int used  [7]; 
 	questions = (Question*) malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
 	for (int i = 0; i < size;){
 		
 		filenumber = rand() % 141; //die nummern reichen bis 140
-		
-		for(int k = i-1; k >= 0; k--) { //schaut ob eine Frage dieses Autors bereits vorkam
-			if  (k >= 0 && used[k] == filenumber){
-				continue;
-			}
-		}
-		used[i] = filenumber; //speichert verwendete Nutzernummern
 		
 		for (int i = 0; i < 3; i++) { //zufällige Nummer wird in einzelne Ziffern aufgeteilt und in String eingefügt
 			tempnumber = filenumber % 10;
@@ -199,30 +193,10 @@ void getAnswer(Player *player, char *answer) {
 	// Deniz Akdeniz
 }
 
-int checkAnswer(Question question, Player player, char answer, int level) {
+int checkAnswer(Question question, char answer) {
 	// Überprüfen der Antwort
-	int input; //answer als int
-	switch(answer)
-	{
-		case 65: //A
-		case 97: input = 0; break; //a
-		case 66: //B
-		case 98: input = 1; break; //b
-		case 67: //C
-		case 99: input = 2;  break; //c
-		case 68: //D
-		case 100: input = 3; break; //d
-	}
-	if(question.correctAnswer == input)
-	{
-		printf("Antwort %c ist korrekt!\n", answer);
-		player.score = prices[level];	// Setzen der Punkte
-	}
-	else
-	{
-		printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
-		//player.score = 0;
-	}
+	// Setzen der Punkte
+
 	// Nick Hof
 }
 
