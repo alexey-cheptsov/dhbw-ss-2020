@@ -5,7 +5,7 @@
 #include<stdlib.h>
 
 #define MAX 97
-#define PATH "test123"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
+#define PATH "C:/Users/Harald/Documents/GitHub/dhbw-ss-2020/Termin_4-Million/Fragen-DB/"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
 #define ZEILENLAENGE 80
 
 struct fragenKatalogEintrag
@@ -43,6 +43,7 @@ int nutzerdaten_eingabe(char *vorname,char *nachname)
 }
 int read_frage(struct fragenKatalogEintrag * Catalogue)
 {
+
 	DIR *dir;
 	FILE *dateiFrage;
 	struct dirent *dirzeiger;
@@ -60,11 +61,16 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 		return 0;}
 	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen
 		Jede Fragedatei wird geöffnet*/
+
 	while((dirzeiger=readdir(dir)) != NULL){
-		char* dateipfad;
-		strcpy(dateipfad, PATH);
-		strcat(dateipfad, (*dirzeiger).d_name);
+		char* dateipfad = "C:/Users/Harald/Documents/GitHub/dhbw-ss-2020/Termin_4-Million/Fragen-DB/";
+		//strcpy(dateipfad, PATH);
+		printf("da waren wir\n");
+		printf("%s\n", dateipfad);
+		strcat(dateipfad, dirzeiger->d_name);
+
 		dateiFrage = fopen(dateipfad, "r");
+
 		if (NULL == dateiFrage){
 			printf("\n Datei konnte nicht geoeffnet werden\n\n\n");
 			return 0;}
@@ -147,9 +153,9 @@ void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
 	printf("\n%s\n", Catalogue[index].frage);
 	for (int i = 0; i<=3;i++){
-	printf("\n%d: %s", i+1, Catalogue[index].antworten[i];
+	printf("\n%d: %s", i+1, Catalogue[index].antworten[i]);
 	}
-	
+
 }
 int antwort_eingabe()
 {
@@ -225,7 +231,9 @@ int main()
     int frageAktuell = 0, antwort = 0, jokerflag = 0, fragenzaehler =0;
 
     struct spieler neuerSpieler;
-    read_frage(Catalogue);
+
+    read_frage(&Catalogue);
+
     nutzerdaten_eingabe(neuerSpieler.vorname, neuerSpieler.nachname);
     while(1)
     {

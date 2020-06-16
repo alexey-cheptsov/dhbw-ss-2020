@@ -69,12 +69,11 @@ void swap_int (int*,int,int);
 
 int main(int argc, char **argv) {
 	printTitle();
+	
 	int count = 0;
 	getSettings(players, &count);
 	readQuestiones(questions, ROUNDS);
-	printf("YAY");
-	
-	for(int i = 0; i < ROUNDS; i++) {
+	for(int i = 0; i < 1; i++) {
 		Question question = questions[i];
 		printQuestion(question);
 		
@@ -82,9 +81,15 @@ int main(int argc, char **argv) {
 			Player player = players[j];
 			char answer;
 			getAnswer(player, &answer);
-			checkAnswer(question, player, answer, i);
+			if(checkAnswer(question, player, answer, i)) {
+				printf("CHANCE");
+				
+				printChance(question, player);
+				getAnswer(player, &answer);
+				checkAnswer(question, player, answer, i);
+			}
 		}
-		printf("\n -> Richtige Antwort: %i.) %s\n", question.correctAnswer, question.answers[question.correctAnswer]);
+		printf("\n -> Richtige Antwort: %c.) %s\n", 'a' + question.correctAnswer, question.answers[question.correctAnswer]);
 	}
 	
 	return 0;
@@ -108,49 +113,59 @@ void printTitle() {
 	printf("Viel ERFOLG! :)\n\n\n");
 }
 
-void getSettings(Player *players, int *count) {
+void getSettings(Player *players1, int *count) {
 	// Abfrage Anzahl der Spieler
 	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
 	scanf("%d", count);
 
     //Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
     players = (Player*) malloc(*count * sizeof(Player));
-    char *name = (char*) malloc(20 * sizeof(char));
 
-    //Überprüfen ob der Speicherbereich voll ist
-    if(name == NULL)
-        return;
 
     //Einlesen des Spielernamens
     for(int i = 0; i < *count; i++){
+		char *name = (char*) malloc(20 * sizeof(char));
+		
+		//Überprüfen ob der Speicherbereich voll ist
+		if(name == NULL)
+			return;
+        
 		// Eingabe der Spielernamen
-		printf("Bitte Geben sie Ihren Namen ein: ");
+		printf("Bitte Geben sie Ihren Namen ein (%d): ", i);
         scanf("%20s", name);
+		while (getchar()!= '\n');
 
         Player player = {name, 0, 0};
         players[i] = player;
     }
-    //Speicherplatz wieder freigeben für den nächsten Spieler
-	free(name);
 }
 
 
-void readQuestiones(Question *questions, int size) {
+void readQuestiones(Question *questions1, int size) {
 	// Speichern der Fragen
-	char filename [] = "ET19xxx_x.txt";
+	// Fabian Himmelsbach
+	char filename [] = "ET19xxx_x.txt";  
 	FILE *path;
-	int filenumber;
+	int filenumber;   
 	int tempnumber;
-	srand(time(NULL));
-	int numbers [] = {0,1,2,3};
+	srand(time(NULL));  
+	int numbers [] = {0,1,2,3};       	
 	int x;
-	questions = (Question*) malloc (size * sizeof(Question));
+	int used  [7]; 
+	questions = (Question*)  malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
+		//n muss noch geshuffelt werden
 	for (int i = 0; i < size;){
 		
 		filenumber = rand() % 141; //die nummern reichen bis 140
 		
+		for(int k = i-1; k >= 0; k--) { //schaut ob eine Frage dieses Autors bereits vorkam
+			if  (k >= 0 && used[k] == filenumber){
+				continue;
+			}
+		}
+		used[i] = filenumber; //speichert verwenden
 		for (int i = 0; i < 3; i++) { //zufällige Nummer wird in einzelne Ziffern aufgeteilt und in String eingefügt
 			tempnumber = filenumber % 10;
 			filename[6 - i] = '0' + tempnumber;
@@ -162,22 +177,20 @@ void readQuestiones(Question *questions, int size) {
 			continue; // wenn Datei nicht existiert/nicht zu öffnen ist wird nächste Nummer versucht
 		}
 		else {
-			i++; //erfolgreiches öffnen der Datei.
-	
-			questions[i].question = (char*) malloc (100 * sizeof(char));
-			fscanf(path,"%[^\n]",questions[i].question);
-			while (fgetc(path)!= '\n'); //Buffer leeren
-			
 				
-			shuffle(numbers);
+			questions[i].question = (char*) malloc (500 * sizeof(char));
+			fscanf(path,"%[^\n]",questions[i].question);
 			
+			while (fgetc(path)!= '\n');
+			shuffle(numbers);
 			for (int n = 0; n < 4; n++) {
-				questions[i].answers[n] =(char*) malloc (100*sizeof(char)); //Speicherreservierung für die Antworten 
+				questions[i].answers[n] =(char*) malloc (500*sizeof(char)); //Speicherreservierung für die Antworten 
 			}
 			for (int n = 0; n < 4; n++){ 
 				x = numbers[n];	
 				while (fgetc(path)!= '\n'); // Buffer leeren
 				fscanf(path,"%[^\n]",questions[i].answers[x]);
+				
 				if (questions[i].answers[x][0] == '+'){
 						 questions[i].correctAnswer = x;
 				}
@@ -185,32 +198,33 @@ void readQuestiones(Question *questions, int size) {
 					questions[i].answers[x][k] = questions[i].answers[x][k+2]; //entfernt vorzeichen und erstes Leerzeichen
 				}
 			}
-			
+			i++; //erfolgreiches öffnen der Datei.
 		}
+		
 	}
-	
 }
 void swap_int (int array[4],int random_number,int index){
 	int temp = array [index];
 	array[index] = array[random_number];
 	array[random_number] = temp;
-} // Fabian Himmelsbach
+}
+
 void shuffle (int array[4]){
 	for (int i = 3;i > 0; i--){
 		swap_int(array,rand()%i,i);	
 	}
-}// Fabian Himmelsbach
+}
 
 void printQuestion(Question question) {
 	printf("\nFrage: %s\n", question.question);
-	// Ausgabe der Frage (Zufaellige Nummerierung)
-
-	// Fabian Himmelsbach
+	for(int i = 0; i < 4; i++) {
+		printf("%c.) %s\n", 'a' + i, question.answers[i]);
+	}
 }
 
 void getAnswer(Player player, char *answer) {
 	// Eingabe der Antwort des Spielers
-	printf("Bitte geben Sie Ihre Antwort ein %s", player.name);
+	printf("\nBitte geben Sie Ihre Antwort ein %s: ", player.name);
 	scanf("%c", answer);
 	// Deniz Akdeniz
 }
@@ -232,12 +246,12 @@ int checkAnswer(Question question, Player player, char answer, int level) {
 	}
 	if(question.correctAnswer == input)
 	{
-		printf("Antwort %c ist korrekt!\n", answer);
+		//printf("Antwort %c ist korrekt!\n", answer);
 		player.score = prices[level];	// Setzen der Punkte
 	}
 	else
 	{
-		printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
+		//printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
 		//player.score = 0;
 	}
 	return 0;
@@ -256,8 +270,11 @@ void printChance(Question question, Player player) {
 	}
 	int index1 = min(answer, question.correctAnswer);
 	int index2 = max(answer, question.correctAnswer);
+	printf("Index 1: %d", index1);
+	printf("Index 2: %d", index2);
 	
-	printf("\n%s\n\n a) %s\n b) %s\n", question.question, question.answers[index1], question.answers[index2]);
+	printf("%c.) %s\n", 'a' + index1, question.answers[index1]);
+	printf("%c.) %s\n", 'a' + index2, question.answers[index2]);
 	player.chanceUsed = 1;
 }
 
