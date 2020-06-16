@@ -23,7 +23,7 @@ struct spieler {
 struct fragenKatalogEintrag Catalogue[MAX];
 
 int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
-int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
+int read_frage(struct fragenKatalogEintrag * Catalogue);//Tobias
 int frage_auswahl(int nr_entries, int index[7]);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
@@ -41,7 +41,7 @@ int nutzerdaten_eingabe(char *vorname,char *nachname)
 	scanf("%s %s",vorname,nachname);
     return 0;
 }
-int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
+int read_frage(struct fragenKatalogEintrag * Catalogue)
 {
 	DIR *dir;
 	FILE *dateiFrage;
@@ -145,7 +145,11 @@ int frage_auswahl(int nr_entries, int index[7])
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
-
+	printf("\n%s\n", Catalogue[index].frage);
+	for (int i = 0; i<=3;i++){
+	printf("\n%d: %s", i+1, Catalogue[index].antworten[i];
+	}
+	
 }
 int antwort_eingabe()
 {
@@ -178,7 +182,7 @@ int spielstand_speichern(struct spieler *neuerSpieler)
     /*Öffnet die spielstand Datei bzw. legt diese an sofern diese noch nicht existiert*/
     if((fp=fopen("spielstaendeWWM.txt", "a")) != NULL)
     {
-        fprint(fp, "\n%s %s\nHighscore: %d", neuerSpieler->vorname, neuerSpieler->nachname, neuerSpieler->gewinn);
+        fprintf(fp, "\n%s %s\nHighscore: %d", neuerSpieler->vorname, neuerSpieler->nachname, neuerSpieler->gewinn);
         fclose(fp);
     }
     else
@@ -191,19 +195,42 @@ int spielstand_speichern(struct spieler *neuerSpieler)
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 {
 
+	int c;
+	/*	Die Frage wird nochmal ausgegeben*/
+	printf("\n%s",Catalogue[index].frage);
+	/*	Es wird eine Zufallszahl zw. 0 und 3 bestimmt, dabei darf die Zahl nicht die richtige Antwort sein*/
+	srand(time(NULL));
+	c = rand() % 4;
+	if (c == Catalogue[index].nr_correct){
+		if (c<3){
+			c++;
+		}
+		else if(c==3){
+			c--;
+		}
+	}
+	/*	Die ausgewählte Antwort und die richtige Antwort werden in originaler Reihenfolge ausgegeben*/
+	if (c>Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct + 1, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c + 1, Catalogue[index].antworten[c]);
+	}
+	if(c<Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", c + 1, Catalogue[index].antworten[c], Catalogue[index].nr_correct + 1, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
+	}
 }
+
 int main()
 {
     int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
-    int frageAktuell = 0, antwort = 0, jokerflag = 0, index =0;
+    int index[7] = {};
+    int frageAktuell = 0, antwort = 0, jokerflag = 0, fragenzaehler =0;
 
     struct spieler neuerSpieler;
-    read_frage(&Catalogue);
+    read_frage(Catalogue);
     nutzerdaten_eingabe(neuerSpieler.vorname, neuerSpieler.nachname);
     while(1)
     {
-        frageAktuell = frage_auswahl(&Catalogue, MAX);
-        frage_ausgabe(&Catalogue, frageAktuell);
+        frageAktuell = frage_auswahl(MAX, index);
+        frage_ausgabe(Catalogue, frageAktuell);
         antwort = antwort_eingabe();
         if(antwort == 5)//abfragen ob Joker verlangt
         {
@@ -215,20 +242,21 @@ int main()
             else//Wenn Joker verfügbar Frage erneut ausgeben mit 2 Antworten
             {
                 jokerflag = 1;
-                frage_ausgabe_50_50(&Catalogue, frageAktuell);
+                frage_ausgabe_50_50(Catalogue, frageAktuell);
                 antwort= antwort_eingabe();
             }
         }
-        if((antwort_auswertung(Catalogue, antwort))
+        if(antwort_auswertung(Catalogue, antwort))
         {
-            neuerSpieler.gewinn = gewinn[index];
-            index++;
+            neuerSpieler.gewinn = gewinn[fragenzaehler];
+            fragenzaehler++;
         }
         else
         {
 
-            spielstand_speichern(*neuerSpieler);
+            spielstand_speichern(&neuerSpieler);
             return 0;
         }
+    }
     return 0;
 }
