@@ -6,20 +6,21 @@
 #include <dirent.h>
 
 #define L 7
-
 void get_filenames(char array[][100]);
-
 void random_questions(char array[][100]);
+void add_path(char array[][100]);
 void open_files(char array[][100]);
+void cut_files(FILE*datei, int structdata);
+void insert_in_struct(char string[][150], int structdata);
 void bestenliste(int runde);
 
 
-struct Fragen_Catalogue_Eintrag{
-	char *Frage;
-	char *Antworten[4];
+struct Fragen_Catalogue{
+	char Frage[150];
+	char Antworten[4][150];
 	int nr_correct;
-	
-}Catalogue;
+
+} first, second, third, fourth, fifth, sixth, seventh;
 
 
 int main ()
@@ -28,10 +29,24 @@ int main ()
 	
 	get_filenames(namestr);
 	random_questions(namestr);
+	add_path(namestr);
 	open_files(namestr);
+	
+	printf("%s\n",first.Frage);
+	printf("%s\n",first.Antworten[0]);
+	printf("%s\n",first.Antworten[1]);
+	printf("%s\n",first.Antworten[2]);
+	printf("%s\n",first.Antworten[3]);
+	
+	printf("%s\n",seventh.Frage);
+	printf("%s\n",seventh.Antworten[0]);
+	printf("%s\n",seventh.Antworten[1]);
+	printf("%s\n",seventh.Antworten[2]);
+	printf("%s\n",seventh.Antworten[3]);
 	
 	return 0;	
 }
+
 
 //Auslesen der aktuellen Dateinamen aus der Datenbank.
 void get_filenames(char array[][100]){
@@ -80,35 +95,75 @@ void random_questions(char array[][100]){
 		
 	}
 }
-void open_files(char array[][100]){
-	FILE*datei;
+//Hinzufügen des Dateipfads an die Dateinamen zum späteren erfolgreichen öffnen
+void add_path(char array[][100]){
+	
 	char buffer[L][100];
 	
 	for(int m=0;m<L;m++){
 		strcpy(buffer[m], "/home/knoppix/Fragen-DB/");
 		strcat(buffer[m], array[m]);
 	}
+	//Zurückspeichern in "array", um weiterhin in Main zu bleiben 
+	for(int i=0; i<L;i++){
+		strcpy(array[i], buffer[i]);
 		
-/*	for(int i=0; i<L;i++){
+	}
+}
 
-		printf("%s\n", buffer[i]);
-	}*/
+void open_files(char array[][100]){	
+	FILE*datei;
+	int structdata[]={1,2,3,4,5,6,7};
+	
 	
 	
 	for(int i=0;i<L;i++){
-		datei=fopen(buffer[i],"r");
 		
-		while(!feof(datei)){
+		datei=fopen(array[i],"r");
+		
+		cut_files(datei,structdata[i]);
+		
+		
+		/*while(!feof(datei)){
 			printf("%c",fgetc(datei));
 			
 		}
-		printf("\n\n\n");
+		printf("\n\n\n");*/
 		fclose(datei);
 	}
-	
-
 }
+void cut_files(FILE*datei, int structdata){
+	
+	int  m=0;
+	char string[6][150];
+	while(!feof(datei))
+	{	
+		fgets(string[m],149,datei);
+		m++;	
+	}
+	insert_in_struct(string, structdata);
+	
+	/*for(int j=0;j<6;j++)
+		printf("%s\n",string[j]);*/
 
+	//printf("%s\n", string[2]);
+}
+void cut_files(FILE*datei, int structdata){
+	
+	int  m=0;
+	char string[6][150];
+	while(!feof(datei))
+	{	
+		fgets(string[m],149,datei);
+		m++;	
+	}
+	insert_in_struct(string, structdata);
+	
+	/*for(int j=0;j<6;j++)
+		printf("%s\n",string[j]);*/
+
+	//printf("%s\n", string[2]);
+}
 //Fragt den Namen ab und schreibt dann den Namen und die Runde in die Bestenliste Datei
 void bestenliste(int runde){
 	char vorname[50];
