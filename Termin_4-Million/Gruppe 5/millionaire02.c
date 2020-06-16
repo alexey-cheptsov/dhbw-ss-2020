@@ -13,6 +13,7 @@ void add_path(char array[][100]);
 void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
+void insert_in_struct(char string[][150], int structdata);
 
 struct Fragen_Catalogue{
 	char Frage[150];
@@ -198,3 +199,19 @@ void insert_in_struct(char string[][150], int structdata){
 		break;
 	}
 }
+
+//Fragt den Namen ab und schreibt dann den Namen und die Runde in die Bestenliste Datei
+void bestenliste(int runde){
+	char vorname[50];
+	char nachname[50];
+	FILE *fp;
+	printf("Bitte geben Sie ihren Vorname und Nachname fuer die Bestenliste ein:\n");
+	scanf("%s %s",vorname,nachname);
+	
+	fp=fopen("Bestenliste.txt", "a");
+	if(fp==NULL) printf("Fehler Datei konnte nicht geöfnet werden");
+	else{
+		fprintf(fp, "Name:%s %s Runde: %d\n",vorname ,nachname, runde);
+		}
+	}
+
