@@ -194,13 +194,32 @@ void getAnswer(Player *player, char *answer) {
 	// Deniz Akdeniz
 }
 
-int checkAnswer(Question question, char answer) {
+int checkAnswer(Question question, Player player, char answer, int level) {
 	// Überprüfen der Antwort
-	// Setzen der Punkte
-
+	int input; //answer als int
+	switch(answer)
+	{
+		case 65: //A
+		case 97: input = 0; break; //a
+		case 66: //B
+		case 98: input = 1; break; //b
+		case 67: //C
+		case 99: input = 2;  break; //c
+		case 68: //D
+		case 100: input = 3; break; //d
+	}
+	if(question.correctAnswer == input)
+	{
+		printf("Antwort %c ist korrekt!\n", answer);
+		player.score = prices[level];	// Setzen der Punkte
+	}
+	else
+	{
+		printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
+		//player.score = 0;
+	}
 	// Nick Hof
 }
-
 // Ausgabe der 50-50 Chance
 void printChance(Question question, Player player) {
 	if(player.chanceUsed) {
