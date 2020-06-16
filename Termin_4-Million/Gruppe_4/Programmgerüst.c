@@ -24,12 +24,13 @@ struct fragenKatalogEintrag Catalogue[MAX];
 
 int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
 int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
+int frage_auswahl(int nr_entries, int index[7]);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
 int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort);
 int spielstand_speichern(struct spieler *neuerSpieler);//Harald
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
+int cmpfunc (const void * a, const void * b);
 
 
 int nutzerdaten_eingabe(char *vorname,char *nachname)
@@ -106,28 +107,41 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	closedir(dir);
 	return 0;
 }
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+
+int frage_auswahl(int nr_entries, int index[7])
 {
-    char Zwischenspeicher[7][100];
-	int j=0;
-	//Zufallszahl mittels Zeitstempel auf Startwert gesetzt
-	srand(time(NULL));
+	int flag=1;
+	do
+	{
+		srand(time(NULL));
 
-	for(int i=0; i<7;i++){
-		// Zufällig ausgewählte Dateinamen zwischenspeichern
-		strcpy(Zwischenspeicher[i], fragenKatalogEintrag.frage[rand()%nr_entries+1]);
-	}
+		for(int i=0;i<7;i++)
+		{
+			index[i]= (rand()%nr_entries)+1;
+		}
 
-	//Ursprünglichen Inhalt von dem fragenKatalogEintrag löschen
-		while(j<=100){
-		fragenKatalogEintrag.frage[j][0] = '\0';
-		j++;
-	}
+		qsort(index, 7, sizeof(int), cmpfunc);
 
-	//fragenKatalogEintrag mit neuen zufällig ausgewählten Fragen füllen
-	for(int i=0; i<7;i++){
-		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);}
-    return 0;
+		for(int i=1;i<=7;i++)
+		{
+			if(index[i]==index[i-1])
+			{
+				flag=0;
+				break;
+			}
+
+			else
+			{
+		   flag=1;
+			}
+		}
+	}while(flag==0);
+
+	return *index;
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
