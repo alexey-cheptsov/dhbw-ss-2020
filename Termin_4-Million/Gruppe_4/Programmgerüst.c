@@ -146,7 +146,7 @@ int antwort_eingabe()
         antwort = getchar();
         antwortNummer = (int)antwort;
     }while(antwortNummer ==0||antwortNummer >5);
-    printf("Ihre antwort wird ausgewertet\n");
+    printf("Ihre Antwort wird ausgewertet\n");
     return antwortNummer;
 }
 int antwort_auswertung(struct fragenKatalogEintrag *Catalogue , int antwort)
@@ -163,9 +163,28 @@ int spielstand_speichern()
     return 0;
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
-{
+{	
+	int c;
+	
+	printf("\n%s",Catalogue[index].frage);
+	srand(time(NULL));
+	c = rand() % 4;
+	if (c == Catalogue[index].nr_correct){
+		if (c<3){
+		c++;
+		}
+		else if(c==3){
+			c--;
+		}
+	}
+	if (c>Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c, Catalogue[index].antworten[c]);
+	}
+	if(c<Catalogue[index].nr_correct){
+		printf("\n%d: %s\t%d: %s", c, Catalogue[index].antworten[c], Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
+	}
+}	
 
-}
 int main()
 {
     int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
