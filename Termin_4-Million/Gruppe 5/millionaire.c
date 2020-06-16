@@ -148,22 +148,56 @@ void cut_files(FILE*datei, int structdata){
 
 	//printf("%s\n", string[2]);
 }
-void cut_files(FILE*datei, int structdata){
-	
-	int  m=0;
-	char string[6][150];
-	while(!feof(datei))
-	{	
-		fgets(string[m],149,datei);
-		m++;	
-	}
-	insert_in_struct(string, structdata);
-	
-	/*for(int j=0;j<6;j++)
-		printf("%s\n",string[j]);*/
 
-	//printf("%s\n", string[2]);
+void insert_in_struct(char string[][150], int structdata){
+	
+	switch(structdata){
+		case 1: 
+					  strcpy(first.Frage, string[0]);
+					  strcpy(first.Antworten[0], string[2]);	
+					  strcpy(first.Antworten[1], string[3]);
+					  strcpy(first.Antworten[2], string[4]);
+					  strcpy(first.Antworten[3], string[5]);
+		break;
+		case 2: strcpy(second.Frage, string[0]);
+					  strcpy(second.Antworten[0], string[2]);	
+					  strcpy(second.Antworten[1], string[3]);
+					  strcpy(second.Antworten[2], string[4]);
+					  strcpy(second.Antworten[3], string[5]);
+		break;			
+		case 3: strcpy(third.Frage, string[0]);
+					  strcpy(third.Antworten[0], string[2]);	
+					  strcpy(third.Antworten[1], string[3]);
+					  strcpy(third.Antworten[2], string[4]);
+					  strcpy(third.Antworten[3], string[5]);
+		break;
+		case 4: strcpy(fourth.Frage, string[0]);
+					  strcpy(fourth.Antworten[0], string[2]);	
+					  strcpy(fourth.Antworten[1], string[3]);
+					  strcpy(fourth.Antworten[2], string[4]);
+					  strcpy(fourth.Antworten[3], string[5]);
+		break;
+		case 5: strcpy(fifth.Frage, string[0]);
+					  strcpy(fifth.Antworten[0], string[2]);	
+					  strcpy(fifth.Antworten[1], string[3]);
+					  strcpy(fifth.Antworten[2], string[4]);
+					  strcpy(fifth.Antworten[3], string[5]);
+		break;
+		case 6: strcpy(sixth.Frage, string[0]);
+					  strcpy(sixth.Antworten[0], string[2]);	
+					  strcpy(sixth.Antworten[1], string[3]);
+					  strcpy(sixth.Antworten[2], string[4]);
+					  strcpy(sixth.Antworten[3], string[5]);
+		break;
+		case 7: strcpy(seventh.Frage, string[0]);
+					  strcpy(seventh.Antworten[0], string[2]);	
+					  strcpy(seventh.Antworten[1], string[3]);
+					  strcpy(seventh.Antworten[2], string[4]);
+					  strcpy(seventh.Antworten[3], string[5]);
+		break;
+	}
 }
+
 //Fragt den Namen ab und schreibt dann den Namen und die Runde in die Bestenliste Datei
 void bestenliste(int runde){
 	char vorname[50];
