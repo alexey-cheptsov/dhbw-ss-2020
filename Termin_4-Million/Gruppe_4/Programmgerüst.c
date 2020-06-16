@@ -28,7 +28,7 @@ int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Josc
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
 int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort);
-int spielstand_speichern(struct spieler *neuerSpieler);
+int spielstand_speichern(struct spieler *neuerSpieler);//Harald
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 
@@ -158,8 +158,20 @@ int antwort_auswertung(int richtig, int antwort)
         return 0;
     }
 }
-int spielstand_speichern()
+int spielstand_speichern(struct spieler *neuerSpieler)
 {
+    FILE *fp = NULL;
+    /*Öffnet die spielstand Datei bzw. legt diese an sofern diese noch nicht existiert*/
+    if((fp=fopen("spielstaendeWWM.txt", "a")) != NULL)
+    {
+        fprint(fp, "\n%s %s\nHighscore: %d", neuerSpieler->vorname, neuerSpieler->nachname, neuerSpieler->gewinn);
+        fclose(fp);
+    }
+    else
+    {
+        fprintf(stdout, "Dateifehler!\n");//Ausgabe der Fehlermeldung, fals Datei nicht geöffnet wurde
+        return 1;//Beenden der Funktion
+    }
     return 0;
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
@@ -169,7 +181,7 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 int main()
 {
     int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
-    int frageAktuell = 0, antwort = 0, spielstand =0, jokerflag = 0, index =0;
+    int frageAktuell = 0, antwort = 0, jokerflag = 0, index =0;
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
@@ -193,15 +205,15 @@ int main()
                 antwort= antwort_eingabe();
             }
         }
-        if(antwort_auswertung(&Catalogue, antwort))
+        if((antwort_auswertung(&Catalogue, antwort))
         {
-            spielstand = gewinn[index];
+            neuerSpieler.gewinn = gewinn[index];
             index++;
         }
         else
         {
 
-            spielstand_speichern(*neuerSpieler, spielstand);
+            spielstand_speichern(*neuerSpieler);
             return 0;
         }
     return 0;
