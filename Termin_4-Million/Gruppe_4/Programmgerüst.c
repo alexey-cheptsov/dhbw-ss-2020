@@ -100,6 +100,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 			Catalogue[i].antworten[3][j] = antwortDOld[k];
 			}
 		i++;
+		fclose(dateiFrage);
 	}
 	/*	Directory wird wieder geschlossen */
 	closedir(dir);
