@@ -65,6 +65,23 @@ void shuffle (int*); //Fabian
 void swap_int (int*,int,int);
 
 int main(int argc, char **argv) {
+	int count = 0;
+	getSettings(players, &count);
+	readQuestiones(questions, ROUNDS);
+	
+	for(int i = 0; i < ROUNDS; i++) {
+		Question question = questions[i];
+		printQuestion(question);
+		
+		for(int j = 0; j < count; j++) {
+			Player player = players[j];
+			char *answer;
+			getAnswer(player, answer);
+			checkAnswer(question, player, &answer);
+		}
+		printf("\n -> Richtige Antwort: %i.) %s\n", question.correctAnswer, question.answers[correctAnswer]);
+	}
+	
 	return 0;
 }
 
