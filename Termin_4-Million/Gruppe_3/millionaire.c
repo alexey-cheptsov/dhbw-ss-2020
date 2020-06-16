@@ -38,6 +38,7 @@ typedef struct Player {
 	char *name;
 	int score;
 	int chanceUsed;
+	int lost;
 } Player;
 
 typedef struct Question {
@@ -57,9 +58,9 @@ void getSettings(Player *players, int *count);
 void readQuestiones(Question *questions, int size);
 void printQuestion(Question question);
 void getAnswer(Player player, char *answer);
-int checkAnswer(Question question, Player player, char answer, int level);
+int checkAnswer(Question question, int playerindex, char answer, int level);
 
-void printChance(Question question, Player player);
+void printChance(Question question, int playerindex);
 int printScore(FILE *file, Player *players);
 
 int random(int min, int max);
@@ -68,28 +69,45 @@ void shuffle (int*); //Fabian
 void swap_int (int*,int,int);
 
 int main(int argc, char **argv) {
+	srand(time(NULL));
 	printTitle();
 	
 	int count = 0;
 	getSettings(players, &count);
 	readQuestiones(questions, ROUNDS);
-	for(int i = 0; i < 1; i++) {
+	int lost = 0;
+	for(int i = 0; i < ROUNDS; i++) {
 		Question question = questions[i];
+		
 		printQuestion(question);
+		
+		
 		
 		for(int j = 0; j < count; j++) {
 			Player player = players[j];
-			char answer;
-			getAnswer(player, &answer);
-			if(checkAnswer(question, player, answer, i)) {
-				printf("CHANCE");
-				
-				printChance(question, player);
-				getAnswer(player, &answer);
-				checkAnswer(question, player, answer, i);
+			
+			if (player.lost) {
+				continue;
+			}
+			else {
+					char answer;
+					getAnswer(player, &answer);
+				if(checkAnswer(question, j, answer, i)) {
+					printChance(question, j);
+					getAnswer(player, &answer);
+					checkAnswer(question, j, answer, i);
+					
+				}
+				if (players[j].lost) {
+					lost ++;
+				}
 			}
 		}
 		printf("\n -> Richtige Antwort: %c.) %s\n", 'a' + question.correctAnswer, question.answers[question.correctAnswer]);
+		if (lost == count){
+			break;
+		}
+		
 	}
 	
 	return 0;
@@ -135,7 +153,7 @@ void getSettings(Player *players1, int *count) {
         scanf("%20s", name);
 		while (getchar()!= '\n');
 
-        Player player = {name, 0, 0};
+        Player player = {name, 0, 0, 0};
         players[i] = player;
     }
 }
@@ -147,8 +165,7 @@ void readQuestiones(Question *questions1, int size) {
 	char filename [] = "ET19xxx_x.txt";  
 	FILE *path;
 	int filenumber;   
-	int tempnumber;
-	srand(time(NULL));  
+	int tempnumber;  
 	int numbers [] = {0,1,2,3};       	
 	int x;
 	int used  [7]; 
@@ -226,10 +243,11 @@ void getAnswer(Player player, char *answer) {
 	// Eingabe der Antwort des Spielers
 	printf("\nBitte geben Sie Ihre Antwort ein %s: ", player.name);
 	scanf("%c", answer);
+	while (getchar()!= '\n');
 	// Deniz Akdeniz
 }
 
-int checkAnswer(Question question, Player player, char answer, int level) {
+int checkAnswer(Question question, int playerindex, char answer, int level) {
 	// Überprüfen der Antwort
 	int input; //answer als int
 	switch(answer)
@@ -247,20 +265,22 @@ int checkAnswer(Question question, Player player, char answer, int level) {
 	if(question.correctAnswer == input)
 	{
 		//printf("Antwort %c ist korrekt!\n", answer);
-		player.score = prices[level];	// Setzen der Punkte
+		players[playerindex].score = prices[level];	// Setzen der Punkte
+		
 	}
 	else
 	{
 		//printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
 		//player.score = 0;
+		players[playerindex].lost = 1;
 	}
 	return 0;
 	// Nick Hof
 }
 // Ausgabe der 50-50 Chance
-void printChance(Question question, Player player) {
-	if(player.chanceUsed) {
-		printf("\nDu hast dein 50-50 Chance bereits verwendet!\n");
+void printChance(Question question, int playerindex) {
+	if(players[playerindex].chanceUsed) {
+		printf("\nDu hast deine 50-50 Chance bereits verwendet!\n");
 		return;
 	}
 	int answer = random(0, 4);
@@ -270,19 +290,17 @@ void printChance(Question question, Player player) {
 	}
 	int index1 = min(answer, question.correctAnswer);
 	int index2 = max(answer, question.correctAnswer);
-	printf("Index 1: %d", index1);
-	printf("Index 2: %d", index2);
 	
 	printf("%c.) %s\n", 'a' + index1, question.answers[index1]);
 	printf("%c.) %s\n", 'a' + index2, question.answers[index2]);
-	player.chanceUsed = 1;
+	players[playerindex].chanceUsed = 1;
 }
 
 int printScore(FILE *file, Player *players) {
 	// Ausgabe des Spielstands / der Ergebnisse
 	// Speichern der Ergebnisse in Datei
 
-	// To be continued...
+	// Fabian
 	return 1;
 }
 
