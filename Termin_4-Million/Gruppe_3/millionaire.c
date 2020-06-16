@@ -64,6 +64,21 @@ void shuffle (int*); //Fabian
 void swap_int (int*,int,int);
 
 int main(int argc, char **argv) {	
+	printf("Willkommen bei 'Wer Wird Million%cr' !\n",132 );
+	printf("Die Sendung in der Sie mit Ihrem Wissen Geld verdienen, ");
+	printf("und sogar Million%cr werden k%cnnen!\n\n",132,148);
+	printf("Zu den Spielregeln:\n");
+	printf("Regel Nummer eins : Nicht schummeln!\n");
+	printf("Regel Nummer zwei : nur g%cltige Zeichen eingeben!\n",129);
+	printf("Zu den g%cltigen Zeichen geh%cren -> A,B,C,D ODER a,b,c,d .\n\n",129,148);
+	printf("Sie erhalten auch EINEN Joker, der 50:50 Joker kann nur einmal\n");
+	printf("pro Spiel verwendet werden!\n");
+	printf("Diesen benutzen Sie dann, wenn Ihnen die Frage ");
+	printf("vorgelesen wurde.\n");
+	printf("Sie k%cnnen auch mit Ihren Freunden gegeneinander spielen.\n",148);
+	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n",129);
+	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
+	printf("Viel ERFOLG! :)");
 	return 0;
 }
 
