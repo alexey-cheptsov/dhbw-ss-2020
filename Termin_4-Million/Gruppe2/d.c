@@ -167,6 +167,7 @@ int main(void) {
 
 
 void State_Menu_init() {
+	system("clear");
 	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
 	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
 	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
@@ -185,7 +186,7 @@ void State_Menu_init() {
 	while ((rd = readdir(dir)) != NULL) {
 		if(rd->d_name[0] != '.'){
 			strcpy(&(filenames[number_of_questions][0]), rd->d_name);
-			printf("%s", filenames[number_of_questions]);
+			//printf("%s\n", filenames[number_of_questions]);
 			number_of_questions=number_of_questions+1;
 		}
 	}
@@ -240,9 +241,11 @@ bool State_AskQuestion_handle_input() {
 		player.credits *= 10;
 		if (player.level == 8) {
 			currentState = &stateWon;
+		} else if (currentState == &stateJoker) {
+			currentState = &stateAskQuestion;
 		}
 		currentState->init();
-	} else {
+	} else if (user_answer >= 'a' && user_answer <= 'd'){
 		player.done = true;
 		currentState = &stateLost;
 		currentState->init();
