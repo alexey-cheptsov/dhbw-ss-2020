@@ -6,14 +6,14 @@
 #include <dirent.h>
 
 #define L 7
+
 void get_filenames(char array[][100]);
 void random_questions(char array[][100]);
 void add_path(char array[][100]);
 void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
-void bestenliste(int runde);
-
+void insert_in_struct(char string[][150], int structdata);
 
 struct Fragen_Catalogue{
 	char Frage[150];
@@ -21,6 +21,8 @@ struct Fragen_Catalogue{
 	int nr_correct;
 
 } first, second, third, fourth, fifth, sixth, seventh;
+
+
 
 
 int main ()
@@ -47,7 +49,6 @@ int main ()
 	return 0;	
 }
 
-
 //Auslesen der aktuellen Dateinamen aus der Datenbank.
 void get_filenames(char array[][100]){
 	int i=0;
@@ -73,7 +74,7 @@ void get_filenames(char array[][100]){
 }
 
 
-		
+	//Auswählen zufälliger Dateinamen aus allen	
 void random_questions(char array[][100]){
 	char buffer[L][100];
 	int m=0;
@@ -109,7 +110,7 @@ void add_path(char array[][100]){
 		strcpy(array[i], buffer[i]);
 		
 	}
-}
+}	
 
 void open_files(char array[][100]){	
 	FILE*datei;
@@ -132,6 +133,7 @@ void open_files(char array[][100]){
 		fclose(datei);
 	}
 }
+
 void cut_files(FILE*datei, int structdata){
 	
 	int  m=0;
@@ -212,5 +214,4 @@ void bestenliste(int runde){
 		fprintf(fp, "Name:%s %s Runde: %d\n",vorname ,nachname, runde);
 		}
 	}
-
 

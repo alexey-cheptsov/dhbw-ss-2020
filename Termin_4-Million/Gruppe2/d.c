@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+#include <dirent.h>
+
+#define MAX_NAME_SIZE 32
 
 typedef struct {
 	char* question;
@@ -11,7 +17,7 @@ typedef struct {
 	int credits;
 	int level;
 	bool joker_available;
-	char name[32];
+	char name[MAX_NAME_SIZE];
 	bool done;
 } Player;
 
@@ -65,10 +71,90 @@ State stateLost = {
 
 State* currentState = NULL;
 Player player = { .credits = 0, .level = 1, .joker_available = true, .name = {}, .done = false };
+char filenames[200][27];
+int number_of_questions = 0;
 Question currentQuestion;
 
 
+///refresh question data for next call
+void refresh_data(int* m, char** f, int r, char* p){//Anika
+	f[r] = f[*m];	///replace used filename
+	*m = *m -1;	///new number of available questions
+	free(p);	///p is the path to the used file
+}
+
+int read_question(FILE* fl, Question* questions){//Anika
+	 size_t input_size = 1;
+	///read first line (question)
+	if(getline(&questions->question, &input_size, fl) ==-1){
+		return 0;
+	}  
+    ///empty line:
+    if(getline(&questions->answers[0], &input_size, fl) == -1){
+		return 0;
+	}
+    ///read answers:
+    for(int i = 0; i<4; i++){
+		input_size=1;
+	    	///Fragen zufällig anordnen???
+		if(getline(&questions->answers[i], &input_size, fl) == -1){
+			return 0;
+		}
+		///save correct answers
+		if(questions->answers[i][0] == '+'){
+			questions->nr_correct = i;
+		}
+		///remove + / - 
+		for(int c=0; c<input_size; c++){
+			questions->answers[i][c]=questions->answers[i][c+2];
+		}
+	}
+	return 1;
+}
+
+int choose_question(Question* questions){ // Anika
+    int random;
+    FILE* fl;
+    char* path_to_file;
+	
+	path_to_file = (char*)malloc(27*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
+	strcpy(path_to_file, "../Fragen-DB/");
+	
+	///choose rondom question
+    random=rand()% number_of_questions;
+	strcat(path_to_file, filenames[random]);
+    fl = fopen(path_to_file, "r");
+	if(fl==NULL){
+		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(number_of_questions, filenames, random, path_to_file);
+		if(number_of_questions >0){
+			choose_question(questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+	
+	if(read_question(fl, questions)==0){
+		printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(number_of_questions, filenames, random, path_to_file);
+		if(number_of_questions >0){
+			choose_question(questions);
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+    
+    
+	refresh_data(number_of_questions, filenames, random, path_to_file);
+    return 1;
+}
+
+
 int main(void) {
+	srand(time(0));
+
 	currentState = &stateMenu;
 	currentState->init();
 
@@ -79,8 +165,28 @@ int main(void) {
 
 
 void State_Menu_init() {
-	// print welcome message
-	printf("Welcome\n");
+	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
+	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
+	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
+	printf("\nSie haben einen 50:50 Joker der mit xxxx eingesetzt werden kann.");
+	printf("\nViel Spass und Viel Erfolg wuenscht Ihnen Guenther Jauch\n");
+
+	// read filenames
+	struct dirent* rd;
+	DIR* dir;
+	dir = opendir("../Fragen-DB/");
+
+	if (dir == NULL) {
+		printf("Öffnen fehlgeschlagen.");
+	}
+
+	while ((rd = readdir(dir)) != NULL) {
+		if(rd->d_name[0] != '.'){
+			strcpy(&(filenames[number_of_questions][0]), rd->d_name);
+			printf("%s", filenames[number_of_questions]);
+			number_of_questions=number_of_questions+1;
+		}
+	}
 }
 
 bool State_Menu_handle_input() {
@@ -93,25 +199,24 @@ bool State_Menu_handle_input() {
 
 
 void State_CreateUser_init() {
-	// guide user through the creation of a player profile
-	// printf("Name:") ...
-	// fgets ...
-	printf("Enter name ..\n");
+	printf("Geben Sie Ihren Name bitte ein: ");
+	fgets(player.name, MAX_NAME_SIZE, stdin);
+	currentState = &stateAskQuestion;
+	currentState->init();
 }
 
 bool State_CreateUser_handle_input() {
-	if (getchar() == '\n') { // or other condition to start playing
+	/*if (getchar() == '\n') { // or other condition to start playing
 		currentState = &stateAskQuestion;
 		currentState->init();
-	}
+	}*/
 	return true;
 }
 
 
 void State_AskQuestion_init() {
-	//print_question(currentQuestion);
-	// print_joker_info();
-	printf("Question %d\n", player.level);
+	///choose rondom question
+    choose_question(&currentQuestion);
 }
 
 bool State_AskQuestion_handle_input() {
@@ -125,6 +230,10 @@ bool State_AskQuestion_handle_input() {
 		} else {
 			currentState->init();
 		}
+	} else if (user_answer == 'j' && player.joker_available){
+		player.joker_available = false;
+		currentState = &stateJoker;
+		currentState->init();
 	}
 	//if (user_answer == currentQuestion.nr_correct) { increase level, credits, go to next Q };
 	//else if (user_answer == joker) .. joker
@@ -134,9 +243,24 @@ bool State_AskQuestion_handle_input() {
 }
 
 
-void State_Joker_init() {
-	// print remaining 2 answers
-	printf("Joker\n");
+void State_Joker_init() {	
+	int num = (rand() % (4));
+	
+	while(num == currentQuestion.nr_correct)
+	{
+		num = (rand() % (4));
+	}
+	
+	if(num < currentQuestion.nr_correct)
+	{
+		printf("%s \n", currentQuestion.answers[num]);
+		printf("%s \n", currentQuestion.answers[currentQuestion.nr_correct]);
+	}
+	else
+	{
+		printf("%s \n", currentQuestion.answers[currentQuestion.nr_correct]);
+		printf("%s \n", currentQuestion.answers[num]);
+	}	
 }
 
 bool State_Joker_handle_input() {

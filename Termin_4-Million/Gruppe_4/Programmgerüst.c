@@ -27,12 +27,12 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobi
 int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
-int antwort_auswertung(int richtig, int antwort);// Harald
-int spielstand_speichern();
+int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort);
+int spielstand_speichern(struct spieler *neuerSpieler);
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
 
 
-int nutzerdaten_eingabe(char*vorname,char*nachname)
+int nutzerdaten_eingabe(char *vorname,char *nachname)
 {
     vorname[50];
 	nachname[50];
@@ -52,12 +52,12 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	char* antwortBOld;
 	char* antwortCOld;
 	char* antwortDOld;
-	
+
 	/*	öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
 		return 0;}
-	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen 
+	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen
 		Jede Fragedatei wird geöffnet*/
 	while((dirzeiger=readdir(dir)) != NULL){
 		char* dateipfad;
@@ -151,7 +151,12 @@ int antwort_eingabe()
 }
 int antwort_auswertung(int richtig, int antwort)
 {
-    return 0;
+    if(richtig == antwort){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 int spielstand_speichern()
 {
@@ -182,31 +187,41 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 
 int main()
 {
-    int frageAktuell = 0, antwort = 0, richtigeAntwort = 0, jokerflag = 0;
+    int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
+    int frageAktuell = 0, antwort = 0, spielstand =0, jokerflag = 0, index =0;
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
-    nutzerdaten_eingabe(&neuerSpieler.vorname,&neuerSpieler.nachname);
+    nutzerdaten_eingabe(neuerSpieler.vorname, neuerSpieler.nachname);
     while(1)
     {
         frageAktuell = frage_auswahl(&Catalogue, MAX);
         frage_ausgabe(&Catalogue, frageAktuell);
         antwort = antwort_eingabe();
-        if(antwort == 5)
+        if(antwort == 5)//abfragen ob Joker verlangt
         {
-            if(jokerflag == 1)
+            if(jokerflag == 1)//Abfrage ob Joker bereits verbraucht
             {
-                printf("Sie haben leider keinen Joker mehr!\n")
+                printf("Sie haben leider keinen Joker mehr!\n");
                 antwort = antwort_eingabe();
             }
-            else
+            else//Wenn Joker verfügbar Frage erneut ausgeben mit 2 Antworten
             {
                 jokerflag = 1;
                 frage_ausgabe_50_50(&Catalogue, frageAktuell);
-                antwort_eingabe();
+                antwort= antwort_eingabe();
             }
         }
-        antwort_auswertung(richtigeAntwort, antwort);
-    }
+        if(antwort_auswertung(&Catalogue, antwort))
+        {
+            spielstand = gewinn[index];
+            index++;
+        }
+        else
+        {
+
+            spielstand_speichern(*neuerSpieler, spielstand);
+            return 0;
+        }
     return 0;
 }

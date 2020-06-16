@@ -1,0 +1,6 @@
+Von wem wurde die Programmiersprache C entwickelt?
+
+- John von Neumann
+- Grace Hopper
++ Dennis Ritchie
+- Donald Trump

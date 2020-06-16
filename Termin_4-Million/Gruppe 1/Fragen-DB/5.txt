@@ -1,0 +1,6 @@
+Wie viele Saiten hat ein Cello?
+
+- 3
++ 4
+- 5
+- 6
