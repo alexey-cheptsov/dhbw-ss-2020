@@ -96,7 +96,7 @@ int zufallszahl(int Zahl[8])
 }
 
 /* Funktion generiert verkürzte Antwortmöglichkeiten.*/
-int abfrage50_50(Frage *Catalogue, int index)
+int abfrage50_50(Frage *fragen, int index)
 {
 	//int a = 0, e=3;
 	int r2;
@@ -119,9 +119,9 @@ int abfrage50_50(Frage *Catalogue, int index)
 		//r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
 		r2 = rand()%4;
 
-		Catalogue = Catalogue + index;		//weiter zur Ausgewählten Frage aus dem Katalog durch Pointeraddition
+		fragen = fragen + (index-1);		//weiter zur Ausgewählten Frage aus dem Katalog durch Pointeraddition
 
-		while(r2 == (Catalogue->nr_correct))
+		while(r2 == (fragen->richtigeantwort))
 			r2 = rand()%4;
 
 		switch(r2)
@@ -130,20 +130,22 @@ int abfrage50_50(Frage *Catalogue, int index)
 			case 1: c = 'B';
 			case 2: c = 'C';
 			case 3: c = 'D';
+			default: break;
 		}
 
-		switch(Catalogue->nr_correct)
+		switch(fragen->richtigeantwort)
 		{
 			case 0: c2 = 'A';
 			case 1: c2 = 'B';
 			case 2: c2 = 'C';
 			case 3: c2 = 'D';
+			default: break;
 		}	
-		printf("Mögliche Antworten sind:\n\n%c %s\n%c %s", c, Catalogue->Antworten[r2], c2, Catalogue->Antworten[Catalogue->nr_correct]);
+		printf("Mögliche Antworten sind:\n\n%c %s\n%c %s", c, fragen->antworten[r2], c2, fragen->antworten[fragen->richtigeantwort]);
 		/*pruefung = 1;
 	} return 0;*/
 	
-	Catalogue = Catalogue - (index -1);
+	fragen = fragen - (index -1);
 	
 	return 0;
 }
