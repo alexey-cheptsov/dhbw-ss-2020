@@ -67,7 +67,7 @@ int zufallszahl(int Zahl[8])
 		
 		for(int i=0;i<7;i++)
 		{
-			Zahl[i]= (rand()%93)+1;		
+			Zahl[i]= (rand()%89)+1;		
 		}
 	
 		qsort(Zahl, 7, sizeof(int), cmpfunc);
