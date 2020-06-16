@@ -3,6 +3,7 @@
 // Ungültige Antwort einfach überspringen und die Frage neu schreiben
 // bei jeder Frage den Kontostand zeigen
 // Endbildschirm beim Verlieren / Gewinnen
+// Zufällige Antorten
 
 #include <stdio.h>
 #include <stdbool.h>
