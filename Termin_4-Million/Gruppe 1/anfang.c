@@ -95,7 +95,9 @@ int zufallszahl(int Zahl[8])
 	return *Zahl;
 }
 
-/* Funktion generiert verkürzte Antwortmöglichkeiten.*/
+/* Funktion generiert verkürzte Antwortausgabe.
+Zunächst wird ein Zufallswert zw. 0 und 4 generiert. Die Antwort mit dieser Nummer und die richtige Antwort
+der durch den Index ausgewählten Frage werden ausgegeben.*/
 int abfrage50_50(Frage *fragen, int index)
 {
 	//int a = 0, e=3;

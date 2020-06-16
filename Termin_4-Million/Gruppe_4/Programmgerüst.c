@@ -145,7 +145,11 @@ int frage_auswahl(int nr_entries, int index[7])
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
-
+	printf("\n%s\n", Catalogue[index].frage);
+	for (int i = 0; i<=3;i++){
+	printf("\n%d: %s", i+1, Catalogue[index].antworten[i];
+	}
+	
 }
 int antwort_eingabe()
 {
@@ -207,10 +211,10 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 	}
 	/*	Die ausgewählte Antwort und die richtige Antwort werden in originaler Reihenfolge ausgegeben*/
 	if (c>Catalogue[index].nr_correct){
-		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c, Catalogue[index].antworten[c]);
+		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct + 1, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c + 1, Catalogue[index].antworten[c]);
 	}
 	if(c<Catalogue[index].nr_correct){
-		printf("\n%d: %s\t%d: %s", c, Catalogue[index].antworten[c], Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
+		printf("\n%d: %s\t%d: %s", c + 1, Catalogue[index].antworten[c], Catalogue[index].nr_correct + 1, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
 	}
 }
 
