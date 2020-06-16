@@ -84,7 +84,7 @@ void getSettings(Player *players, int *count) {
 
     //Einlesen des Spielernamens
     for(int i=0; i<=*count;i++){
-        scanf("%s", Array_name);
+        scanf("%s", Array_name[i]);
 
         players = Array_name[i];
 
