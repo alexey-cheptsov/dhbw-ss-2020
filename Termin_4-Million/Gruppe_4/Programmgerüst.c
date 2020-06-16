@@ -149,9 +149,9 @@ int antwort_eingabe()
     printf("Ihre antwort wird ausgewertet\n");
     return antwortNummer;
 }
-int antwort_auswertung(int richtig, int antwort)
+int antwort_auswertung(struct fragenKatalogEintrag *Catalogue , int antwort)
 {
-    if(richtig == antwort){
+    if((*Catalogue).nr_correct == antwort){
         return 1;
     }
     else{
@@ -193,7 +193,7 @@ int main()
                 antwort= antwort_eingabe();
             }
         }
-        if(antwort_auswertung(&Catalogue, antwort))
+        if(antwort_auswertung(Catalogue, antwort))
         {
             spielstand = gewinn[index];
             index++;
