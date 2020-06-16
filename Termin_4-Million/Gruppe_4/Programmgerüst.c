@@ -24,12 +24,13 @@ struct fragenKatalogEintrag Catalogue[MAX];
 
 int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
 int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
+int frage_auswahl(int nr_entries, int index[7]);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
 int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort);
-int spielstand_speichern(struct spieler *neuerSpieler);
+int spielstand_speichern(struct spieler *neuerSpieler);//Harald
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
+int cmpfunc (const void * a, const void * b);
 
 
 int nutzerdaten_eingabe(char *vorname,char *nachname)
@@ -106,28 +107,41 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	closedir(dir);
 	return 0;
 }
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+
+int frage_auswahl(int nr_entries, int index[7])
 {
-    char Zwischenspeicher[7][100];
-	int j=0;
-	//Zufallszahl mittels Zeitstempel auf Startwert gesetzt
-	srand(time(NULL));
+	int flag=1;
+	do
+	{
+		srand(time(NULL));
 
-	for(int i=0; i<7;i++){
-		// Zufällig ausgewählte Dateinamen zwischenspeichern
-		strcpy(Zwischenspeicher[i], fragenKatalogEintrag.frage[rand()%nr_entries+1]);
-	}
+		for(int i=0;i<7;i++)
+		{
+			index[i]= (rand()%nr_entries)+1;
+		}
 
-	//Ursprünglichen Inhalt von dem fragenKatalogEintrag löschen
-		while(j<=100){
-		fragenKatalogEintrag.frage[j][0] = '\0';
-		j++;
-	}
+		qsort(index, 7, sizeof(int), cmpfunc);
 
-	//fragenKatalogEintrag mit neuen zufällig ausgewählten Fragen füllen
-	for(int i=0; i<7;i++){
-		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);}
-    return 0;
+		for(int i=1;i<=7;i++)
+		{
+			if(index[i]==index[i-1])
+			{
+				flag=0;
+				break;
+			}
+
+			else
+			{
+		   flag=1;
+			}
+		}
+	}while(flag==0);
+
+	return *index;
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
@@ -146,10 +160,10 @@ int antwort_eingabe()
         antwort = getchar();
         antwortNummer = (int)antwort;
     }while(antwortNummer ==0||antwortNummer >5);
-    printf("Ihre Antwort wird ausgewertet\n");
+    printf("Ihre antwort wird ausgewertet\n");
     return antwortNummer;
 }
-int antwort_auswertung(struct fragenKatalogEintrag *Catalogue , int antwort)
+int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort)
 {
     if((*Catalogue).nr_correct == antwort){
         return 1;
@@ -158,39 +172,30 @@ int antwort_auswertung(struct fragenKatalogEintrag *Catalogue , int antwort)
         return 0;
     }
 }
-int spielstand_speichern()
+int spielstand_speichern(struct spieler *neuerSpieler)
 {
+    FILE *fp = NULL;
+    /*Öffnet die spielstand Datei bzw. legt diese an sofern diese noch nicht existiert*/
+    if((fp=fopen("spielstaendeWWM.txt", "a")) != NULL)
+    {
+        fprint(fp, "\n%s %s\nHighscore: %d", neuerSpieler->vorname, neuerSpieler->nachname, neuerSpieler->gewinn);
+        fclose(fp);
+    }
+    else
+    {
+        fprintf(stdout, "Dateifehler!\n");//Ausgabe der Fehlermeldung, fals Datei nicht geöffnet wurde
+        return 1;//Beenden der Funktion
+    }
     return 0;
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
-{	
-	int c;
-	/*	Die Frage wird nochmal ausgegeben*/
-	printf("\n%s",Catalogue[index].frage);
-	/*	Es wird eine Zufallszahl zw. 0 und 3 bestimmt, dabei darf die Zahl nicht die richtige Antwort sein*/
-	srand(time(NULL));
-	c = rand() % 4;
-	if (c == Catalogue[index].nr_correct){
-		if (c<3){
-			c++;
-		}
-		else if(c==3){
-			c--;
-		}
-	}
-	/*	Die ausgewählte Antwort und die richtige Antwort werden in originaler Reihenfolge ausgegeben*/
-	if (c>Catalogue[index].nr_correct){
-		printf("\n%d: %s\t%d: %s", Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)], c, Catalogue[index].antworten[c]);
-	}
-	if(c<Catalogue[index].nr_correct){
-		printf("\n%d: %s\t%d: %s", c, Catalogue[index].antworten[c], Catalogue[index].nr_correct, Catalogue[index].antworten[(Catalogue[index].nr_correct)]);
-	}
-}	
+{
 
+}
 int main()
 {
     int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
-    int frageAktuell = 0, antwort = 0, spielstand =0, jokerflag = 0, index =0;
+    int frageAktuell = 0, antwort = 0, jokerflag = 0, index =0;
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
@@ -214,15 +219,15 @@ int main()
                 antwort= antwort_eingabe();
             }
         }
-        if(antwort_auswertung(Catalogue, antwort))
+        if((antwort_auswertung(Catalogue, antwort))
         {
-            spielstand = gewinn[index];
+            neuerSpieler.gewinn = gewinn[index];
             index++;
         }
         else
         {
 
-            spielstand_speichern(*neuerSpieler, spielstand);
+            spielstand_speichern(*neuerSpieler);
             return 0;
         }
     return 0;
