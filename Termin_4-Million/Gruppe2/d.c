@@ -1,3 +1,9 @@
+// to do
+// Bestenliste
+// Ungültige Antwort einfach überspringen und die Frage neu schreiben
+// bei jeder Frage den Kontostand zeigen
+// Endbildschirm beim Verlieren / Gewinnen
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -171,8 +177,9 @@ void State_Menu_init() {
 	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
 	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
 	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
-	printf("\nSie haben einen 50:50 Joker der mit xxxx eingesetzt werden kann.");
+	printf("\nSie haben einen 50:50 Joker der mit <j> eingesetzt werden kann.");
 	printf("\nViel Spass und Viel Erfolg wuenscht Ihnen Guenther Jauch\n");
+	printf("Zum Spielbeginn drücken Sie <ENTER>\n")
 
 	// read filenames
 	struct dirent* rd;
@@ -235,10 +242,14 @@ bool State_AskQuestion_handle_input() {
 		player.joker_available = false;
 		currentState = &stateJoker;
 		currentState->init();
-	} else if (user_answer == 'a' + currentQuestion.nr_correct){
+	} else if (user_answer == 'a' + currentQuestion.nr_correct || user_answer == '0' + currentQuestion.nr_correct){
 		// right answer
+		if (player.level == 1) {
+			player.credits = 10;
+		} else {
+			player.credits *= 10;
+		}
 		++player.level;
-		player.credits *= 10;
 		if (player.level == 8) {
 			currentState = &stateWon;
 		} else if (currentState == &stateJoker) {
