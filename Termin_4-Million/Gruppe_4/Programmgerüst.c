@@ -24,15 +24,16 @@ struct fragenKatalogEintrag Catalogue[MAX];
 
 int nutzerdaten_eingabe(char*vorname,char*nachname);// Patrik
 int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries);//Tobias
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries);// Joscha
+int frage_auswahl(int nr_entries, int index[7]);// Joscha
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index);// Anja
 int antwort_eingabe();// Harald
-int antwort_auswertung(int richtig, int antwort);// Harald
-int spielstand_speichern();
+int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort);
+int spielstand_speichern(struct spieler *neuerSpieler);//Harald
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index);
+int cmpfunc (const void * a, const void * b);
 
 
-int nutzerdaten_eingabe(char*vorname,char*nachname)
+int nutzerdaten_eingabe(char *vorname,char *nachname)
 {
     vorname[50];
 	nachname[50];
@@ -52,12 +53,12 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 	char* antwortBOld;
 	char* antwortCOld;
 	char* antwortDOld;
-	
+
 	/*	öffne Verzeichnis @ PATH */
 	if((dir=opendir(PATH)) == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
 		return 0;}
-	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen 
+	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen
 		Jede Fragedatei wird geöffnet*/
 	while((dirzeiger=readdir(dir)) != NULL){
 		char* dateipfad;
@@ -100,33 +101,47 @@ int read_frage(struct fragenKatalogEintrag * Catalogue, int * nr_entries)
 			Catalogue[i].antworten[3][j] = antwortDOld[k];
 			}
 		i++;
+		fclose(dateiFrage);
 	}
 	/*	Directory wird wieder geschlossen */
 	closedir(dir);
 	return 0;
 }
-int frage_auswahl(struct fragenKatalogEintrag*Catalogue, int nr_entries)
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+
+int frage_auswahl(int nr_entries, int index[7])
 {
-    char Zwischenspeicher[7][100];
-	int j=0;
-	//Zufallszahl mittels Zeitstempel auf Startwert gesetzt
-	srand(time(NULL));
+	int flag=1;
+	do
+	{
+		srand(time(NULL));
 
-	for(int i=0; i<7;i++){
-		// Zufällig ausgewählte Dateinamen zwischenspeichern
-		strcpy(Zwischenspeicher[i], fragenKatalogEintrag.frage[rand()%nr_entries+1]);
-	}
+		for(int i=0;i<7;i++)
+		{
+			index[i]= (rand()%nr_entries)+1;
+		}
 
-	//Ursprünglichen Inhalt von dem fragenKatalogEintrag löschen
-		while(j<=100){
-		fragenKatalogEintrag.frage[j][0] = '\0';
-		j++;
-	}
+		qsort(index, 7, sizeof(int), cmpfunc);
 
-	//fragenKatalogEintrag mit neuen zufällig ausgewählten Fragen füllen
-	for(int i=0; i<7;i++){
-		strcpy(fragenKatalogEintrag.frage[i], Zwischenspeicher[i]);}
-    return 0;
+		for(int i=1;i<=7;i++)
+		{
+			if(index[i]==index[i-1])
+			{
+				flag=0;
+				break;
+			}
+
+			else
+			{
+		   flag=1;
+			}
+		}
+	}while(flag==0);
+
+	return *index;
 }
 void frage_ausgabe(struct fragenKatalogEintrag* Catalogue, int index)
 {
@@ -148,12 +163,29 @@ int antwort_eingabe()
     printf("Ihre antwort wird ausgewertet\n");
     return antwortNummer;
 }
-int antwort_auswertung(int richtig, int antwort)
+int antwort_auswertung(struct fragenKatalogEintrag* Catalogue, int antwort)
 {
-    return 0;
+    if((*Catalogue).nr_correct == antwort){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
-int spielstand_speichern()
+int spielstand_speichern(struct spieler *neuerSpieler)
 {
+    FILE *fp = NULL;
+    /*Öffnet die spielstand Datei bzw. legt diese an sofern diese noch nicht existiert*/
+    if((fp=fopen("spielstaendeWWM.txt", "a")) != NULL)
+    {
+        fprint(fp, "\n%s %s\nHighscore: %d", neuerSpieler->vorname, neuerSpieler->nachname, neuerSpieler->gewinn);
+        fclose(fp);
+    }
+    else
+    {
+        fprintf(stdout, "Dateifehler!\n");//Ausgabe der Fehlermeldung, fals Datei nicht geöffnet wurde
+        return 1;//Beenden der Funktion
+    }
     return 0;
 }
 void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
@@ -162,31 +194,41 @@ void frage_ausgabe_50_50 (struct fragenKatalogEintrag* Eintrag, int index)
 }
 int main()
 {
-    int frageAktuell = 0, antwort = 0, richtigeAntwort = 0, jokerflag = 0;
+    int gewinn[7] = {10, 100, 1000, 10000, 100000, 500000, 1000000};
+    int frageAktuell = 0, antwort = 0, jokerflag = 0, index =0;
 
     struct spieler neuerSpieler;
     read_frage(&Catalogue);
-    nutzerdaten_eingabe(&neuerSpieler.vorname,&neuerSpieler.nachname);
+    nutzerdaten_eingabe(neuerSpieler.vorname, neuerSpieler.nachname);
     while(1)
     {
         frageAktuell = frage_auswahl(&Catalogue, MAX);
         frage_ausgabe(&Catalogue, frageAktuell);
         antwort = antwort_eingabe();
-        if(antwort == 5)
+        if(antwort == 5)//abfragen ob Joker verlangt
         {
-            if(jokerflag == 1)
+            if(jokerflag == 1)//Abfrage ob Joker bereits verbraucht
             {
-                printf("Sie haben leider keinen Joker mehr!\n")
+                printf("Sie haben leider keinen Joker mehr!\n");
                 antwort = antwort_eingabe();
             }
-            else
+            else//Wenn Joker verfügbar Frage erneut ausgeben mit 2 Antworten
             {
                 jokerflag = 1;
                 frage_ausgabe_50_50(&Catalogue, frageAktuell);
-                antwort_eingabe();
+                antwort= antwort_eingabe();
             }
         }
-        antwort_auswertung(richtigeAntwort, antwort);
-    }
+        if((antwort_auswertung(Catalogue, antwort))
+        {
+            neuerSpieler.gewinn = gewinn[index];
+            index++;
+        }
+        else
+        {
+
+            spielstand_speichern(*neuerSpieler);
+            return 0;
+        }
     return 0;
 }

@@ -1,0 +1,6 @@
+Welche Farbe hat die Haut eines Eisbären?
+
+- weiß
+- braun
+- grau
++ schwarz
