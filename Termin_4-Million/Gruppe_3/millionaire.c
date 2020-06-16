@@ -135,20 +135,29 @@ void getSettings(Player *players, int *count) {
 
 void readQuestiones(Question *questions, int size) {
 	// Speichern der Fragen
-	char filename [] = "ET19xxx_x.txt"; 
+	// Fabian Himmelsbach
+	char filename [] = "ET19xxx_x.txt";  
 	FILE *path;
-	int filenumber;
+	int filenumber;   
 	int tempnumber;
-	srand(time(NULL));
-	int numbers [] = {0,1,2,3};
+	srand(time(NULL));  
+	int numbers [] = {0,1,2,3};       	
 	int x;
-	questions = (Question*) malloc (size * sizeof(Question));
+	int used  [7]; 
+	questions = (Question*)  malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
+		//n muss noch geshuffelt werden
 	for (int i = 0; i < size;){
 		
 		filenumber = rand() % 141; //die nummern reichen bis 140
 		
+		for(int k = i-1; k >= 0; k--) { //schaut ob eine Frage dieses Autors bereits vorkam
+			if  (k >= 0 && used[k] == filenumber){
+				continue;
+			}
+		}
+		used[i] = filenumber; //speichert verwenden
 		for (int i = 0; i < 3; i++) { //zufällige Nummer wird in einzelne Ziffern aufgeteilt und in String eingefügt
 			tempnumber = filenumber % 10;
 			filename[6 - i] = '0' + tempnumber;
@@ -161,14 +170,11 @@ void readQuestiones(Question *questions, int size) {
 		}
 		else {
 			i++; //erfolgreiches öffnen der Datei.
-	
 			questions[i].question = (char*) malloc (100 * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
-			while (fgetc(path)!= '\n'); //Buffer leeren
-			
-				
+			printf("%s\n",questions[i].question);
+			while (fgetc(path)!= '\n');
 			shuffle(numbers);
-			
 			for (int n = 0; n < 4; n++) {
 				questions[i].answers[n] =(char*) malloc (100*sizeof(char)); //Speicherreservierung für die Antworten 
 			}
@@ -176,6 +182,7 @@ void readQuestiones(Question *questions, int size) {
 				x = numbers[n];	
 				while (fgetc(path)!= '\n'); // Buffer leeren
 				fscanf(path,"%[^\n]",questions[i].answers[x]);
+				printf("%s\n",questions[i].answers[x]);
 				if (questions[i].answers[x][0] == '+'){
 						 questions[i].correctAnswer = x;
 				}
@@ -183,10 +190,8 @@ void readQuestiones(Question *questions, int size) {
 					questions[i].answers[x][k] = questions[i].answers[x][k+2]; //entfernt vorzeichen und erstes Leerzeichen
 				}
 			}
-			
 		}
 	}
-	
 }
 void swap_int (int array[4],int random_number,int index){
 	int temp = array [index];
