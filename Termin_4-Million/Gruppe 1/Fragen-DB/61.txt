@@ -1,0 +1,6 @@
+Mit welcher Konstante wird die Lichtgeschwindigkeit im Vakuum abgekürzt?
+
+- C
+- E
++ c
+- v

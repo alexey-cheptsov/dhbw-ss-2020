@@ -1,0 +1,6 @@
+Wie viele Halswirbel hat eine Giraffe?
+
+- 14
++ 7
+- 10
+- 8

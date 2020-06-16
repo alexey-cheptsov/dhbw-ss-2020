@@ -1,0 +1,6 @@
+Wie viele Buchstaben hat das hawaiianische Alphabet?
+
++ 12
+- 16
+- 20
+- 24

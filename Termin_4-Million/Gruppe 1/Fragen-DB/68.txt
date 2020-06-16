@@ -1,0 +1,6 @@
+Die klassisch genormte Europalette EPAL1 besteht aus 78 Nägeln, neun Klötzen und insgesamt wie vielen Brettern?
+
+- neun
+- zehn
++ elf
+- zwölf
