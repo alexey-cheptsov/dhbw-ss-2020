@@ -1,0 +1,6 @@
+In welchem Jahr wurde der Euro als Bargeld eingeführt?
+
+- 2000
+- 2001
++ 2002
+- 2003

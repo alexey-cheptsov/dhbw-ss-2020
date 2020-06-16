@@ -1,0 +1,6 @@
+Welches Dateiformat öffnet man typischerweise mit dem Acrobat Reader?
+
+-BAT
+-ARF
+-EXE
++PDF
