@@ -117,7 +117,7 @@ int choose_question(Question* questions){ // Anika
     FILE* fl;
     char* path_to_file;
 	
-	path_to_file = (char*)malloc(27*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
+	path_to_file = (char*)malloc(50*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
 	strcpy(path_to_file, "../Fragen-DB/");
 	
 	///choose rondom question
