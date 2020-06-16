@@ -6,6 +6,7 @@
 #include <dirent.h>
 
 #define MAX_NAME_SIZE 32
+//#define clear_console() printf("\033[H\033[J")
 
 typedef struct {
 	char* question;
@@ -216,40 +217,45 @@ bool State_CreateUser_handle_input() {
 
 
 void State_AskQuestion_init() {
+	system("clear");
     choose_question(&currentQuestion);
 	printf("Frage %d\n", player.level);
 	printf("%s\n\n", currentQuestion.question);
 	for (int i = 0; i < 4; ++i) {
 		printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
 	}
-	printf("j) Joker\n");
+	if (player.joker_available) printf("j) Joker\n");
 }
 
 bool State_AskQuestion_handle_input() {
 	// get user input and check answer
 	char user_answer = getchar();
-	if (user_answer == '\n') {
-		++player.level;
-		if (player.level == 8) {
-			currentState = &stateWon;
-			currentState->init();
-		} else {
-			currentState->init();
-		}
-	} else if (user_answer == 'j' && player.joker_available){
+	if (user_answer == 'j' && player.joker_available){
 		player.joker_available = false;
 		currentState = &stateJoker;
 		currentState->init();
+	} else if (user_answer == 'a' + currentQuestion.nr_correct){
+		// right answer
+		++player.level;
+		player.credits *= 10;
+		if (player.level == 8) {
+			currentState = &stateWon;
+		}
+		currentState->init();
+	} else {
+		player.done = true;
+		currentState = &stateLost;
+		currentState->init();
 	}
-	//if (user_answer == currentQuestion.nr_correct) { increase level, credits, go to next Q };
-	//else if (user_answer == joker) .. joker
-	// else wrong answer: currentState = &stateLost;
-	// currentState->init();
 	return true;
 }
 
 
 void State_Joker_init() {	
+	system("clear");
+	printf("Frage %d\n", player.level);
+	printf("%s\n\n", currentQuestion.question);
+
 	int num = (rand() % (4));
 	
 	while(num == currentQuestion.nr_correct)
@@ -259,19 +265,18 @@ void State_Joker_init() {
 	
 	if(num < currentQuestion.nr_correct)
 	{
-		printf("%s \n", currentQuestion.answers[num]);
-		printf("%s \n", currentQuestion.answers[currentQuestion.nr_correct]);
+		printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+		printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
 	}
 	else
 	{
-		printf("%s \n", currentQuestion.answers[currentQuestion.nr_correct]);
-		printf("%s \n", currentQuestion.answers[num]);
-	}	
+		printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
+		printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+	}
 }
 
 bool State_Joker_handle_input() {
-	// check answer
-	return true;
+	return State_AskQuestion_handle_input();
 }
 
 
