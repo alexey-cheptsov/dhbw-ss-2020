@@ -28,6 +28,8 @@
 #include <stdlib.h>
 
 #define FILE_PATH "../Fragen-DB"
+#define NAME_SIZE 20
+#define ROUNDS 7
 
 #define min(X, Y) ((X < Y) ? (X) : (Y))
 #define max(X, Y) ((X > Y) ? (X) : (Y))
@@ -47,15 +49,15 @@ typedef struct Question {
 Player *players;
 Question *questions;
 
-const int[] price = {10,100,1000,10000,100000,500000,1000000};
+const int prices[] = {10,100,1000,10000,100000,500000,1000000};
 
 void printTitle();
 void getSettings(Player *players, int *count);
 
 void readQuestiones(Question *questions, int size);
 void printQuestion(Question question);
-void getAnswer(Player *player, char *answer);
-int checkAnswer(Question question, char *answer);
+void getAnswer(Player player, char *answer);
+int checkAnswer(Question question, Player player, char answer, int level);
 
 void printChance(Question question, Player player);
 int printScore(FILE *file, Player *players);
@@ -66,9 +68,11 @@ void shuffle (int*); //Fabian
 void swap_int (int*,int,int);
 
 int main(int argc, char **argv) {
+	printTitle();
 	int count = 0;
 	getSettings(players, &count);
 	readQuestiones(questions, ROUNDS);
+	printf("YAY");
 	
 	for(int i = 0; i < ROUNDS; i++) {
 		Question question = questions[i];
@@ -76,11 +80,11 @@ int main(int argc, char **argv) {
 		
 		for(int j = 0; j < count; j++) {
 			Player player = players[j];
-			char *answer;
-			getAnswer(player, answer);
-			checkAnswer(question, player, &answer);
+			char answer;
+			getAnswer(player, &answer);
+			checkAnswer(question, player, answer, i);
 		}
-		printf("\n -> Richtige Antwort: %i.) %s\n", question.correctAnswer, question.answers[correctAnswer]);
+		printf("\n -> Richtige Antwort: %i.) %s\n", question.correctAnswer, question.answers[question.correctAnswer]);
 	}
 	
 	return 0;
@@ -101,7 +105,7 @@ void printTitle() {
 	printf("Sie k%cnnen auch mit Ihren Freunden gegeneinander spielen.\n",148);
 	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n",129);
 	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
-	printf("Viel ERFOLG! :)");
+	printf("Viel ERFOLG! :)\n\n\n");
 }
 
 void getSettings(Player *players, int *count) {
@@ -109,33 +113,32 @@ void getSettings(Player *players, int *count) {
 	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
 	scanf("%d", count);
 
-	// Eingabe der Spielernamen
-    printf("Bitte Geben sie Ihren Namen ein: ");
-
     //Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
-    char *Array_name = (char*) malloc(*count*sizeof(*Array_name));
+    players = (Player*) malloc(*count * sizeof(Player));
+    char *name = (char*) malloc(20 * sizeof(char));
 
     //Überprüfen ob der Speicherbereich voll ist
-    if(Array_name == NULL)
+    if(name == NULL)
         return;
 
     //Einlesen des Spielernamens
-    for(int i=0; i<=*count;i++){
-        scanf("%s", Array_name);
+    for(int i = 0; i < *count; i++){
+		// Eingabe der Spielernamen
+		printf("Bitte Geben sie Ihren Namen ein: ");
+		
+        scanf("%20s", name);
 
-        Player player = {Array_name, 0, 0};
+        Player player = {name, 0, 0};
         players[i] = player;
     }
     //Speicherplatz wieder freigeben für den nächsten Spieler
-        free(Array_name);
-
-	// Lukas Hauser
+	free(name);
 }
 
 
 void readQuestiones(Question *questions, int size) {
 	// Speichern der Fragen
-	char filename [] = "ET19xxx_x.txt"; 
+	char filename [] = "ET19xxx_x.txt";
 	FILE *path;
 	int filenumber;
 	int tempnumber;
@@ -200,14 +203,15 @@ void shuffle (int array[4]){
 }// Fabian Himmelsbach
 
 void printQuestion(Question question) {
+	printf("\nFrage: %s\n", question.question);
 	// Ausgabe der Frage (Zufaellige Nummerierung)
 
 	// Fabian Himmelsbach
 }
 
-void getAnswer(Player *player, char *answer) {
+void getAnswer(Player player, char *answer) {
 	// Eingabe der Antwort des Spielers
-	printf("Bitte geben Sie Ihre Antwort ein %s", player->name);
+	printf("Bitte geben Sie Ihre Antwort ein %s", player.name);
 	scanf("%c", answer);
 	// Deniz Akdeniz
 }
@@ -225,6 +229,7 @@ int checkAnswer(Question question, Player player, char answer, int level) {
 		case 99: input = 2;  break; //c
 		case 68: //D
 		case 100: input = 3; break; //d
+		case '%': return 1;
 	}
 	if(question.correctAnswer == input)
 	{
@@ -236,6 +241,7 @@ int checkAnswer(Question question, Player player, char answer, int level) {
 		printf("Antwort %c ist falsch, Antwot %c waere richtig gewesen!\n", answer, question.correctAnswer + 65);
 		//player.score = 0;
 	}
+	return 0;
 	// Nick Hof
 }
 // Ausgabe der 50-50 Chance
@@ -261,6 +267,7 @@ int printScore(FILE *file, Player *players) {
 	// Speichern der Ergebnisse in Datei
 
 	// To be continued...
+	return 1;
 }
 
 int random(int min, int max) {
