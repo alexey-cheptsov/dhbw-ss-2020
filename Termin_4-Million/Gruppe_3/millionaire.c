@@ -121,12 +121,20 @@ void readQuestiones(Question *questions, int size) {
 	srand(time(NULL));
 	int numbers [] = {0,1,2,3};
 	int x;
+	int used  [7]; 
 	questions = (Question*) malloc (size * sizeof(Question));
 		
 	chdir(FILE_PATH); // wechselt in das Verzeichnis indem die Fragen sind
 	for (int i = 0; i < size;){
 		
 		filenumber = rand() % 141; //die nummern reichen bis 140
+		
+		for(int k = i-1; k >= 0; k--) { //schaut ob eine Frage dieses Autors bereits vorkam
+			if  (k >= 0 && used[k] == filenumber){
+				continue;
+			}
+		}
+		used[i] = filenumber; //speichert verwendete Nutzernummern
 		
 		for (int i = 0; i < 3; i++) { //zufällige Nummer wird in einzelne Ziffern aufgeteilt und in String eingefügt
 			tempnumber = filenumber % 10;
