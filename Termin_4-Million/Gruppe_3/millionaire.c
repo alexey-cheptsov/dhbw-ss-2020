@@ -160,29 +160,31 @@ void getSettings(int *count) {
 	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
 	scanf("%d", count);
 	while (getchar()!= '\n');
-	
+
 	if(*count < 1) {
+		printf("\n[ERROR] Ungültige Anzahl von Spielern!\n");
 		return;
 	}
-    // Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
-    players = (Player*) malloc(*count * sizeof(Player));
+	// Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
+	players = (Player*) malloc(*count * sizeof(Player));
 
-    // Einlesen des Spielernamens
-    for(int i = 0; i < *count; i++){
+	// Einlesen des Spielernamens
+	for(int i = 0; i < *count; i++){
 		char *name = (char*) malloc(20 * sizeof(char));
-		
+
 		// Überprüfen ob der Speicherbereich voll ist
-		if(name == NULL)
+		if(players == NULL || name == NULL) {
+			printf("\n[ERROR] Nicht genügend Speicherplatz vorhanden!\n");
 			return;
-        
+		}
 		// Eingabe der Spielernamen
 		printf("Bitte Geben sie Ihren Namen ein (%d): ", i + 1);
-        scanf("%20s", name);
+		scanf("%20s", name);
 		while (getchar()!= '\n');
 
-        Player player = {name, 0, 0, 0};
-        players[i] = player;
-    }
+		Player player = {name, 0, 0, 0};
+		players[i] = player;
+	}
 }
 
 /*!
@@ -227,11 +229,11 @@ void readQuestiones(int size) {
 		else {
 			questions[i].question = (char*) malloc(500 * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
-			
 			while(fgetc(path)!= '\n');
+			
 			shuffle(numbers, ANSWER_COUNT);
+			// Speicherreservierung für die Antworten 
 			for(int n = 0; n < ANSWER_COUNT; n++) {
-				// Speicherreservierung für die Antworten 
 				questions[i].answers[n] = (char*) malloc(500 * sizeof(char));
 			}
 			for(int n = 0; n < ANSWER_COUNT; n++){ 
@@ -241,16 +243,15 @@ void readQuestiones(int size) {
 				fscanf(path,"%[^\n]",questions[i].answers[x]);
 				
 				if(questions[i].answers[x][0] == '+'){
-					 questions[i].correctAnswer = x;
+					questions[i].correctAnswer = x;
 				}
-				for(int k = 0; questions[i].answers[x][k+1] != '\0'; k++){
+				for(int k = 0; questions[i].answers[x][k + 1] != '\0'; k++){
 					// Entfernen des Vorzeichens und Leerzeichens
-					questions[i].answers[x][k] = questions[i].answers[x][k+2];
+					questions[i].answers[x][k] = questions[i].answers[x][k + 2];
 				}
 			}
 			i++;
 		}
-		
 	}
 }
 
@@ -298,7 +299,7 @@ int checkAnswer(Question question, int playerindex, char answer, int level) {
 		return 1;
 	}
 	else {
-		printf("\n[ERROR] Invalid answer!\n");
+		printf("\n[ERROR] Ungültige Antwort!\n");
 		return 0;
 	}
 	// Setzen der Punkte
@@ -375,7 +376,7 @@ void shuffle(int array[], int size){
  * @param index1 - Index of the first value
  * @param index2 - Index of the second value
  */
-void swap_int(int array[],int index1,int index2){
+void swap_int(int array[], int index1, int index2){
 	int temp = array[index1];
 	array[index1] = array[index2];
 	array[index2] = temp;
