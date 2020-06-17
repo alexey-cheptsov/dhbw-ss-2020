@@ -21,7 +21,7 @@
  * 
  */
 
-
+// Bibliotheken
 #include <string.h>
 #include <dir.h>
 #include <time.h>
@@ -29,10 +29,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Konstanten
 #define FILE_PATH "../Fragen-DB"
 #define NAME_SIZE 20
+
+#define ANSWER_COUNT 4
 #define ROUNDS 7
 
+// Hilfsfunktionen
 #define min(X, Y) ((X < Y) ? (X) : (Y))
 #define max(X, Y) ((X > Y) ? (X) : (Y))
 
@@ -51,16 +55,9 @@ typedef struct Player {
  */
 typedef struct Question {
 	char *question;
-	char *answers[4];
+	char *answers[ANSWER_COUNT];
 	int correctAnswer;
 } Question;
-
-// Liste der Spieler und Quizfragen
-Player *players;
-Question *questions;
-
-// Preise des Spiels
-const int prices[] = {10,100,1000,10000,100000,500000,1000000};
 
 // Funktionsprototypen
 void printTitle();
@@ -76,8 +73,16 @@ int printScore(FILE *file);
 
 // Hilfsfunktionen
 int random(int min, int max);
-void shuffle (int* array);
+void shuffle (int* array, int size);
 void swap_int (int* array, int index1, int index2);
+
+
+// Liste der Spieler und Quizfragen
+Player *players;
+Question *questions;
+
+// Preise des Spiels
+const int prices[] = {10,100,1000,10000,100000,500000,1000000};
 
 /*!
  * @brief Main program function
@@ -113,7 +118,7 @@ int main(int argc, char **argv) {
 				checkAnswer(question, j, answer, i);
 			}
 			if (players[j].lost) {
-				lost ++;
+				lost++;
 			}
 		}
 		printf("\n -> Richtige Antwort: %c.) %s\n", 'a' + question.correctAnswer, question.answers[question.correctAnswer]);
@@ -128,13 +133,14 @@ int main(int argc, char **argv) {
  * @brief Prints the title of the game
  */
 void printTitle() {	
+	printf("\n");
 	printf("Willkommen bei 'Wer Wird Million%cr' !\n",132 );
 	printf("Die Sendung in der Sie mit Ihrem Wissen Geld verdienen, ");
 	printf("und sogar Million%cr werden k%cnnen!\n\n",132,148);
 	printf("Zu den Spielregeln:\n");
 	printf("Regel Nummer eins : Nicht schummeln!\n");
 	printf("Regel Nummer zwei : nur g%cltige Zeichen eingeben!\n",129);
-	printf("Zu den g%cltigen Zeichen geh%cren -> A,B,C,D ODER a,b,c,d .\n\n",129,148);
+	printf("Zu den g%cltigen Zeichen geh%cren -> A,B,C,D ODER a,b,c,d UND %%.\n\n",129,148);
 	printf("Sie erhalten auch EINEN Joker, der 50:50 Joker kann nur einmal\n");
 	printf("pro Spiel verwendet werden!\n");
 	printf("Diesen benutzen Sie dann, wenn Ihnen die Frage ");
@@ -170,7 +176,7 @@ void getSettings(int *count) {
 			return;
         
 		// Eingabe der Spielernamen
-		printf("Bitte Geben sie Ihren Namen ein (%d): ", i);
+		printf("Bitte Geben sie Ihren Namen ein (%d): ", i + 1);
         scanf("%20s", name);
 		while (getchar()!= '\n');
 
@@ -184,19 +190,19 @@ void getSettings(int *count) {
  * @param size - Number of questions to read
  */
 void readQuestiones(int size) {
-	char filename [] = "ET19xxx_x.txt";  
+	char filename[] = "ET19xxx_x.txt";  
 	FILE *path;
 	int filenumber;   
 	int tempnumber;  
-	int numbers [] = {0,1,2,3};       	
+	int numbers[] = {0,1,2,3};       	
 	int x;
-	int used  [7]; 
-	questions = (Question*)  malloc (size * sizeof(Question));
+	int used[7]; 
+	questions = (Question*) malloc(size * sizeof(Question));
 	
 	// Wechseln in das Verzeichnis, in dem die Fragen sind
 	chdir(FILE_PATH); 
 	for(int i = 0; i < size;){
-		filenumber = rand() % 141; // Nummern bis 140
+		filenumber = random(0, 141); // Nummern bis 140
 		
 		// Überprüfen, ob eine Frage dieses Autors bereits vorkam
 		for(int k = i - 1; k >= 0; k--) {
@@ -207,38 +213,38 @@ void readQuestiones(int size) {
 		// Speichern der verwendeten Dateien
 		used[i] = filenumber;
 		// Einfügen der zufälligen Nummern
-		for (int i = 0; i < 3; i++) {
+		for(int i = 0; i < 3; i++) {
 			tempnumber = filenumber % 10;
 			filename[6 - i] = '0' + tempnumber;
 			filenumber /= 10;
 		}
-		filename [8] = '0' + (rand() % 4);
+		filename[8] = '0' + random(0, 4);
 		path = fopen(filename,"r");
 		// Überprüfen, ob die Datei existiert
-		if (path == NULL) {
+		if(path == NULL) {
 			continue;
 		}
 		else {
-			questions[i].question = (char*) malloc (500 * sizeof(char));
+			questions[i].question = (char*) malloc(500 * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
 			
-			while (fgetc(path)!= '\n');
-			shuffle(numbers);
-			for (int n = 0; n < 4; n++) {
+			while(fgetc(path)!= '\n');
+			shuffle(numbers, ANSWER_COUNT);
+			for(int n = 0; n < ANSWER_COUNT; n++) {
 				// Speicherreservierung für die Antworten 
-				questions[i].answers[n] =(char*) malloc (500*sizeof(char));
+				questions[i].answers[n] = (char*) malloc(500 * sizeof(char));
 			}
-			for (int n = 0; n < 4; n++){ 
+			for(int n = 0; n < ANSWER_COUNT; n++){ 
 				x = numbers[n];	
 				// Leeren des Buffers
-				while (fgetc(path)!= '\n');
+				while(fgetc(path)!= '\n');
 				fscanf(path,"%[^\n]",questions[i].answers[x]);
 				
-				if (questions[i].answers[x][0] == '+'){
-						 questions[i].correctAnswer = x;
+				if(questions[i].answers[x][0] == '+'){
+					 questions[i].correctAnswer = x;
 				}
-				for (int k = 0;questions[i].answers[x][k+1] != '\0'; k++){
-					// Entfernung des Vorzeichen und Leerzeichens
+				for(int k = 0; questions[i].answers[x][k+1] != '\0'; k++){
+					// Entfernen des Vorzeichens und Leerzeichens
 					questions[i].answers[x][k] = questions[i].answers[x][k+2];
 				}
 			}
@@ -254,7 +260,7 @@ void readQuestiones(int size) {
  */
 void printQuestion(Question question) {
 	printf("\n%s\n", question.question);
-	for(int i = 0; i < 4; i++) {
+	for(int i = 0; i < ANSWER_COUNT; i++) {
 		printf("%c.) %s\n", 'a' + i, question.answers[i]);
 	}
 }
@@ -277,36 +283,26 @@ void getAnswer(Player player, char *answer) {
  * @param playerindex - Index of the player int the global array
  * @param answer - Answer of the player
  * @param level - Current level of the game
+ * @return Wether the player uses the 50-50 chance
  */
 int checkAnswer(Question question, int playerindex, char answer, int level) {
 	// Überprüfen der Antwort
 	int input;
-	
-	switch(answer) {
-		case 'A': //A
-		case 'a': //a
-			input = 0;
-			break;
-		case 'B': //B
-		case 'b': //b
-			input = 1;
-			break;
-		case 'C': //C
-		case 'c': //c
-			input = 2; 
-			break;
-		case 'D': //D
-		case 'd': //d
-			input = 3;
-			break;
-		case '%':
-			return 1;
-		default:
-			printf("\n[ERROR] Invalid answer!\n");
-			return 0;
+	if(answer >= 'a') {
+		input = answer - 'a';
 	}
+	else if(answer >= 'A') {
+		input = answer - 'A';
+	}
+	else if(answer == '%') {
+		return 1;
+	}
+	else {
+		printf("\n[ERROR] Invalid answer!\n");
+		return 0;
+	}
+	// Setzen der Punkte
 	if(question.correctAnswer == input) {
-		// Setzen der Punkte
 		players[playerindex].score = prices[level];
 	}
 	else {
@@ -325,15 +321,16 @@ void printChance(Question question, int playerindex) {
 		printf("\nDu hast deine 50-50 Chance bereits verwendet!\n");
 		return;
 	}
-	int answer = random(0, 4);
+	int answer = random(0, ANSWER_COUNT);
 
 	while(answer == question.correctAnswer) {
-		answer = random(0, 4);
+		answer = random(0, ANSWER_COUNT);
 	}
 	int index1 = min(answer, question.correctAnswer);
 	int index2 = max(answer, question.correctAnswer);
 	
 	// Ausgabe der 50-50 Chance
+	printf("\n50-50 Chance:\n");
 	printf("%c.) %s\n", 'a' + index1, question.answers[index1]);
 	printf("%c.) %s\n", 'a' + index2, question.answers[index2]);
 	players[playerindex].chanceUsed = 1;
@@ -342,6 +339,7 @@ void printChance(Question question, int playerindex) {
 /*!
  * @brief Prints the score of the game
  * @param file - File to save the scores in
+ * @return Wether the score has been successfully saved
  */
 int printScore(FILE *file) {
 	// Ausgabe des Spielstands / der Ergebnisse
@@ -354,9 +352,21 @@ int printScore(FILE *file) {
  * @brief Gets a random integer value in an intervall
  * @param min - Minimum value of the random value
  * @param max - Maximum value of the random value
+ * @return The random generated value
  */
 int random(int min, int max) {
 	return (rand() % (max - min + 1)) + min;
+}
+
+/*!
+ * @brief Shuffles the values of an integer array
+ * @param array - Array with the integer values
+ * @param size - Size of the integer array
+ */
+void shuffle(int array[], int size){
+	for (int i = size - 1; i > 0; i--){
+		swap_int(array, random(0, size - 1), i);
+	}
 }
 
 /*!
@@ -365,18 +375,8 @@ int random(int min, int max) {
  * @param index1 - Index of the first value
  * @param index2 - Index of the second value
  */
-void swap_int(int array[4],int index1,int index2){
+void swap_int(int array[],int index1,int index2){
 	int temp = array[index1];
 	array[index1] = array[index2];
 	array[index2] = temp;
-}
-
-/*!
- * @brief Shuffles the values of an integer array
- * @param array - Array with the integer values
- */
-void shuffle(int array[4]){
-	for (int i = 3; i > 0; i--){
-		swap_int(array, random(0, 3), i);
-	}
 }
