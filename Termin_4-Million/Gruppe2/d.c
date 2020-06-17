@@ -92,34 +92,45 @@ void refresh_data(int r, char* p){//Anika
 }
 
 int read_question(FILE* fl, Question* questions){//Anika
-	size_t input_size = 1;
+	 size_t input_size = 1;
+	 
+	 
 	///read first line (question)
-	if(getline(&questions->question, &input_size, fl) ==-1){
+	if(getline(&(currentQuestion.question), &input_size, fl) ==-1){
 		return 0;
 	}  
     ///empty line:
-    if(getline(&questions->answers[0], &input_size, fl) == -1){
+    if(getline(&(currentQuestion.answers[0]), &input_size, fl) == -1){
 		return 0;
 	}
+
     ///read answers:
+    int r[4];
+    int random, max=4;
+    int n[4]= {0,1,2,3};
     for(int i = 0; i<4; i++){
 		input_size=1;
-	    	///Fragen zufällig anordnen???
-		if(getline(&questions->answers[i], &input_size, fl) == -1){
+		random=rand()%max;
+		r[i]=n[random];
+		n[random]=n[max-1];
+		max=max-1;
+		
+		if(getline(&(currentQuestion.answers[r[i]]), &input_size, fl) == -1){
 			return 0;
 		}
 		///save correct answers
-		if(questions->answers[i][0] == '+'){
-			questions->nr_correct = i;
+		if(currentQuestion.answers[r[i]][0] == '+'){
+			currentQuestion.nr_correct = r[i];
 		}
 		///remove + / - 
 		for(int c=0; c<input_size; c++){
-			questions->answers[i][c]=questions->answers[i][c+2];
+			//Leerzeichen?
+			currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
 		}
+		
 	}
 	return 1;
 }
-
 int choose_question(Question* questions){ // Anika
     int random;
     FILE* fl;
