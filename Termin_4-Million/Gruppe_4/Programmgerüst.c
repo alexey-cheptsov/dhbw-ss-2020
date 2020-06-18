@@ -50,7 +50,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 	int k = 2;
 	char array[90][100];
 	char *temp;
-	char* test = "C:/Users/tobia/Documents/DHBW/2. Semester/Informatik Labor/dhbw-ss-2020/Termin_4-Million/Fragen-DB/Gruppe_4/";
+	char* test = "C:/Users/tobia/Documents/DHBW/2. Semester/Informatik Labor/dhbw-ss-2020/Termin_4-Million/Fragen-DB/Gruppe_4/";     //Hier Dateipfad der Fragen angeben
 	char* dateipfad;
 	char* antwortAOld;
 	char* antwortBOld;
@@ -80,8 +80,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 			printf("\n Datei konnte nicht geoeffnet werden\n\n\n");
 			return 0;
 			}
-			
-		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
+		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);			//Ich hab keine Ahnung warum die Datei nicht geöffnet wird, dateipfad stimmt
 		fgets(temp, ZEILENLAENGE, dateiFrage);
 		fgets(antwortAOld, ZEILENLAENGE, dateiFrage);
 		fgets(antwortBOld, ZEILENLAENGE, dateiFrage);
