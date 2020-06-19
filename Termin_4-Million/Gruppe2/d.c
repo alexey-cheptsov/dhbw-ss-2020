@@ -1,9 +1,7 @@
 // to do
 // Bestenliste
-// Ungültige Antwort einfach überspringen und die Frage neu schreiben
-// Endbildschirm beim Verlieren / Gewinnen
-// Zufällige Antorten
 // \n hinter den Antworten entfernen
+// 1. Buchstabe von Antworten nicht überspringen
 
 #include <stdio.h>
 #include <stdbool.h>
