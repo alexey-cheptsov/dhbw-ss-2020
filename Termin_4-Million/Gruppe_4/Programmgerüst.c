@@ -4,8 +4,8 @@
 #include<time.h>
 #include<stdlib.h>
 
-#define MAX 97
-#define PATH "C:/Users/Harald/Documents/GitHub/dhbw-ss-2020/Termin_4-Million/Fragen-DB/"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
+#define MAX 85
+#define PATH "C:/Users/tobia/Documents/DHBW/2. Semester/Informatik Labor/dhbw-ss-2020/Termin_4-Million/Fragen-DB/"					//Eintragen des Pfades in dem sich das Verzeichnis mit den Fragen befindet
 #define ZEILENLAENGE 80
 
 struct fragenKatalogEintrag
@@ -45,38 +45,42 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 {
 
 	DIR *dir;
-	FILE *dateiFrage;
 	struct dirent *dirzeiger;
 	int i = 0;
 	int k = 2;
+	char array[90][100];
 	char *temp;
+	char* test = "C:/Users/tobia/Documents/DHBW/2. Semester/Informatik Labor/dhbw-ss-2020/Termin_4-Million/Fragen-DB/Gruppe_4/";     //Hier Dateipfad der Fragen angeben
+	char* dateipfad;
 	char* antwortAOld;
 	char* antwortBOld;
 	char* antwortCOld;
 	char* antwortDOld;
 
 	/*	öffne Verzeichnis @ PATH */
-	if((dir=opendir(PATH)) == NULL){
+	dir = opendir(PATH);
+	if(dir == NULL){
 		printf("\nVerzeichnis konnte nicht gefunden werden\n");
 		return 0;}
 	/*	komplettes Verzeichnis Eintrag für Eintrag auslesen
 		Jede Fragedatei wird geöffnet*/
-
-	while((dirzeiger=readdir(dir)) != NULL){
-		char* dateipfad = "C:/Users/Harald/Documents/GitHub/dhbw-ss-2020/Termin_4-Million/Fragen-DB/";
-		//strcpy(dateipfad, PATH);
-		printf("da waren wir\n");
-		printf("%s\n", dateipfad);
-		strcat(dateipfad, dirzeiger->d_name);
-
-		dateiFrage = fopen(dateipfad, "r");
-
-		if (NULL == dateiFrage){
+	while(dirzeiger=readdir(dir)){
+		strcpy(array[i], dirzeiger->d_name);
+		i++;
+	}
+	
+	closedir(dirzeiger);
+	
+	for(int i=3; i<=MAX; i++){
+		FILE *dateiFrage;
+		strcpy(dateipfad,test);
+		strcat(dateipfad, array[i]);
+		dateiFrage = fopen(dateipfad,"r");
+		if (dateiFrage == NULL){
 			printf("\n Datei konnte nicht geoeffnet werden\n\n\n");
-			return 0;}
-		/*	Aus der ersten Zeile wird die Frage ausgelesen, die zweite wird übersprungen und die folgenden Zeilen
-		werden als Fragen zwischengespeichert. */
-		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);
+			return 0;
+			}
+		fgets(Catalogue[i].frage, ZEILENLAENGE, dateiFrage);			//Ich hab keine Ahnung warum die Datei nicht geöffnet wird, dateipfad stimmt
 		fgets(temp, ZEILENLAENGE, dateiFrage);
 		fgets(antwortAOld, ZEILENLAENGE, dateiFrage);
 		fgets(antwortBOld, ZEILENLAENGE, dateiFrage);
@@ -108,9 +112,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 			}
 		i++;
 		fclose(dateiFrage);
-	}
-	/*	Directory wird wieder geschlossen */
-	closedir(dir);
+		}
 	return 0;
 }
 
