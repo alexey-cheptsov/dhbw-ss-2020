@@ -16,6 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *
+ * millionaire.c
+ * 
+ * Copyright 2020 Gruppe_3
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  * 
  * 
@@ -70,14 +88,14 @@ void getAnswer(Player player, char *answer);
 int checkAnswer(Question question, int playerindex, char answer, int level);
 
 void printChance(Question question, int playerindex);
-int printScore(FILE *file);
+int printScore(int playercount);
 
 // Hilfsfunktionen
 int random(int min, int max);
 void shuffle (int* array, int size);
 void swapInt (int* array, int index1, int index2);
-
-
+void sorting_asc(int playercount);
+void swapStructPlayer( int index1, int index2);
 // Liste der Spieler und Quizfragen
 Player *players;
 Question *questions;
@@ -127,6 +145,7 @@ int main(int argc, char **argv) {
 			break;
 		}
 	}
+	printScore(count);
 	return 0;
 }
 
@@ -200,6 +219,7 @@ void readQuestiones(int size) {
 	int numbers[] = {0,1,2,3};       	
 	int x;
 	int used[7]; 
+	int flag;
 	questions = (Question*) malloc(size * sizeof(Question));
 	
 	// Wechseln in das Verzeichnis, in dem die Fragen sind
@@ -208,11 +228,14 @@ void readQuestiones(int size) {
 		filenumber = random(0, 141); // Nummern bis 140
 		
 		// Überprüfen, ob eine Frage dieses Autors bereits vorkam
+		flag = 0;
 		for(int k = i - 1; k >= 0; k--) {
 			if(k >= 0 && used[k] == filenumber) {
-				continue;
+				flag = 1;
 			}
 		}
+		
+		if (flag) continue; // wenn bereits eine Frage des ausgewählten Nutzers genutzt wurde wird eine neue Nummer ausgewählt.
 		// Speichern der verwendeten Dateien
 		used[i] = filenumber;
 		// Einfügen der zufälligen Nummern
@@ -343,13 +366,30 @@ void printChance(Question question, int playerindex) {
  * @param file - File to save the scores in
  * @return Wether the score has been successfully saved
  */
-int printScore(FILE *file) {
+int printScore(int playercount) {
 	// Ausgabe des Spielstands / der Ergebnisse
 	// Speichern der Ergebnisse in Datei
-
+	
+	sorting_asc(playercount);
+	
+	printf("\n\n Spiel beendet!\n");
+	for (int i = playercount - 1; i >= 0 ; i--) {
+		printf("Platz %d: %s mit einem Highscore von %i Euro\n",i+1,players[i].name,players[i].score);
+	}
 	return 1;
 }
-
+void sorting_asc(int playercount){
+	int index;
+	for (int i = 0; i < playercount;i++) {
+			index = i;
+		for (int j = i; j < playercount;j++){
+			if (players[j].score >= players[index].score) {
+				index = j;
+			}
+		}
+		swapStructPlayer (index,i);
+	}
+}
 /*!
  * @brief Gets a random integer value in an intervall
  * @param min - Minimum value of the random value
@@ -381,4 +421,9 @@ void swapInt(int array[], int index1, int index2){
 	int temp = array[index1];
 	array[index1] = array[index2];
 	array[index2] = temp;
+}
+void swapStructPlayer( int index1, int index2){
+	Player temp = players[index1];
+	players[index1] = players[index2];
+	players[index2] = temp;
 }
