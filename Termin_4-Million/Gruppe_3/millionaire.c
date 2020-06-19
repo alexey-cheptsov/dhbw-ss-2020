@@ -31,6 +31,7 @@
 
 // Konstanten
 #define FILE_PATH "../Fragen-DB"
+#define SCORE_FILE "millionaire_score.txt"
 #define NAME_SIZE 20
 
 #define ANSWER_COUNT 4
@@ -74,7 +75,7 @@ int printScore(FILE *file);
 // Hilfsfunktionen
 int random(int min, int max);
 void shuffle (int* array, int size);
-void swap_int (int* array, int index1, int index2);
+void swapInt (int* array, int index1, int index2);
 
 
 // Liste der Spieler und Quizfragen
@@ -162,7 +163,7 @@ void getSettings(int *count) {
 	while (getchar()!= '\n');
 
 	if(*count < 1) {
-		printf("\n[ERROR] Ungültige Anzahl von Spielern!\n");
+		printf("\n[ERROR] Ung%cltige Anzahl von Spielern!\n", 129);
 		return;
 	}
 	// Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
@@ -174,7 +175,7 @@ void getSettings(int *count) {
 
 		// Überprüfen ob der Speicherbereich voll ist
 		if(players == NULL || name == NULL) {
-			printf("\n[ERROR] Nicht genügend Speicherplatz vorhanden!\n");
+			printf("\n[ERROR] Nicht genug Speicherplatz vorhanden!\n");
 			return;
 		}
 		// Eingabe der Spielernamen
@@ -299,7 +300,7 @@ int checkAnswer(Question question, int playerindex, char answer, int level) {
 		return 1;
 	}
 	else {
-		printf("\n[ERROR] Ungültige Antwort!\n");
+		printf("\n[ERROR] Ung%cltige Antwort!\n", 129);
 		return 0;
 	}
 	// Setzen der Punkte
@@ -366,7 +367,7 @@ int random(int min, int max) {
  */
 void shuffle(int array[], int size){
 	for (int i = size - 1; i > 0; i--){
-		swap_int(array, random(0, size - 1), i);
+		swapInt(array, random(0, size - 1), i);
 	}
 }
 
@@ -376,7 +377,7 @@ void shuffle(int array[], int size){
  * @param index1 - Index of the first value
  * @param index2 - Index of the second value
  */
-void swap_int(int array[], int index1, int index2){
+void swapInt(int array[], int index1, int index2){
 	int temp = array[index1];
 	array[index1] = array[index2];
 	array[index2] = temp;
