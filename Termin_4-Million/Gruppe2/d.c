@@ -1,9 +1,7 @@
 // to do
 // Bestenliste
-// Ungültige Antwort einfach überspringen und die Frage neu schreiben
-// bei jeder Frage den Kontostand zeigen
-// Endbildschirm beim Verlieren / Gewinnen
-// Zufällige Antorten
+// \n hinter den Antworten entfernen
+// 1. Buchstabe von Antworten nicht überspringen
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -11,6 +9,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include "jauch.h"
+#include "banner_wwm.h"
+#include <math.h>
+#include <unistd.h>
 
 #define MAX_NAME_SIZE 32
 //#define clear_console() printf("\033[H\033[J")
@@ -52,6 +54,9 @@ bool State_Won_handle_input();
 void State_Lost_init();
 bool State_Lost_handle_input();
 
+void State_RightAnswer_init();
+bool State_RightAnswer_handle_input();
+
 State stateMenu = {
 	&State_Menu_init,
 	&State_Menu_handle_input
@@ -75,6 +80,10 @@ State stateWon = {
 State stateLost = {
 	&State_Lost_init,
 	&State_Lost_handle_input
+};
+State stateRightAnswer = {
+	&State_RightAnswer_init,
+	&State_RightAnswer_handle_input
 };
 
 State* currentState = NULL;
@@ -170,6 +179,35 @@ int choose_question(Question* questions){ // Anika
     return 1;
 }
 
+void print_question(bool joker) {
+	printf("%d Euro Frage\n", (int)pow(10.0, player.level));
+	printf("%s\n\n", currentQuestion.question);
+	if (joker) {
+		int num = (rand() % (4));
+		
+		while(num == currentQuestion.nr_correct)
+		{
+			num = (rand() % (4));
+		}
+		
+		if(num < currentQuestion.nr_correct)
+		{
+			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
+		}
+		else
+		{
+			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
+			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+		}
+	} else {
+		for (int i = 0; i < 4; ++i) {
+			printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
+		}
+	}
+	if (player.joker_available) printf("j) Joker\n");
+}
+
 
 
 int main(void) {
@@ -186,12 +224,15 @@ int main(void) {
 
 void State_Menu_init() {
 	system("clear");
-	printf("Herzlich Willkommen\n zu\n WER WIRD MILLIONAER");
-	printf("\nHerr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n kommen Sie eine Runde weiter. Es gibt 7 Runden.");
-	printf("\nFuer jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld");
-	printf("\nSie haben einen 50:50 Joker der mit <j> eingesetzt werden kann.");
-	printf("\nViel Spass und Viel Erfolg wuenscht Ihnen Guenther Jauch\n");
-	printf("Zum Spielbeginn drücken Sie <ENTER>\n");
+	print_wwm_banner();
+	sleep(1);
+	printf("Herr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n");
+	printf("kommen Sie eine Runde weiter. Es gibt 7 Runden.\n");
+	printf("Für jede Runde gibt es ein Preisgeld. Beantworten Sie die Frage falsch, verlieren sie all Ihr Geld.\n");
+	printf("Sie haben einen 50:50 Joker, der mit <j> eingesetzt werden kann.\n");
+	printf("Viel Spass und viel Erfolg wünscht Ihnen Günther Jauch\n\n");
+	sleep(1);
+	printf("<ENTER> ZUM STARTEN\n");
 
 	// read filenames
 	struct dirent* rd;
@@ -199,7 +240,8 @@ void State_Menu_init() {
 	dir = opendir("../Fragen-DB/");
 
 	if (dir == NULL) {
-		printf("Öffnen fehlgeschlagen.");
+		printf("Öffnen fehlgeschlagen.\n");
+		exit(1);
 	}
 
 	while ((rd = readdir(dir)) != NULL) {
@@ -212,10 +254,9 @@ void State_Menu_init() {
 }
 
 bool State_Menu_handle_input() {
-	if (getchar() == '\n') {
-		currentState = &stateCreateUser;
-		currentState->init();
-	}
+	while (getchar() != '\n');
+	currentState = &stateCreateUser;
+	currentState->init();
 	return true;
 }
 
@@ -223,15 +264,19 @@ bool State_Menu_handle_input() {
 void State_CreateUser_init() {
 	printf("Geben Sie Ihren Name bitte ein: ");
 	fgets(player.name, MAX_NAME_SIZE, stdin);
+	printf("\n");
+	if (strlen(player.name) == 0 || player.name[0] == '\n') {
+		State_CreateUser_init();
+		return;
+	}
 	currentState = &stateAskQuestion;
 	currentState->init();
 }
 
 bool State_CreateUser_handle_input() {
-	if (getchar() == '\n') { // or other condition to start playing
-		currentState = &stateAskQuestion;
-		currentState->init();
-	}
+	while (getchar() != '\n');
+	currentState = &stateAskQuestion;
+	currentState->init();
 	return true;
 }
 
@@ -239,22 +284,19 @@ bool State_CreateUser_handle_input() {
 void State_AskQuestion_init() {
 	system("clear");
     choose_question(&currentQuestion);
-	printf("Frage %d\n", player.level);
-	printf("%s\n\n", currentQuestion.question);
-	for (int i = 0; i < 4; ++i) {
-		printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
-	}
-	if (player.joker_available) printf("j) Joker\n");
+	print_question(false);
 }
 
 bool State_AskQuestion_handle_input() {
 	// get user input and check answer
-	char user_answer = getchar();
+	char buffer[128];
+	fgets(buffer, 127, stdin);
+	char user_answer = buffer[0];
 	if (user_answer == 'j' && player.joker_available){
 		player.joker_available = false;
 		currentState = &stateJoker;
 		currentState->init();
-	} else if (user_answer == 'a' + currentQuestion.nr_correct || user_answer == '0' + currentQuestion.nr_correct){
+	} else if (user_answer == 'a' + currentQuestion.nr_correct){
 		// right answer
 		if (player.level == 1) {
 			player.credits = 10;
@@ -264,14 +306,17 @@ bool State_AskQuestion_handle_input() {
 		++player.level;
 		if (player.level == 8) {
 			currentState = &stateWon;
-		} else if (currentState == &stateJoker) {
-			currentState = &stateAskQuestion;
+		} else {
+			currentState = &stateRightAnswer;
 		}
 		currentState->init();
 	} else if (user_answer >= 'a' && user_answer <= 'd'){
 		player.done = true;
 		currentState = &stateLost;
 		currentState->init();
+	} else {
+		system("clear");
+		print_question(false);
 	}
 	return true;
 }
@@ -279,26 +324,7 @@ bool State_AskQuestion_handle_input() {
 
 void State_Joker_init() {	
 	system("clear");
-	printf("Frage %d\n", player.level);
-	printf("%s\n\n", currentQuestion.question);
-
-	int num = (rand() % (4));
-	
-	while(num == currentQuestion.nr_correct)
-	{
-		num = (rand() % (4));
-	}
-	
-	if(num < currentQuestion.nr_correct)
-	{
-		printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
-		printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
-	}
-	else
-	{
-		printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
-		printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
-	}
+	print_question(true);
 }
 
 bool State_Joker_handle_input() {
@@ -307,9 +333,9 @@ bool State_Joker_handle_input() {
 
 
 void State_Won_init() {
-	// print_winning_screen();
-	// show_game_results();
-	printf("Won!\n");
+	system("clear");
+	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n");
+	// print_leaderboard();
 }
 
 bool State_Won_handle_input() {
@@ -322,9 +348,11 @@ bool State_Won_handle_input() {
 
 
 void State_Lost_init() {
-	// print_losing_screen();
-	// show_game_results();
-	printf("Lost!\n");
+	system("clear");
+	print_jauch_lost();
+	printf("\n");
+	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.", 0, 0, player.credits);
+	// print_leaderboard();
 }
 
 bool State_Lost_handle_input() {
@@ -332,5 +360,20 @@ bool State_Lost_handle_input() {
 		//save_player_stats();
 		return false; // false means game is done and will close
 	}
+	return true;
+}
+
+
+
+void State_RightAnswer_init() {
+	system("clear");
+	print_richtig_banner();
+	sleep(2);
+	currentState = &stateAskQuestion;
+	currentState->init();
+}
+
+
+bool State_RightAnswer_handle_input() {
 	return true;
 }
