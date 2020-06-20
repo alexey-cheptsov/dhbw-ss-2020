@@ -339,7 +339,6 @@ void printChance(Question question, int playerindex) {
 	}
 	int index1 = min(answer, question.correctAnswer);
 	int index2 = max(answer, question.correctAnswer);
-	printf("index1: %i, index2: %i\n", index1, index2);
 	
 	// Ausgabe der 50-50 Chance
 	printf("\n50-50 Chance:\n");
