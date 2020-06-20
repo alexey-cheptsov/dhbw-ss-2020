@@ -17,8 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
- * 
- * 
  */
 
 // Bibliotheken
@@ -31,6 +29,7 @@
 
 // Konstanten
 #define FILE_PATH "../Fragen-DB"
+#define SCORE_FILE "../Gruppe_3/millionaire_score.txt"
 #define NAME_SIZE 20
 
 #define ANSWER_COUNT 4
@@ -61,7 +60,7 @@ typedef struct Question {
 
 // Funktionsprototypen
 void printTitle();
-void getSettings(int *count);
+int getSettings(int *count);
 void readQuestiones(int size);
 
 void printQuestion(Question question);
@@ -69,13 +68,14 @@ void getAnswer(Player player, char *answer);
 int checkAnswer(Question question, int playerindex, char answer, int level);
 
 void printChance(Question question, int playerindex);
-int printScore(FILE *file);
+int printScore(int playercount);
 
 // Hilfsfunktionen
 int random(int min, int max);
 void shuffle (int* array, int size);
-void swap_int (int* array, int index1, int index2);
-
+void swapInt (int* array, int index1, int index2);
+void swapPlayer(int index1, int index2);
+void sortPlayers(int playercount);
 
 // Liste der Spieler und Quizfragen
 Player *players;
@@ -95,7 +95,9 @@ int main(int argc, char **argv) {
 	printTitle();
 	
 	int count = 0;
-	getSettings(&count);
+	if(!getSettings(&count)) {
+		return -1;
+	}
 	readQuestiones(ROUNDS);
 	
 	int lost = 0;
@@ -112,20 +114,19 @@ int main(int argc, char **argv) {
 			char answer;
 			getAnswer(player, &answer);
 			
-			if(checkAnswer(question, j, answer, i)) {
-				printChance(question, j);
+			while(!checkAnswer(question, j, answer, i)) {
 				getAnswer(player, &answer);
-				checkAnswer(question, j, answer, i);
 			}
 			if (players[j].lost) {
 				lost++;
 			}
 		}
 		printf("\n -> Richtige Antwort: %c.) %s\n", 'a' + question.correctAnswer, question.answers[question.correctAnswer]);
-		if (lost == count){
+		if(lost == count){
 			break;
 		}
 	}
+	printScore(count);
 	return 0;
 }
 
@@ -154,16 +155,17 @@ void printTitle() {
 /*!
  * @brief Gets the setting for the game
  * @param count - Number of players
+ * @return Wether the settings are applied correctly
  */
-void getSettings(int *count) {
+int getSettings(int *count) {
 	// Abfrage Anzahl der Spieler
 	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
 	scanf("%d", count);
 	while (getchar()!= '\n');
 
 	if(*count < 1) {
-		printf("\n[ERROR] Ungültige Anzahl von Spielern!\n");
-		return;
+		printf("\n[ERROR] Ung%cltige Anzahl von Spielern!\n", 129);
+		return 0;
 	}
 	// Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
 	players = (Player*) malloc(*count * sizeof(Player));
@@ -174,8 +176,8 @@ void getSettings(int *count) {
 
 		// Überprüfen ob der Speicherbereich voll ist
 		if(players == NULL || name == NULL) {
-			printf("\n[ERROR] Nicht genügend Speicherplatz vorhanden!\n");
-			return;
+			printf("\n[ERROR] Nicht genug Speicherplatz vorhanden!\n");
+			return 0;
 		}
 		// Eingabe der Spielernamen
 		printf("Bitte Geben sie Ihren Namen ein (%d): ", i + 1);
@@ -185,6 +187,7 @@ void getSettings(int *count) {
 		Player player = {name, 0, 0, 0};
 		players[i] = player;
 	}
+	return 1;
 }
 
 /*!
@@ -199,6 +202,7 @@ void readQuestiones(int size) {
 	int numbers[] = {0,1,2,3};       	
 	int x;
 	int used[7]; 
+	int flag;
 	questions = (Question*) malloc(size * sizeof(Question));
 	
 	// Wechseln in das Verzeichnis, in dem die Fragen sind
@@ -207,11 +211,14 @@ void readQuestiones(int size) {
 		filenumber = random(0, 141); // Nummern bis 140
 		
 		// Überprüfen, ob eine Frage dieses Autors bereits vorkam
+		flag = 0;
 		for(int k = i - 1; k >= 0; k--) {
 			if(k >= 0 && used[k] == filenumber) {
-				continue;
+				flag = 1;
 			}
 		}
+		
+		if (flag) continue; // wenn bereits eine Frage des ausgewählten Nutzers genutzt wurde wird eine neue Nummer ausgewählt.
 		// Speichern der verwendeten Dateien
 		used[i] = filenumber;
 		// Einfügen der zufälligen Nummern
@@ -284,22 +291,23 @@ void getAnswer(Player player, char *answer) {
  * @param playerindex - Index of the player int the global array
  * @param answer - Answer of the player
  * @param level - Current level of the game
- * @return Wether the player uses the 50-50 chance
+ * @return Wether the answer is valid
  */
 int checkAnswer(Question question, int playerindex, char answer, int level) {
 	// Überprüfen der Antwort
 	int input;
-	if(answer >= 'a') {
+	if(answer >= 'a' && answer <= 'd') {
 		input = answer - 'a';
 	}
-	else if(answer >= 'A') {
+	else if(answer >= 'A' && answer <= 'D') {
 		input = answer - 'A';
 	}
 	else if(answer == '%') {
-		return 1;
+		printChance(question ,playerindex);
+		return 0;
 	}
 	else {
-		printf("\n[ERROR] Ungültige Antwort!\n");
+		printf("\n[ERROR] Ung%cltige Antwort!\n", 129);
 		return 0;
 	}
 	// Setzen der Punkte
@@ -309,15 +317,16 @@ int checkAnswer(Question question, int playerindex, char answer, int level) {
 	else {
 		players[playerindex].lost = 1;
 	}
-	return 0;
+	return 1;
 }
 
 /*!
- * @brief Print the 50-50 chance for a player
+ * @brief Prints the 50-50 chance for a player
  * @param question - Question to create the chance for
  * @param playerindex - Index of the player to create the chance for
  */
 void printChance(Question question, int playerindex) {
+	// Überprüfen auf 50-50 Chance
 	if(players[playerindex].chanceUsed) {
 		printf("\nDu hast deine 50-50 Chance bereits verwendet!\n");
 		return;
@@ -339,13 +348,26 @@ void printChance(Question question, int playerindex) {
 
 /*!
  * @brief Prints the score of the game
- * @param file - File to save the scores in
+ * @param playercount - Count of players of the game
  * @return Wether the score has been successfully saved
  */
-int printScore(FILE *file) {
-	// Ausgabe des Spielstands / der Ergebnisse
+int printScore(int playercount) {
+	// Sortieren der Spielstände
+	sortPlayers(playercount);
+	printf("\n\nSpiel beendet!\n");
+	printf("--------------\n");
+	
 	// Speichern der Ergebnisse in Datei
-
+	FILE *file = fopen(SCORE_FILE, "w");
+	if(file == NULL) {
+		printf("\n[ERROR] Spielstand konnte nicht gespeichert werden!\n");
+		return 0;
+	}
+	// Ausgabe des Spielstands / der Ergebnisse
+	for(int i = 0; i < playercount; i++) {
+		printf("Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
+		fprintf(file, "Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
+	}
 	return 1;
 }
 
@@ -356,7 +378,7 @@ int printScore(FILE *file) {
  * @return The random generated value
  */
 int random(int min, int max) {
-	return (rand() % (max - min + 1)) + min;
+	return (rand() % (max - min)) + min;
 }
 
 /*!
@@ -366,7 +388,7 @@ int random(int min, int max) {
  */
 void shuffle(int array[], int size){
 	for (int i = size - 1; i > 0; i--){
-		swap_int(array, random(0, size - 1), i);
+		swapInt(array, random(0, size - 1), i);
 	}
 }
 
@@ -376,8 +398,36 @@ void shuffle(int array[], int size){
  * @param index1 - Index of the first value
  * @param index2 - Index of the second value
  */
-void swap_int(int array[], int index1, int index2){
+void swapInt(int array[], int index1, int index2){
 	int temp = array[index1];
 	array[index1] = array[index2];
 	array[index2] = temp;
+}
+
+/*!
+ * @brief Swaps two players of the player array
+ * @param index1 - Index of the first player
+ * @param index2 - Index of the second player
+ */
+void swapPlayer(int index1, int index2){
+	Player temp = players[index1];
+	players[index1] = players[index2];
+	players[index2] = temp;
+}
+
+/*!
+ * @brief Sorts the players of the player array
+ * @param playercount - Count of players of the array
+ */
+void sortPlayers(int playercount){
+	int index;
+	for(int i = 0; i < playercount; i++) {
+		index = i;
+		for(int j = i; j < playercount; j++){
+			if (players[j].score >= players[index].score) {
+				index = j;
+			}
+		}
+		swapPlayer(index, i);
+	}
 }
