@@ -88,6 +88,7 @@ State stateRightAnswer = {
 
 State* currentState = NULL;
 Player player = { .credits = 0, .level = 1, .joker_available = true, .name = {}, .done = false };
+int prices[] = {10, 1e2, 1e3, 1e4, 1e5, 5e5, 1e6};
 char filenames[200][27];
 int number_of_questions = 0;
 Question currentQuestion;
@@ -180,7 +181,7 @@ int choose_question(Question* questions){ // Anika
 }
 
 void print_question(bool joker) {
-	printf("%d Euro Frage\n", (int)pow(10.0, player.level));
+	printf("%d Euro Frage\n", prices[player.level]);
 	printf("%s\n\n", currentQuestion.question);
 	if (joker) {
 		int num = (rand() % (4));
@@ -298,11 +299,7 @@ bool State_AskQuestion_handle_input() {
 		currentState->init();
 	} else if (user_answer == 'a' + currentQuestion.nr_correct){
 		// right answer
-		if (player.level == 1) {
-			player.credits = 10;
-		} else {
-			player.credits *= 10;
-		}
+		player.credits = prices[player.level-1];
 		++player.level;
 		if (player.level == 8) {
 			currentState = &stateWon;
