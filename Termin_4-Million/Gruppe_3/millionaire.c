@@ -332,7 +332,6 @@ void printChance(Question question, int playerindex) {
 		return;
 	}
 	int answer = random(0, ANSWER_COUNT);
-	printf("\nAnswer: %i, ", answer);
 
 	while(answer == question.correctAnswer) {
 		answer = random(0, ANSWER_COUNT);
