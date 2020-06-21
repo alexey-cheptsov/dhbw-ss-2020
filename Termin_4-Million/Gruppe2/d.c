@@ -182,7 +182,7 @@ int choose_question(Question* questions){ // Anika
 }
 
 void print_question(bool joker) {
-	printf("%d Euro Frage\n", prices[player.level]);
+	printf("%d Euro Frage\n", prices[player.level-1]);
 	printf("%s\n\n", currentQuestion.question);
 	if (joker) {
 		int num = (rand() % (4));
@@ -273,7 +273,7 @@ void State_CreateUser_init() {
 	}
 	currentState = &stateAskQuestion;
 	currentState->init();
-
+	}
 bool State_CreateUser_handle_input() {
 	while (getchar() != '\n');
 	currentState = &stateAskQuestion;
@@ -332,8 +332,8 @@ bool State_Joker_handle_input() {
 void State_Won_init() {
 	system("clear");
 	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n", player.credits);
-	highscore = fopen ("highscore.txt", "a")
-	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level, player.credits);
+	FILE* highscore = fopen ("highscore.txt", "a");
+	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level -1, player.credits);
 	fclose(highscore);
 	// print_leaderboard();
 }
@@ -352,8 +352,8 @@ void State_Lost_init() {
 	print_jauch_lost();
 	printf("\n");
 	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.", 0, 0, player.credits);
-	highscore = fopen ("highscore.txt", "a")
-	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level, player.credits);
+	FILE* highscore = fopen ("highscore.txt", "a");
+	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level -1, player.credits);
 	fclose(highscore);	
 	// print_leaderboard();
 }
