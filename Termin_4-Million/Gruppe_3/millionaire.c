@@ -31,6 +31,7 @@
 #define FILE_PATH "../Fragen-DB"
 #define SCORE_FILE "../Gruppe_3/millionaire_score.txt"
 #define NAME_SIZE 20
+#define STRING_SIZE 500
 
 #define ANSWER_COUNT 4
 #define ROUNDS 7
@@ -127,6 +128,9 @@ int main(int argc, char **argv) {
 		}
 	}
 	printScore(count);
+	free(players);
+	free(questions);
+	
 	return 0;
 }
 
@@ -167,12 +171,12 @@ int getSettings(int *count) {
 		printf("\n[ERROR] Ung%cltige Anzahl von Spielern!\n", 129);
 		return 0;
 	}
-	// Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
 	players = (Player*) malloc(*count * sizeof(Player));
 
 	// Einlesen des Spielernamens
 	for(int i = 0; i < *count; i++){
-		char *name = (char*) malloc(20 * sizeof(char));
+		// Anlegen eine dynamischen Arrays zum Zwischenspeichern des Namens
+		char *name = (char*) malloc(NAME_SIZE * sizeof(char));
 
 		// Überprüfen ob der Speicherbereich voll ist
 		if(players == NULL || name == NULL) {
@@ -181,8 +185,8 @@ int getSettings(int *count) {
 		}
 		// Eingabe der Spielernamen
 		printf("Bitte Geben sie Ihren Namen ein (%d): ", i + 1);
-		scanf("%20s", name);
-		while (getchar()!= '\n');
+		scanf("%19s", name);
+		while(getchar()!= '\n');
 
 		Player player = {name, 0, 0, 0};
 		players[i] = player;
@@ -213,14 +217,15 @@ void readQuestiones(int size) {
 		// Überprüfen, ob eine Frage dieses Autors bereits vorkam
 		flag = 0;
 		for(int k = i - 1; k >= 0; k--) {
-			if(k >= 0 && used[k] == filenumber) {
+			if(used[k] == filenumber) {
 				flag = 1;
+				break;
 			}
 		}
-		
-		if (flag) continue; // wenn bereits eine Frage des ausgewählten Nutzers genutzt wurde wird eine neue Nummer ausgewählt.
 		// Speichern der verwendeten Dateien
+		if (flag) continue;		
 		used[i] = filenumber;
+		
 		// Einfügen der zufälligen Nummern
 		for(int i = 0; i < 3; i++) {
 			tempnumber = filenumber % 10;
@@ -229,19 +234,20 @@ void readQuestiones(int size) {
 		}
 		filename[8] = '0' + random(0, 4);
 		path = fopen(filename,"r");
+		
 		// Überprüfen, ob die Datei existiert
 		if(path == NULL) {
 			continue;
 		}
 		else {
-			questions[i].question = (char*) malloc(500 * sizeof(char));
+			questions[i].question = (char*) malloc(STRING_SIZE * sizeof(char));
 			fscanf(path,"%[^\n]",questions[i].question);
 			while(fgetc(path)!= '\n');
-			
 			shuffle(numbers, ANSWER_COUNT);
+			
 			// Speicherreservierung für die Antworten 
 			for(int n = 0; n < ANSWER_COUNT; n++) {
-				questions[i].answers[n] = (char*) malloc(500 * sizeof(char));
+				questions[i].answers[n] = (char*) malloc(STRING_SIZE * sizeof(char));
 			}
 			for(int n = 0; n < ANSWER_COUNT; n++){ 
 				x = numbers[n];	
@@ -259,6 +265,7 @@ void readQuestiones(int size) {
 			}
 			i++;
 		}
+		fclose(path);
 	}
 }
 
@@ -368,6 +375,8 @@ int printScore(int playercount) {
 		printf("Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
 		fprintf(file, "Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
 	}
+	fclose(file);
+	
 	return 1;
 }
 
