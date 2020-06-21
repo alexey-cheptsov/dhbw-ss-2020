@@ -29,6 +29,7 @@ typedef struct {
 	bool joker_available;
 	char name[MAX_NAME_SIZE];
 	bool done;
+	FILE *highscore;
 } Player;
 
 typedef struct {
@@ -265,14 +266,13 @@ bool State_Menu_handle_input() {
 void State_CreateUser_init() {
 	printf("Geben Sie Ihren Name bitte ein: ");
 	fgets(player.name, MAX_NAME_SIZE, stdin);
-	printf("\n");
-	if (strlen(player.name) == 0 || player.name[0] == '\n') {
-		State_CreateUser_init();
-		return;
+	char * pChar = strchr(player.name, '\n');
+	if (NULL != pChar)
+	{
+		*pChar = 0;
 	}
 	currentState = &stateAskQuestion;
 	currentState->init();
-}
 
 bool State_CreateUser_handle_input() {
 	while (getchar() != '\n');
@@ -331,7 +331,10 @@ bool State_Joker_handle_input() {
 
 void State_Won_init() {
 	system("clear");
-	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n");
+	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n", player.credits);
+	highscore = fopen ("highscore.txt", "a")
+	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level, player.credits);
+	fclose(highscore);
 	// print_leaderboard();
 }
 
@@ -349,6 +352,9 @@ void State_Lost_init() {
 	print_jauch_lost();
 	printf("\n");
 	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.", 0, 0, player.credits);
+	highscore = fopen ("highscore.txt", "a")
+	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level, player.credits);
+	fclose(highscore);	
 	// print_leaderboard();
 }
 
