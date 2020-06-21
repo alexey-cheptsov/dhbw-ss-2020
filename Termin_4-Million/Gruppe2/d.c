@@ -100,7 +100,7 @@ void refresh_data(int r, char* p){//Anika
 	free(p);	///p is the path to the used file
 }
 
-int read_question(FILE* fl, Question* questions){//Anika
+int read_question(FILE* fl){//Anika
 	 size_t input_size = 1;
 	 
 	 
@@ -140,7 +140,7 @@ int read_question(FILE* fl, Question* questions){//Anika
 	}
 	return 1;
 }
-int choose_question(Question* questions){ // Anika
+int choose_question(){ // Anika
     int random;
     FILE* fl;
     char* path_to_file;
@@ -156,18 +156,18 @@ int choose_question(Question* questions){ // Anika
 		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
 		refresh_data(random, path_to_file);
 		if(number_of_questions >0){
-			choose_question(questions);
+			choose_question();
 		}else{
 			printf("Es können keine neuen Fragen gelesen werden!\n");
 			return 0;
 		}
 	}
 	
-	if(read_question(fl, questions)==0){
+	if(read_question(fl)==0){
 		printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
 		refresh_data(random, path_to_file);
 		if(number_of_questions >0){
-			choose_question(questions);
+			choose_question();
 		}else{
 			printf("Es können keine neuen Fragen gelesen werden!\n");
 			return 0;
