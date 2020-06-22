@@ -365,12 +365,15 @@ int printScore(int playercount) {
 	printf("--------------\n");
 	
 	// Speichern der Ergebnisse in Datei
-	FILE *file = fopen(SCORE_FILE, "w");
+	FILE *file = fopen(SCORE_FILE, "a+");
 	if(file == NULL) {
 		printf("\n[ERROR] Spielstand konnte nicht gespeichert werden!\n");
 		return 0;
 	}
 	// Ausgabe des Spielstands / der Ergebnisse
+	time_t now;
+	time(&now);
+	fprintf(file, "\n%s\n",ctime(&now));
 	for(int i = 0; i < playercount; i++) {
 		printf("Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
 		fprintf(file, "Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
@@ -379,7 +382,6 @@ int printScore(int playercount) {
 	
 	return 1;
 }
-
 /*!
  * @brief Gets a random integer value in an intervall
  * @param min - Minimum value of the random value
