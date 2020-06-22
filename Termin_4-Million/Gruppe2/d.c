@@ -1,5 +1,4 @@
 // to do
-// Bestenliste
 // \n hinter den Antworten entfernen
 // 1. Buchstabe von Antworten nicht überspringen
 
@@ -101,122 +100,10 @@ char filenames[200][27];
 int number_of_questions = 0;
 Question currentQuestion;
 
-
-///refresh question data for next call
-void refresh_data(int r, char* p){//Anika
-	strcpy(filenames[r], filenames[number_of_questions]);	///replace used filename
-	number_of_questions = number_of_questions -1;	///new number of available questions
-	free(p);	///p is the path to the used file
-}
-
-int read_question(FILE* fl){//Anika
-	 size_t input_size = 1;
-	 
-	 
-	///read first line (question)
-	if(getline(&(currentQuestion.question), &input_size, fl) ==-1){
-		return 0;
-	}  
-    ///empty line:
-    if(getline(&(currentQuestion.answers[0]), &input_size, fl) == -1){
-		return 0;
-	}
-
-    ///read answers:
-    int r[4];
-    int random, max=4;
-    int n[4]= {0,1,2,3};
-    for(int i = 0; i<4; i++){
-		input_size=1;
-		random=rand()%max;
-		r[i]=n[random];
-		n[random]=n[max-1];
-		max=max-1;
-		
-		if(getline(&(currentQuestion.answers[r[i]]), &input_size, fl) == -1){
-			return 0;
-		}
-		///save correct answers
-		if(currentQuestion.answers[r[i]][0] == '+'){
-			currentQuestion.nr_correct = r[i];
-		}
-		///remove + / - 
-		for(int c=0; c<input_size; c++){
-			//Leerzeichen?
-			currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
-		}
-		
-	}
-	return 1;
-}
-int choose_question(){ // Anika
-    int random;
-    FILE* fl;
-    char* path_to_file;
-	
-	path_to_file = (char*)malloc(50*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
-	strcpy(path_to_file, "../Fragen-DB/");
-	
-	///choose rondom question
-    random=rand()% number_of_questions;
-	strcat(path_to_file, filenames[random]);
-    fl = fopen(path_to_file, "r");
-	if(fl==NULL){
-		//printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
-		refresh_data(random, path_to_file);
-		if(number_of_questions >0){
-			choose_question();
-		}else{
-			printf("Es können keine neuen Fragen gelesen werden!\n");
-			return 0;
-		}
-	}
-	
-	if(read_question(fl)==0){
-		//printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
-		refresh_data(random, path_to_file);
-		if(number_of_questions >0){
-			choose_question();
-		}else{
-			printf("Es können keine neuen Fragen gelesen werden!\n");
-			return 0;
-		}
-	}
-    
-    
-	refresh_data(random, path_to_file);
-    return 1;
-}
-
-void print_question(bool joker) {
-	printf("%d Euro Frage\n", prices[player.level-1]);
-	printf("%s\n\n", currentQuestion.question);
-	if (joker) {
-		int num = (rand() % (4));
-		
-		while(num == currentQuestion.nr_correct)
-		{
-			num = (rand() % (4));
-		}
-		
-		if(num < currentQuestion.nr_correct)
-		{
-			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
-			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
-		}
-		else
-		{
-			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
-			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
-		}
-	} else {
-		for (int i = 0; i < 4; ++i) {
-			printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
-		}
-	}
-	if (player.joker_available) printf("j) Joker\n");
-}
-
+void refresh_data(int r, char* p);
+int read_question(FILE* fl);
+int choose_question();
+void print_question(bool joker);
 void save_player_stats();
 void print_leaderboard();
 
@@ -460,7 +347,7 @@ void print_leaderboard() {
 
 	// find player rank
 	int player_rank = 0;
-	for (int i = 0; i < num_entries-1; ++i) {
+	for (int i = 0; i < num_entries; ++i) {
 		if (entries[i].level == player.level-1 && strcmp(player.name, entries[i].name) == 0) {
 			player_rank = num_entries-i;
 			break;
@@ -476,4 +363,120 @@ void print_leaderboard() {
 	free(entries);
 
 	fclose(file);
+}
+
+
+///refresh question data for next call
+void refresh_data(int r, char* p){//Anika
+	strcpy(filenames[r], filenames[number_of_questions]);	///replace used filename
+	number_of_questions = number_of_questions -1;	///new number of available questions
+	free(p);	///p is the path to the used file
+}
+
+int read_question(FILE* fl){//Anika
+	 size_t input_size = 1;
+	 
+	 
+	///read first line (question)
+	if(getline(&(currentQuestion.question), &input_size, fl) ==-1){
+		return 0;
+	}  
+    ///empty line:
+    if(getline(&(currentQuestion.answers[0]), &input_size, fl) == -1){
+		return 0;
+	}
+
+    ///read answers:
+    int r[4];
+    int random, max=4;
+    int n[4]= {0,1,2,3};
+    for(int i = 0; i<4; i++){
+		input_size=1;
+		random=rand()%max;
+		r[i]=n[random];
+		n[random]=n[max-1];
+		max=max-1;
+		
+		if(getline(&(currentQuestion.answers[r[i]]), &input_size, fl) == -1){
+			return 0;
+		}
+		///save correct answers
+		if(currentQuestion.answers[r[i]][0] == '+'){
+			currentQuestion.nr_correct = r[i];
+		}
+		///remove + / - 
+		for(int c=0; c<input_size; c++){
+			//Leerzeichen?
+			currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
+		}
+		
+	}
+	return 1;
+}
+int choose_question(){ // Anika
+    int random;
+    FILE* fl;
+    char* path_to_file;
+	
+	path_to_file = (char*)malloc(50*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
+	strcpy(path_to_file, "../Fragen-DB/");
+	
+	///choose rondom question
+    random=rand()% number_of_questions;
+	strcat(path_to_file, filenames[random]);
+    fl = fopen(path_to_file, "r");
+	if(fl==NULL){
+		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(random, path_to_file);
+		if(number_of_questions >0){
+			choose_question();
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+	
+	if(read_question(fl)==0){
+		//printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		refresh_data(random, path_to_file);
+		if(number_of_questions >0){
+			choose_question();
+		}else{
+			printf("Es können keine neuen Fragen gelesen werden!\n");
+			return 0;
+		}
+	}
+    
+    
+	refresh_data(random, path_to_file);
+    return 1;
+}
+
+void print_question(bool joker) {
+	printf("%d Euro Frage\n", prices[player.level-1]);
+	printf("%s\n\n", currentQuestion.question);
+	if (joker) {
+		int num = (rand() % (4));
+		
+		while(num == currentQuestion.nr_correct)
+		{
+			num = (rand() % (4));
+		}
+		
+		if(num < currentQuestion.nr_correct)
+		{
+			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
+		}
+		else
+		{
+			printf("%c) %s \n", 'a' + currentQuestion.nr_correct, currentQuestion.answers[currentQuestion.nr_correct]);
+			printf("%c) %s \n", 'a' + num, currentQuestion.answers[num]);
+		}
+	} else {
+		for (int i = 0; i < 4; ++i) {
+			printf("%c) %s\n", 'a' + i, currentQuestion.answers[i]);
+		}
+	}
+	if (player.joker_available) printf("j) Joker\n");
 }
