@@ -341,7 +341,7 @@ bool State_Joker_handle_input() {
 
 void State_Won_init() {
 	system("clear");
-	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n", 1, 1, player.credits);
+	printf("Glückwunsch! Du hast gerade %d Euro gewonnen ", player.credits);
 	save_player_stats();
 	print_leaderboard();
 }
@@ -360,7 +360,7 @@ void State_Lost_init() {
 	print_jauch_lost(); 
 	printf("\n");
 	#endif
-	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.\n", 1, 1, player.credits);
+	printf("Jauch ist empört! Du hast gerade %d Euro verloren", player.credits);
 	save_player_stats();
 	print_leaderboard();
 }
@@ -407,13 +407,13 @@ void print_leaderboard() {
 	char delimiters[] = {',', '\n'};
 
 	LeaderboardEntry* entries = (LeaderboardEntry*) malloc(ENTRYSIZE);
-	int num_entries = 1;
+	int num_entries = 0;
 	
 	// get all entries and place them in 'entries'
 	while ((read = getline(&line, &len, file)) != -1) {
         //printf("Retrieved line of length %zu:\n", read);
         //printf("%s", line);
-		if (strlen(line) < 2) continue;
+		//if (strlen(line) <= 3) continue;
 
 		char* section = strtok(line, delimiters);
 		if (section == NULL) {
@@ -440,9 +440,9 @@ void print_leaderboard() {
 		}
 
 		// append new entry to entries
-		memcpy(&(entries[num_entries-1]), &entry, ENTRYSIZE);
 		++num_entries;
 		entries = (LeaderboardEntry*) realloc(entries, ENTRYSIZE * num_entries);
+		memcpy(&(entries[num_entries-1]), &entry, ENTRYSIZE);
     }
 
 	// sort top 10 entries and figure out current player rank
@@ -457,8 +457,20 @@ void print_leaderboard() {
 			}
 		}
 	}
-	for (int i = num_entries-1; i > 0; --i) {
-		printf("Name: %32s\tLevel: %3d Credits: %9s\n", entries[i].name, entries[i].level, entries[i].credits);
+
+	// find player rank
+	int player_rank = 0;
+	for (int i = 0; i < num_entries-1; ++i) {
+		if (entries[i].level == player.level-1 && strcmp(player.name, entries[i].name) == 0) {
+			player_rank = num_entries-i;
+			break;
+		}
+	}
+
+	printf(" und bist Platz %d von %d!\n", player_rank, num_entries);
+	printf("Bestenliste (%d Spieler)\n", num_entries);
+	for (int i = num_entries-1; i >= 0; --i) {
+		printf("Platz %2d %32s\tLevel: %3d Credits: %9s\n", num_entries-i, entries[i].name, entries[i].level, entries[i].credits);
 	}
 
 	free(entries);
