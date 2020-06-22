@@ -62,7 +62,7 @@ typedef struct Question {
 // Funktionsprototypen
 void printTitle();
 int getSettings(int *count);
-int readQuestiones(int size);
+int readQuestions(int size);
 
 void printQuestion(Question question);
 void getAnswer(Player player, char *answer);
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 	printTitle();
 	
 	int count = 0;
-	if(!getSettings(&count) || !readQuestiones(ROUNDS)) {
+	if(!getSettings(&count) || !readQuestions(ROUNDS)) {
 		return -1;
 	}	
 	int lost = 0;
@@ -155,7 +155,7 @@ void printTitle() {
 }
 
 /*!
- * @brief Gets the setting for the game
+ * @brief Gets the settings for the game
  * @param count - Number of players
  * @return Wether the settings are applied correctly
  */
@@ -197,7 +197,7 @@ int getSettings(int *count) {
  * @param size - Number of questions to read
  * @return Wether the quiz questions have been successfully loaded
  */
-int readQuestiones(int size) {
+int readQuestions(int size) {
 	char filename[] = "ET19xxx_x.txt";  
 	FILE *path;
 	int filenumber;   
@@ -302,7 +302,7 @@ void getAnswer(Player player, char *answer) {
 /*!
  * @brief Checks the answer of a player
  * @param question - Question asked to the player
- * @param playerindex - Index of the player int the global array
+ * @param playerindex - Index of the player
  * @param answer - Answer of the player
  * @param level - Current level of the game
  * @return Wether the answer is valid
