@@ -62,7 +62,7 @@ typedef struct Question {
 // Funktionsprototypen
 void printTitle();
 int getSettings(int *count);
-void readQuestiones(int size);
+int readQuestiones(int size);
 
 void printQuestion(Question question);
 void getAnswer(Player player, char *answer);
@@ -96,11 +96,9 @@ int main(int argc, char **argv) {
 	printTitle();
 	
 	int count = 0;
-	if(!getSettings(&count)) {
+	if(!getSettings(&count) || !readQuestiones(ROUNDS)) {
 		return -1;
-	}
-	readQuestiones(ROUNDS);
-	
+	}	
 	int lost = 0;
 	for(int i = 0; i < ROUNDS; i++) {
 		Question question = questions[i];
@@ -139,19 +137,19 @@ int main(int argc, char **argv) {
  */
 void printTitle() {	
 	printf("\n");
-	printf("Willkommen bei 'Wer Wird Million%cr' !\n",132 );
+	printf("Willkommen bei 'Wer Wird Million%cr' !\n", 132);
 	printf("Die Sendung in der Sie mit Ihrem Wissen Geld verdienen, ");
-	printf("und sogar Million%cr werden k%cnnen!\n\n",132,148);
+	printf("und sogar Million%cr werden k%cnnen!\n\n", 132, 148);
 	printf("Zu den Spielregeln:\n");
 	printf("Regel Nummer eins : Nicht schummeln!\n");
-	printf("Regel Nummer zwei : nur g%cltige Zeichen eingeben!\n",129);
-	printf("Zu den g%cltigen Zeichen geh%cren -> A,B,C,D ODER a,b,c,d UND %%.\n\n",129,148);
+	printf("Regel Nummer zwei : nur g%cltige Zeichen eingeben!\n", 129);
+	printf("Zu den g%cltigen Zeichen geh%cren -> A,B,C,D ODER a,b,c,d UND %%.\n\n", 129, 148);
 	printf("Sie erhalten auch EINEN Joker, der 50:50 Joker kann nur einmal\n");
 	printf("pro Spiel verwendet werden!\n");
 	printf("Diesen benutzen Sie dann, wenn Ihnen die Frage ");
 	printf("vorgelesen wurde.\n");
-	printf("Sie k%cnnen auch mit Ihren Freunden gegeneinander spielen.\n",148);
-	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n",129);
+	printf("Sie k%cnnen auch mit Ihren Freunden gegeneinander spielen.\n", 148);
+	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n", 129);
 	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
 	printf("Viel ERFOLG! :)\n\n\n");
 }
@@ -197,8 +195,9 @@ int getSettings(int *count) {
 /*!
  * @brief Reads and saves the local quiz questions
  * @param size - Number of questions to read
+ * @return Wether the quiz questions have been successfully loaded
  */
-void readQuestiones(int size) {
+int readQuestiones(int size) {
 	char filename[] = "ET19xxx_x.txt";  
 	FILE *path;
 	int filenumber;   
@@ -209,8 +208,15 @@ void readQuestiones(int size) {
 	int flag;
 	questions = (Question*) malloc(size * sizeof(Question));
 	
+	if(questions == NULL) {
+		printf("\n[ERROR] Nicht genug Speicherplatz vorhanden!\n");
+		return 0;
+	}	
 	// Wechseln in das Verzeichnis, in dem die Fragen sind
-	chdir(FILE_PATH); 
+	if(chdir(FILE_PATH) != 0) {
+		printf("\n[ERROR] Dateipfad \"%s\" konnte nicht gefunden werden!\n", FILE_PATH);
+		return 0;
+	} 
 	for(int i = 0; i < size;){
 		filenumber = random(0, 141); // Nummern bis 140
 		
@@ -267,6 +273,7 @@ void readQuestiones(int size) {
 		}
 		fclose(path);
 	}
+	return 1;
 }
 
 /*!
@@ -373,7 +380,7 @@ int printScore(int playercount) {
 	// Ausgabe des Spielstands / der Ergebnisse
 	time_t now;
 	time(&now);
-	fprintf(file, "\n%s\n",ctime(&now));
+	fprintf(file, "\nWer wird Million\xE4r? - %s-------------------\n", ctime(&now));
 	for(int i = 0; i < playercount; i++) {
 		printf("Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
 		fprintf(file, "Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
@@ -382,6 +389,7 @@ int printScore(int playercount) {
 	
 	return 1;
 }
+
 /*!
  * @brief Gets a random integer value in an intervall
  * @param min - Minimum value of the random value
