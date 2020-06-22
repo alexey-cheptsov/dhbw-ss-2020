@@ -15,7 +15,8 @@
 #include <unistd.h>
 
 #define MAX_NAME_SIZE 32
-//#define clear_console() printf("\033[H\033[J")
+//#define BIG_TERMINAL
+#define ENTRYSIZE (sizeof(char)*(MAX_NAME_SIZE+8) + sizeof(int))
 
 typedef struct {
 	char* question;
@@ -36,6 +37,12 @@ typedef struct {
 	void (*init) (void);
 	bool (*handle_input) (void);
 } State;
+
+typedef struct {
+	char name[MAX_NAME_SIZE];
+	int level;
+	char credits[8];
+} LeaderboardEntry;
 
 void State_Menu_init();
 bool State_Menu_handle_input();
@@ -155,7 +162,7 @@ int choose_question(){ // Anika
 	strcat(path_to_file, filenames[random]);
     fl = fopen(path_to_file, "r");
 	if(fl==NULL){
-		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		//printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
 		refresh_data(random, path_to_file);
 		if(number_of_questions >0){
 			choose_question();
@@ -166,7 +173,7 @@ int choose_question(){ // Anika
 	}
 	
 	if(read_question(fl)==0){
-		printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
+		//printf("Die Datei %s enthält einen Fehler. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
 		refresh_data(random, path_to_file);
 		if(number_of_questions >0){
 			choose_question();
@@ -210,6 +217,8 @@ void print_question(bool joker) {
 	if (player.joker_available) printf("j) Joker\n");
 }
 
+void save_player_stats();
+void print_leaderboard();
 
 
 int main(void) {
@@ -227,6 +236,7 @@ int main(void) {
 void State_Menu_init() {
 	system("clear");
 	print_wwm_banner();
+	printf("(Bitte das Terminal maximieren)\n");
 	sleep(1);
 	printf("Herr Jauch stellt Ihnen eine Frage und wenn Sie diese richtig beantworten,\n");
 	printf("kommen Sie eine Runde weiter. Es gibt 7 Runden.\n");
@@ -242,7 +252,7 @@ void State_Menu_init() {
 	dir = opendir("../Fragen-DB/");
 
 	if (dir == NULL) {
-		printf("Öffnen fehlgeschlagen.\n");
+		//printf("Öffnen fehlgeschlagen.\n");
 		exit(1);
 	}
 
@@ -331,16 +341,13 @@ bool State_Joker_handle_input() {
 
 void State_Won_init() {
 	system("clear");
-	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n", player.credits);
-	FILE* highscore = fopen ("highscore.txt", "a");
-	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level -1, player.credits);
-	fclose(highscore);
-	// print_leaderboard();
+	printf("Gewonnen! Du bist Platz %d von %d und hast gerade %d Euro gewonnen!\n", 1, 1, player.credits);
+	save_player_stats();
+	print_leaderboard();
 }
 
 bool State_Won_handle_input() {
 	if (getchar() == '\n') {
-		//save_player_stats();
 		return false; // false means game is done and will close
 	}
 	return true;
@@ -349,18 +356,17 @@ bool State_Won_handle_input() {
 
 void State_Lost_init() {
 	system("clear");
-	print_jauch_lost();
+	#ifdef BIG_TERMINAL
+	print_jauch_lost(); 
 	printf("\n");
-	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.", 0, 0, player.credits);
-	FILE* highscore = fopen ("highscore.txt", "a");
-	fprintf(highscore, "Name: %s\tLevel: %i\tCredits: %d\n",player.name, player.level -1, player.credits);
-	fclose(highscore);	
-	// print_leaderboard();
+	#endif
+	printf("Jauch ist empört! Du bist Platz %d von %d und hast gerade %d Euro verloren.\n", 1, 1, player.credits);
+	save_player_stats();
+	print_leaderboard();
 }
 
 bool State_Lost_handle_input() {
 	if (getchar() == '\n') {
-		//save_player_stats();
 		return false; // false means game is done and will close
 	}
 	return true;
@@ -379,4 +385,83 @@ void State_RightAnswer_init() {
 
 bool State_RightAnswer_handle_input() {
 	return true;
+}
+
+
+
+void save_player_stats() {
+	FILE* file = fopen("leaderboard.txt", "a");
+	fprintf(file, "%s,%d,%d\n", player.name, player.level -1, player.credits);
+	fclose(file);
+}
+
+
+void print_leaderboard() {
+	FILE* file = fopen("leaderboard.txt", "r");
+	if (file == NULL) exit(1);
+
+	char* line = NULL;
+	size_t len = 0;
+	size_t read;
+
+	char delimiters[] = {',', '\n'};
+
+	LeaderboardEntry* entries = (LeaderboardEntry*) malloc(ENTRYSIZE);
+	int num_entries = 1;
+	
+	// get all entries and place them in 'entries'
+	while ((read = getline(&line, &len, file)) != -1) {
+        //printf("Retrieved line of length %zu:\n", read);
+        //printf("%s", line);
+		if (strlen(line) < 2) continue;
+
+		char* section = strtok(line, delimiters);
+		if (section == NULL) {
+			printf("error with leaderboard\n");
+			exit(1);
+		}
+		int section_num = 0;
+
+		LeaderboardEntry entry = {};
+		strcpy(entry.name, section);
+		
+		while (section != NULL) {
+			if (section[0] == '\n') break;
+			//printf("Found section '%s'\n", section);
+			if (section_num == 1) {
+				entry.level = (int) (section[0] - 0x30);
+			} else if (section_num == 2) {
+				strcpy(entry.credits, section);
+				break;
+			}
+
+			section = strtok(NULL, delimiters);
+			++section_num;
+		}
+
+		// append new entry to entries
+		memcpy(&(entries[num_entries-1]), &entry, ENTRYSIZE);
+		++num_entries;
+		entries = (LeaderboardEntry*) realloc(entries, ENTRYSIZE * num_entries);
+    }
+
+	// sort top 10 entries and figure out current player rank
+	int i, j;
+	LeaderboardEntry* tmp = (LeaderboardEntry*) malloc(ENTRYSIZE);
+	for (i = 1; i < num_entries ; i++) {
+		for (j = 0; j < num_entries - i ; j++) {
+			if (entries[j].level > entries[j + 1].level) {
+				memcpy(tmp, &(entries[j]), ENTRYSIZE);
+				memcpy(&(entries[j]), &(entries[j + 1]), ENTRYSIZE);
+				memcpy(&(entries[j+1]), tmp, ENTRYSIZE);
+			}
+		}
+	}
+	for (int i = num_entries-1; i > 0; --i) {
+		printf("Name: %32s\tLevel: %3d Credits: %9s\n", entries[i].name, entries[i].level, entries[i].credits);
+	}
+
+	free(entries);
+
+	fclose(file);
 }
