@@ -102,6 +102,10 @@ void richtigeantwort()
 	strcpy(first.Antworten[4],"3");
 	}
 	printf("%s",first.Antworten[4]);
+	first.Antworten[0][0]=' ';
+	first.Antworten[1][0]=' ';
+	first.Antworten[2][0]=' ';
+	first.Antworten[3][0]=' ';
 }
 void Umwandlung(char zahl1[4],int *zahl)
 {
