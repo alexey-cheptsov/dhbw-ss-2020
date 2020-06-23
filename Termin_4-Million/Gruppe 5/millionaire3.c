@@ -872,7 +872,7 @@ void add_path(char array[][100]){
 	//Zurückspeichern in "array", um weiterhin in Main zu bleiben 
 	for(int i=0; i<L;i++){
 		strcpy(array[i], buffer[i]);
-		printf("%s\n", array[i]);
+		
 	}
 }	
 
