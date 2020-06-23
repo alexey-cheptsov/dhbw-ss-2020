@@ -95,6 +95,41 @@ int zufallszahl(int Zahl[8])
 	return *Zahl;
 }
 
+int frage_ausgabe(Frage *Catalogue, int index, int argc){
+	
+	frage=frage + index;								
+	printf("Frage: %s\n", frage);
+	for (int n=1; n<=4; n++)
+	printf("%s \n",antworten[n]);
+	
+	printf("Moechten Sie den 50:50 Joker benutzen?\n");
+	printf("Antworten Sie mit ja oder nein.\n");
+	char joker[4];	
+	
+	if(argc==1){																								
+			gets(joker);
+			if (strcmp(joker,"ja")== 0){
+				 abfrage50_50();	
+			}else{
+				printf("Ihre Antwort bitte:\n");
+				char antwort[4];
+					if(argc==1){																								
+						gets(antwort);
+						if (antwort=richtigeantwort){
+							printf("richtige Antwort\n");
+							guthaben= guthaben + coins[index];
+							printf("Guthaben: %g\n", guthaben);		
+						}else{
+							printf("falsche Antwort\n");	
+							printf("Guthaben: %g\n", guthaben);
+						}		
+			
+					}
+			}
+			
+	}
+}
+
 /* Funktion generiert verkürzte Antwortausgabe.
 Zunächst wird ein Zufallswert zw. 0 und 4 generiert. Die Antwort mit dieser Nummer und die richtige Antwort
 der durch den Index ausgewählten Frage werden ausgegeben.*/
