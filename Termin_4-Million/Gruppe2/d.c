@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 #define MAX_NAME_SIZE 32
-//#define BIG_TERMINAL
+#define BIG_TERMINAL
 #define ENTRYSIZE (sizeof(char)*(MAX_NAME_SIZE+8) + sizeof(int))
 
 typedef struct {
@@ -405,7 +405,10 @@ int read_question(FILE* fl){//Anika
 			currentQuestion.nr_correct = r[i];
 		}
 		///remove + / - 
-		if(currentQuestion.answers[r[i]][1]==' '){
+		for(int c=0; c<input_size; c++){
+			//Leerzeichen?
+			currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
+		/*if(currentQuestion.answers[r[i]][1]==' '){
 			for(int c=0; c<input_size; c++){
 				if(currentQuestion.answers[r[i]][c+2]!='\n'){
 					currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
@@ -416,7 +419,7 @@ int read_question(FILE* fl){//Anika
 				if(currentQuestion.answers[r[i]][c+2]!='\n'){
 					currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+1];
 				}
-			}
+			}*/
 		}
 		
 	}
@@ -430,11 +433,11 @@ int choose_question(){ // Anika
 	path_to_file = (char*)malloc(50*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
 	strcpy(path_to_file, "../Fragen-DB/");
 	
-	if(number_of_questions==0){
+	/*if(number_of_questions==0){
 		printf("Es können keine neuen Fragen gelesen werden!\n");
 		free(path_to_file);
 		return 0;
-	}
+	}*/
 	
 	///choose rondom question
     	random=rand()% number_of_questions;
@@ -452,7 +455,7 @@ int choose_question(){ // Anika
 			choose_question();
 		}else{
 			printf("Es können keine neuen Fragen gelesen werden!\n");
-			free(path_to_file);
+			//free(path_to_file);
 			return 0;
 		}
 	}
