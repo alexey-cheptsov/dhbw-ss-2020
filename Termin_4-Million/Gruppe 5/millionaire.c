@@ -212,6 +212,7 @@ void bestenliste(int runde){
 		fprintf(fp, "Name:%s %s Runde: %d\n",vorname ,nachname, runde);
 		}
 	}
+//Löscht zwei der Falschen antworten und gibt somit nur noch zwei Antworten aus. Der Spieler gibt dann seine Antwort ein und die Funktion gibt 1 für richtig und 0 für falsch zurück
 int funzigfunfzig(char antwort1[], char antwort2[], char antwort3[], char antwort4[], int richtig){
 	time_t now;
 	time(&now);

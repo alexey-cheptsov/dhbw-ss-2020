@@ -13,10 +13,10 @@ void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
 void insert_in_struct(char string[][150], int structdata);
+void Umwandlung(char zahl1[4],int *zahl);
 void Fragenausgabefirst();
 void richtigeantwortfirst();
 void Antworteingabefirst(int zahl1,int zahl2,int zahl3,int zahl4);
-void Umwandlung(char zahl1[4],int *zahl);
 
 void Fragenausgabesecond();
 void richtigeantwortsecond();
@@ -33,9 +33,11 @@ void Antworteingabefourth(int zahl1,int zahl2,int zahl3,int zahl4);
 void Fragenausgabefifth();
 void richtigeantwortfifth();
 void Antworteingabefifth(int zahl1,int zahl2,int zahl3,int zahl4);
+
 void Fragenausgabesixth();
 void richtigeantwortsixth();
 void Antworteingabesixth(int zahl1,int zahl2,int zahl3,int zahl4);
+
 void Fragenausgabeseventh();
 void richtigeantwortseventh();
 void Antworteingabeseventh(int zahl1,int zahl2,int zahl3,int zahl4);
@@ -948,4 +950,25 @@ void bestenliste(int runde){
 	else{
 		fprintf(fp, "Name:%s %s Runde: %d\n",vorname ,nachname, runde);
 		}
+	}
+//Löscht zwei der Falschen antworten und gibt somit nur noch zwei Antworten aus. Der Spieler gibt dann seine Antwort ein und die Funktion gibt 1 für richtig und 0 für falsch zurück
+int funzigfunfzig(char antwort1[], char antwort2[], char antwort3[], char antwort4[], int richtig){
+	time_t now;
+	time(&now);
+	srand(now);
+	int z,eingabe;
+	for(int n=0;2>n;){
+		z=rand()%4;
+		switch(z){
+			case 0:if(richtig!=1&&antwort1[0]!=' '){strcpy(antwort1, " ");n++;}break;
+			case 1:if(richtig!=2&&antwort2[0]!=' '){strcpy(antwort2, " ");n++;}break;
+			case 2:if(richtig!=3&&antwort3[0]!=' '){strcpy(antwort3, " ");n++;}break;
+			case 3:if(richtig!=4&&antwort4[0]!=' '){strcpy(antwort4, " ");n++;}break;
+		 }
+	}
+	printf("1:%s\n2:%s\n3:%s\n4:%s \n %d\n", antwort1, antwort2, antwort3, antwort4, z);
+	scanf("%d",&eingabe);
+	if (eingabe==richtig) return 1;
+	else return 0;
+	
 	}
