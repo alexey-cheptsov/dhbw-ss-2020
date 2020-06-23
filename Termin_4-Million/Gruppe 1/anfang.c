@@ -139,21 +139,7 @@ int abfrage50_50(Frage *fragen, int index)
 	int r2;
 	//static int pruefung = 0;
 	char c, c2;
-   	//double r = e - a + 1;
-	/*
-	if(pruefung == 1)
-	{
-		return 1;
-	}
-	
-	printf("Zur Auswahl des 50-50 Jokers druecken Sie bitte j.\nFalls Sie keinen Joker wuenschen, druecken Sie einen anderen Buchstaben.");
-		
-	sscanf("%c", &joker);
-	
-	if(joker == 'j')
-	{
-	*/
-		//r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
+   	
 		r2 = rand()%4;
 
 		fragen = fragen + (index-1);		//weiter zur Ausgewählten Frage aus dem Katalog durch Pointeraddition
@@ -177,8 +163,6 @@ int abfrage50_50(Frage *fragen, int index)
 			case 3: c2 = 'D';
 		}	
 		printf("Mögliche Antworten sind:\n\n%c %s\n%c %s", c, fragen->antworten[r2], c2, fragen->antworten[fragen->richtigeantwort]);
-		/*pruefung = 1;
-	} return 0;*/
 	
 	fragen = fragen - (index -1);
 	
