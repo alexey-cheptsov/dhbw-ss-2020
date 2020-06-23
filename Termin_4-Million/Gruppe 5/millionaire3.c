@@ -6,8 +6,9 @@
 
 #define L 7
 
-void get_filenames(char array[][100]);
-void random_questions(char array[][100]);
+int get_filenames(char array[][100]);
+void random_questions(char array[][100], int file_count);
+void check_filenames(char buffer[][100],char array[][100], int file_counter);
 void add_path(char array[][100]);
 void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
@@ -55,12 +56,17 @@ struct Fragen_Catalogue{
 int main ()
 {
 	printf("Bitte geben sie ihre antworten mit a, b, c oder d an\n");
-	char namestr[100][100];
 	
-	get_filenames(namestr);
-	random_questions(namestr);
+	char namestr[100][100];
+	int file_count=0;
+	
+	file_count = get_filenames(namestr);
+	random_questions(namestr, file_count);
 	add_path(namestr);
 	open_files(namestr);
+	
+	
+	
 	richtigeantwortfirst();
 	Fragenausgabefirst();
 	richtigeantwortsecond();
@@ -957,6 +963,7 @@ void insert_in_struct(char string[][150], int structdata){
 		break;
 	}
 }
+
 
 //Fragt den Namen ab und schreibt dann den Namen und die Runde in die Bestenliste Datei
 void bestenliste(int runde){
