@@ -212,5 +212,25 @@ void bestenliste(int runde){
 		fprintf(fp, "Name:%s %s Runde: %d\n",vorname ,nachname, runde);
 		}
 	}
+int funzigfunfzig(char antwort1[], char antwort2[], char antwort3[], char antwort4[], int richtig){
+	time_t now;
+	time(&now);
+	srand(now);
+	int z,eingabe;
+	for(int n=0;2>n;){
+		z=rand()%4;
+		switch(z){
+			case 0:if(richtig!=1&&antwort1[0]!=' '){strcpy(antwort1, " ");n++;}break;
+			case 1:if(richtig!=2&&antwort2[0]!=' '){strcpy(antwort2, " ");n++;}break;
+			case 2:if(richtig!=3&&antwort3[0]!=' '){strcpy(antwort3, " ");n++;}break;
+			case 3:if(richtig!=4&&antwort4[0]!=' '){strcpy(antwort4, " ");n++;}break;
+		 }
+	}
+	printf("1:%s\n2:%s\n3:%s\n4:%s \n %d\n", antwort1, antwort2, antwort3, antwort4, z);
+	scanf("%d",&eingabe);
+	if (eingabe==richtig) return 1;
+	else return 0;
+	
+	}
 
 
