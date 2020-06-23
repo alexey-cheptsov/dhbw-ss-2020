@@ -405,9 +405,18 @@ int read_question(FILE* fl){//Anika
 			currentQuestion.nr_correct = r[i];
 		}
 		///remove + / - 
-		for(int c=0; c<input_size; c++){
-			//Leerzeichen?
-			currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
+		if(currentQuestion.answers[r[i]][1]==' '){
+			for(int c=0; c<input_size; c++){
+				if(currentQuestion.answers[r[i]][c+2]!='\n'){
+					currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+2];
+				}
+			}
+		}else{
+			for(int c=0; c<input_size; c++){
+				if(currentQuestion.answers[r[i]][c+2]!='\n'){
+					currentQuestion.answers[r[i]][c]=currentQuestion.answers[r[i]][c+1];
+				}
+			}
 		}
 		
 	}
@@ -421,19 +430,19 @@ int choose_question(){ // Anika
 	path_to_file = (char*)malloc(50*sizeof(char));  //da "et19004_1.txt" 13 Zeichen und "../Fragen-DB/" ebenfalls 13 Zeichen
 	strcpy(path_to_file, "../Fragen-DB/");
 	
+	if(number_of_questions==0){
+		printf("Es können keine neuen Fragen gelesen werden!\n");
+		free(path_to_file);
+		return 0;
+	}
+	
 	///choose rondom question
-    random=rand()% number_of_questions;
+    	random=rand()% number_of_questions;
 	strcat(path_to_file, filenames[random]);
-    fl = fopen(path_to_file, "r");
+   	fl = fopen(path_to_file, "r");
 	if(fl==NULL){
 		printf("Die Datei %s konnte nicht geöffnet werden. Es wird eine andere Frage ausgewählt.\n", filenames[random]);
 		refresh_data(random, path_to_file);
-		if(number_of_questions >0){
-			choose_question();
-		}else{
-			printf("Es können keine neuen Fragen gelesen werden!\n");
-			return 0;
-		}
 	}
 	
 	if(read_question(fl)==0){
@@ -443,6 +452,7 @@ int choose_question(){ // Anika
 			choose_question();
 		}else{
 			printf("Es können keine neuen Fragen gelesen werden!\n");
+			free(path_to_file);
 			return 0;
 		}
 	}
