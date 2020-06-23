@@ -15,10 +15,12 @@ void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
 void insert_in_struct(char string[][150], int structdata);
 void Fragenausgabe();
-
+void richtigeantwort();
+void Antworteingabe(int zahl1,int zahl2,int zahl3,int zahl4);
+void Umwandlung(char zahl1[4],int *zahl);
 struct Fragen_Catalogue{
 	char Frage[150];
-	char Antworten[4][150];
+	char Antworten[5][150];
 	int nr_correct;
 
 } first, second, third, fourth, fifth, sixth, seventh;
@@ -34,6 +36,7 @@ int main ()
 	random_questions(namestr);
 	add_path(namestr);
 	open_files(namestr);
+	richtigeantwort();
 	Fragenausgabe(namestr);
 	
 	
@@ -74,14 +77,91 @@ void Fragenausgabe()
 	{
 		zahl4=rand() % 4;
 	}
-	
-
 	printf(" a)%10s",first.Antworten[zahl1]);
 	printf(" b)%10s\n",first.Antworten[zahl2]);
 	printf(" c)%10s",first.Antworten[zahl3]);
 	printf(" d)%10s\n",first.Antworten[zahl4]);
+	Antworteingabe(zahl1,zahl2,zahl3,zahl4);
 }
-
+void richtigeantwort()
+{	
+	if(*first.Antworten[0]=='+')
+	{
+	strcpy(first.Antworten[4],"0");
+	}
+	if(*first.Antworten[1]=='+')
+	{
+	strcpy(first.Antworten[4],"1");
+	}
+	if(*first.Antworten[2]=='+')
+	{
+	strcpy(first.Antworten[4],"2");
+	}
+	if(*first.Antworten[3]=='+')
+	{
+	strcpy(first.Antworten[4],"3");
+	}
+	printf("%s",first.Antworten[4]);
+	first.Antworten[0][0]=' ';
+	first.Antworten[1][0]=' ';
+	first.Antworten[2][0]=' ';
+	first.Antworten[3][0]=' ';
+}
+void Umwandlung(char zahl1[4],int *zahl)
+{
+	if(*zahl==0)
+	*zahl1='0';
+	if(*zahl==1)
+	*zahl1='1';
+	if(*zahl==2)
+	*zahl1='2';
+	if(*zahl==3)
+	*zahl1='3';
+}
+void Antworteingabe(int zahl1,int zahl2,int zahl3,int zahl4)
+{
+	char zahl[4][4];
+	Umwandlung(zahl[0],&zahl1);
+	Umwandlung(zahl[1],&zahl2);
+	Umwandlung(zahl[2],&zahl3);
+	Umwandlung(zahl[3],&zahl4);
+	
+	char eingabe[10];
+	scanf("%s",eingabe);
+	if(*eingabe=='a')
+	{
+		printf("a");
+		if(*zahl[0]==*first.Antworten[4])
+		{
+			printf("Richtig");
+		}
+	}
+	if(*eingabe=='b')
+	{
+		printf("b");
+		if(*zahl[1]==*first.Antworten[4])
+		{
+			printf("Richtig");
+		}
+	}
+	if(*eingabe=='c')
+	{
+		printf("c");
+		if(*zahl[2]==*first.Antworten[4])
+		{
+			printf("Richtig");
+		}
+	}
+	if(*eingabe=='d')
+	{
+		printf("d");
+		if(*zahl[3]==*first.Antworten[4])
+		{
+			printf("Richtig");
+		}
+	}
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Auslesen der aktuellen Dateinamen aus der Datenbank.
 void get_filenames(char array[][100]){
 	int i=0;

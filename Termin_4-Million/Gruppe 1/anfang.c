@@ -95,6 +95,41 @@ int zufallszahl(int Zahl[8])
 	return *Zahl;
 }
 
+int frage_ausgabe(Frage *Catalogue, int index, int argc){
+	
+	frage=frage + index;								
+	printf("Frage: %s\n", frage);
+	for (int n=1; n<=4; n++)
+	printf("%s \n",antworten[n]);
+	
+	printf("Moechten Sie den 50:50 Joker benutzen?\n");
+	printf("Antworten Sie mit ja oder nein.\n");
+	char joker[4];	
+	
+	if(argc==1){																								
+			gets(joker);
+			if (strcmp(joker,"ja")== 0){
+				 abfrage50_50();	
+			}else{
+				printf("Ihre Antwort bitte:\n");
+				char antwort[4];
+					if(argc==1){																								
+						gets(antwort);
+						if (antwort=richtigeantwort){
+							printf("richtige Antwort\n");
+							guthaben= guthaben + coins[index];
+							printf("Guthaben: %g\n", guthaben);		
+						}else{
+							printf("falsche Antwort\n");	
+							printf("Guthaben: %g\n", guthaben);
+						}		
+			
+					}
+			}
+			
+	}
+}
+
 /* Funktion generiert verkürzte Antwortausgabe.
 Zunächst wird ein Zufallswert zw. 0 und 4 generiert. Die Antwort mit dieser Nummer und die richtige Antwort
 der durch den Index ausgewählten Frage werden ausgegeben.*/
@@ -104,21 +139,7 @@ int abfrage50_50(Frage *fragen, int index)
 	int r2;
 	//static int pruefung = 0;
 	char c, c2;
-   	//double r = e - a + 1;
-	/*
-	if(pruefung == 1)
-	{
-		return 1;
-	}
-	
-	printf("Zur Auswahl des 50-50 Jokers druecken Sie bitte j.\nFalls Sie keinen Joker wuenschen, druecken Sie einen anderen Buchstaben.");
-		
-	sscanf("%c", &joker);
-	
-	if(joker == 'j')
-	{
-	*/
-		//r2 = a + (int)(r * rand()/(RAND_MAX+1.0));
+   	
 		r2 = rand()%4;
 
 		fragen = fragen + (index-1);		//weiter zur Ausgewählten Frage aus dem Katalog durch Pointeraddition
@@ -142,8 +163,6 @@ int abfrage50_50(Frage *fragen, int index)
 			case 3: c2 = 'D';
 		}	
 		printf("Mögliche Antworten sind:\n\n%c %s\n%c %s", c, fragen->antworten[r2], c2, fragen->antworten[fragen->richtigeantwort]);
-		/*pruefung = 1;
-	} return 0;*/
 	
 	fragen = fragen - (index -1);
 	

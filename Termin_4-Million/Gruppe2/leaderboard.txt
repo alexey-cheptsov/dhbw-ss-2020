@@ -1,0 +1,3 @@
+Dominik,0,0
+Dominik,0,0
+Dominik,4,10000
