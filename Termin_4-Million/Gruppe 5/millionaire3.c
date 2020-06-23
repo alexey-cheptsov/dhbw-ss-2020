@@ -52,7 +52,7 @@ struct Fragen_Catalogue{
 
 int main ()
 {
-	printf("Bitte geben sie ihre antworten mit a, b, c oder d an");
+	printf("Bitte geben sie ihre antworten mit a, b, c oder d an\n");
 	char namestr[100][100];
 	
 	get_filenames(namestr);
