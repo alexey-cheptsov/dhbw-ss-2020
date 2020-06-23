@@ -50,7 +50,7 @@ int read_frage(struct fragenKatalogEintrag * Catalogue)
 	int k = 2;
 	char array[90][100];
 	char *temp;
-	char* test = "C:/Users/tobia/Documents/DHBW/2. Semester/Informatik Labor/dhbw-ss-2020/Termin_4-Million/Fragen-DB/Gruppe_4/";     //Hier Dateipfad der Fragen angeben
+	char* test = " ";     //Hier Dateipfad der Fragen angeben
 	char* dateipfad;
 	char* antwortAOld;
 	char* antwortBOld;
