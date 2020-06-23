@@ -786,14 +786,16 @@ void Antworteingabeseventh(int zahl1,int zahl2,int zahl3,int zahl4)
 	printf("\n");
 }
 //777777777777
+
 //Auslesen der aktuellen Dateinamen aus der Datenbank.
-void get_filenames(char array[][100]){
+int get_filenames(char array[][100]){
 	int i=0;
     DIR * Ordner;
     struct dirent * entry;
   
-
     Ordner = opendir ("Fragen-DB");
+    
+    
     if (Ordner == NULL)
     {
         perror ("Verzeichnis kann nicht gelesen werden");
@@ -808,19 +810,23 @@ void get_filenames(char array[][100]){
     }
 
     closedir (Ordner);
+    
+    return i;
 }
 
 
 	//Auswählen zufälliger Dateinamen aus allen	
-void random_questions(char array[][100]){
+void random_questions(char array[][100], int file_count){
 	char buffer[L][100];
 	int m=0;
 	srand(time(NULL));
 	
 	for(int i=0; i<L;i++){
 		// Zufällig ausgewählte Dateinamen zwischenspeichern
-		strcpy(buffer[i], array[rand()%94]);
-	}
+		strcpy(buffer[i], array[rand()%file_count]); //Es wird aus allen existierenden Dateien eine zufällige ausgewählt
+	}												 //file_count enthält die Anzahl der vorhandenen Dateien im Verzeichnis
+	
+	check_filenames(buffer, array, file_count);
 	
 	//Ursprünglichen Inhalt von Array löschen 
 		while(m<=100){
@@ -830,9 +836,24 @@ void random_questions(char array[][100]){
 	//Array neu beschreiben mit zufällig Ausgew
 	for(int i=0; i<L;i++){
 		strcpy(array[i], buffer[i]);
+		
 	}
-	
 }
+//Sollten Dateinamen doppelt vorkommen, so wird dies hier erkannt und die Dopplungen werden entfernt
+void check_filenames(char buffer[][100],char array[][100], int file_count){
+	srand(time(NULL));
+	int count = 0;
+	while(count<3){ //Zur absoluten Sicherheit wird der Check 3 mal durchgeführt. Dopplungen und ungültige Dateinamen sind so gut wie unmöglich.
+		for(int i=0; i<L; i++){
+			for(int j=(i+1); j<L; j++){
+				if(strcmp(buffer[i],buffer[j])==0 || strlen(buffer[j])< 8 )
+					strcpy(buffer[j], array[rand()%file_count]);
+			}
+		}
+		count++;
+	}
+}
+
 //Hinzufügen des Dateipfads an die Dateinamen zum späteren erfolgreichen öffnen
 void add_path(char array[][100]){
 	
@@ -845,7 +866,7 @@ void add_path(char array[][100]){
 	//Zurückspeichern in "array", um weiterhin in Main zu bleiben 
 	for(int i=0; i<L;i++){
 		strcpy(array[i], buffer[i]);
-		
+		printf("%s\n", array[i]);
 	}
 }	
 
