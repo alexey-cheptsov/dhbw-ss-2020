@@ -13,10 +13,10 @@ void open_files(char array[][100]);
 void cut_files(FILE*datei, int structdata);
 void insert_in_struct(char string[][150], int structdata);
 void insert_in_struct(char string[][150], int structdata);
+void Umwandlung(char zahl1[4],int *zahl);
 void Fragenausgabefirst();
 void richtigeantwortfirst();
 void Antworteingabefirst(int zahl1,int zahl2,int zahl3,int zahl4);
-void Umwandlung(char zahl1[4],int *zahl);
 
 void Fragenausgabesecond();
 void richtigeantwortsecond();
@@ -33,9 +33,11 @@ void Antworteingabefourth(int zahl1,int zahl2,int zahl3,int zahl4);
 void Fragenausgabefifth();
 void richtigeantwortfifth();
 void Antworteingabefifth(int zahl1,int zahl2,int zahl3,int zahl4);
+
 void Fragenausgabesixth();
 void richtigeantwortsixth();
 void Antworteingabesixth(int zahl1,int zahl2,int zahl3,int zahl4);
+
 void Fragenausgabeseventh();
 void richtigeantwortseventh();
 void Antworteingabeseventh(int zahl1,int zahl2,int zahl3,int zahl4);
