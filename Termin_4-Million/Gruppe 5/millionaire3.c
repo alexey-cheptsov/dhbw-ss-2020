@@ -149,6 +149,7 @@ void Umwandlung(char zahl1[4],int *zahl)
 }
 void Antworteingabefirst(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -249,6 +250,7 @@ void richtigeantwortsecond()
 
 void Antworteingabesecond(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -348,6 +350,7 @@ void richtigeantwortthird()
 
 void Antworteingabethird(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -447,6 +450,7 @@ void richtigeantwortfourth()
 
 void Antworteingabefourth(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -547,6 +551,7 @@ void richtigeantwortfifth()
 
 void Antworteingabefifth(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -647,6 +652,7 @@ void richtigeantwortsixth()
 
 void Antworteingabesixth(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
@@ -747,6 +753,7 @@ void richtigeantwortseventh()
 
 void Antworteingabeseventh(int zahl1,int zahl2,int zahl3,int zahl4)
 {
+	printf("Ihre Antwort");
 	char zahl[4][4];
 	Umwandlung(zahl[0],&zahl1);
 	Umwandlung(zahl[1],&zahl2);
