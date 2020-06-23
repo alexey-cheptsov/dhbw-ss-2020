@@ -33,6 +33,7 @@
 #define NAME_SIZE 20
 #define STRING_SIZE 500
 
+#define MAX_PLAYERS 20
 #define ANSWER_COUNT 4
 #define ROUNDS 7
 
@@ -151,7 +152,7 @@ void printTitle() {
 	printf("Sie k%cnnen auch mit Ihren Freunden gegeneinander spielen.\n", 148);
 	printf("Sie m%cssen lediglich die Anzahl der Spieler eingeben.\n", 129);
 	printf("Im Anschluss frage ich Sie nach Ihrem Namen.\n");
-	printf("Viel ERFOLG! :)\n\n\n");
+	printf("Viel ERFOLG! :)\n\n");
 }
 
 /*!
@@ -161,13 +162,13 @@ void printTitle() {
  */
 int getSettings(int *count) {
 	// Abfrage Anzahl der Spieler
-	printf("Bitte Geben Sie die Anzahl der Spieler ein: ");
+	printf("\nBitte Geben Sie die Anzahl der Spieler ein: ");
 	scanf("%d", count);
 	while (getchar()!= '\n');
 
-	if(*count < 1) {
+	if(*count < 1 || *count > MAX_PLAYERS) {
 		printf("\n[ERROR] Ung%cltige Anzahl von Spielern!\n", 129);
-		return 0;
+		return getSettings(count);
 	}
 	players = (Player*) malloc(*count * sizeof(Player));
 
@@ -310,10 +311,10 @@ void getAnswer(Player player, char *answer) {
 int checkAnswer(Question question, int playerindex, char answer, int level) {
 	// Überprüfen der Antwort
 	int input;
-	if(answer >= 'a' && answer <= 'd') {
+	if(answer >= 'a' && answer <= 'a' + ANSWER_COUNT) {
 		input = answer - 'a';
 	}
-	else if(answer >= 'A' && answer <= 'D') {
+	else if(answer >= 'A' && answer <= 'A' + ANSWER_COUNT) {
 		input = answer - 'A';
 	}
 	else if(answer == '%') {
@@ -380,7 +381,7 @@ int printScore(int playercount) {
 	// Ausgabe des Spielstands / der Ergebnisse
 	time_t now;
 	time(&now);
-	fprintf(file, "\nWer wird Million\xE4r? - %s-------------------\n", ctime(&now));
+	fprintf(file, "\n\nWer wird Million\xE4r - %s-------------------\n", ctime(&now));
 	for(int i = 0; i < playercount; i++) {
 		printf("Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
 		fprintf(file, "Platz %d: %s mit einem Highscore von %i Euro\n", i + 1, players[i].name, players[i].score);
